@@ -1,0 +1,9 @@
+1. 5명의 고객을 저장해야 한다. 고객정보는 회원번호:memberNum, 회원이름: memberName, 회원주소:memberAddr, 회원연락처:memberPhone, 회원생년월일:memberBirth , 회원성별:memberGender이다,
+   객체를 생성한 후 5명의 회원 정보를 입의로 입력하시오.
+
+2. 5개의 상품 정보를 입력해야 한다. 상품정보는 상품번호:goodsNum, 상품명:goodsName, 상품가격:goodsPrice, 상품상세정보: goodsContent이다.
+  객체를 생성한 후 5개의 상품정보를 입의로 입력하시오.
+
+3. 투표를 진행하기 위해 후보자들의 정보를 입력하여야한다. 후보자 정보는 후보자번호:candidateNum, 후보자 이름:candidateName,  투표수: vote
+   후보자3명과 투표수를 임의로 입력하세요.
+
