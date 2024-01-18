@@ -1,4 +1,5 @@
 // setter/getter , 생성자
+// 객체생성시 생성자를 이용하고 생성한 후 setter를 이용해서 멤버값을 변경하고 getter를 이용해서 맴버값을 출력
 1. 결제정보를 저장하고 싶다. 결제정보는 승인번호:purchaseNum, 카드번호:cardnum, 결제금액:totalPrice
                                     결제일 : appldate , 결제시간:appltime
 
