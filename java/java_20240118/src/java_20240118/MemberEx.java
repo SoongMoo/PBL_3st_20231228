@@ -6,10 +6,15 @@ import java.util.Date;
 public class MemberEx {
 	public static void main(String[] args) {
 		Member member1 = new Member();
+		/*
 		member1.memberNum ="hk12234";
 		member1.memberName = "이숭무";
 		member1.memberAddr = "서울";
 		member1.memberGender ='F';
+		*/
+		member1.setMemberAddr("서울");
+		member1.setMemberGender('F');
+		System.out.println(member1.getMemberGender());	
 		
 		String day = "2014/10/25";
 		/// 날짜 형식 지정
