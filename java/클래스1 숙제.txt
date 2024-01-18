@@ -1,0 +1,12 @@
+1. 결제정보를 저장하고 싶다. 결제정보는 승인번호:purchaseNum, 카드번호:cardnum, 결제금액:totalPrice
+                                    결제일 : appldate , 결제시간:appltime
+
+2. 리뷰정보를 저장하고 싶다. 리뷰정보는 리뷰번호:reviewNum, 별점:score, 리뷰등록:reviewDate
+                                     리뷰내용:reviewContent
+
+3. 상담정보를 저장싶다. 상담정보는 상담 번호:inquireNum, 상담종류 : inquireKind,
+                                 상담 제목:inquireSubject, 상담내용:inquireSubject
+                                  상담일 : inquireDate , 답변:inquireAnswer
+                                  답변일:inquireAnswerDate
+4. 상품입고 : 입고번호:ipgoNum, 상품번호:goodsNum, 입고수량:ipgoQty, 입고일:ipgoDate
+              상품제조일:madeDate, 입고금액:ipgoPrice, 상품금액:goodsPrice
