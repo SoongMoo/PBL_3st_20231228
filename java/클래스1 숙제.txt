@@ -6,7 +6,7 @@
                                      리뷰내용:reviewContent
 
 3. 상담정보를 저장싶다. 상담정보는 상담 번호:inquireNum, 상담종류 : inquireKind,
-                                 상담 제목:inquireSubject, 상담내용:inquireSubject
+                                 상담 제목:inquireSubject, 상담내용:inquireContent
                                   상담일 : inquireDate , 답변:inquireAnswer
                                   답변일:inquireAnswerDate
 4. 상품입고 : 입고번호:ipgoNum, 상품번호:goodsNum, 입고수량:ipgoQty, 입고일:ipgoDate
