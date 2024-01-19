@@ -1,7 +1,7 @@
 package java_20240119_static;
 
 public class Student1 {
-int serialNum = 1000;
+	int serialNum = 1000;
 	
 	int studentId;
 	String studentName;
