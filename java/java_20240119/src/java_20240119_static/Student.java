@@ -1,7 +1,7 @@
 package java_20240119_static;
 
 public class Student {
-	static int serialNum ; // static변수는 초기화가 되어 있어야 한다.
+	static int serialNum = 1000; // static변수는 초기화가 되어 있어야 한다.
 	
 	int studentId;
 	String studentName;

@@ -1,21 +1,22 @@
-package java_20240119_static;
+package java_20240119_static_method;
 
-public class Student1 {
-	static int serialNum; // 정적변수 // 클래스변수
+
+public class Student {
+	private static int serialNum; // 정적변수 // 클래스변수
 	
-	int studentId;
-	String studentName;
-	int grade;
-	String address;
+	private int studentId;
+	private String studentName;
+	private int grade;
+	private String address;
+	
 	static {
 		serialNum = 1000;
 	}
-	public int getSerialNum() {
-		return serialNum;
+	
+	public static int getSerialNum() { // 정적 메서드 // 클래스 메서드
+		return serialNum++;
 	}
-	public void setSerialNum(int serialNum) {
-		this.serialNum = serialNum;
-	}
+	
 	public int getStudentId() {
 		return studentId;
 	}
@@ -40,6 +41,4 @@ public class Student1 {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-	
 }
