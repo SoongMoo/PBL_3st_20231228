@@ -1,18 +1,18 @@
 package java_20240122_account;
 
 public class Account {
-	String ano;
+	int ano;
 	String owner;
 	int balance;
-	public Account(String ano, String owner, int balance) {
+	public Account(int ano, String owner, int balance) {
 		this.ano = ano;
 		this.owner = owner;
 		this.balance = balance;
 	}
-	public String getAno() {
+	public int getAno() {
 		return ano;
 	}
-	public void setAno(String ano) {
+	public void setAno(int ano) {
 		this.ano = ano;
 	}
 	public String getOwner() {
