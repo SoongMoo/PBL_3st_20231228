@@ -1,10 +1,12 @@
 package java_20240123;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BankAccount {
-	static int index = 0;
-	static Account [] account = new Account[100];
+	//static int index = 0;
+	//static Account [] account = new Account[100];
+	static ArrayList<Account> account = new  ArrayList<Account>();
 	static Scanner sc = new Scanner(System.in);
 	public static void main(String[] args) {	
 		boolean run = true;
@@ -38,9 +40,50 @@ public class BankAccount {
 		System.out.println("초기입금금액 : ");
 		int balance = sc.nextInt();
 		Account acc = new Account(ano,owner,balance);
-		account[index++] = acc;
+		//account[index++] = acc;
+		account.add(acc);
 	}
-	public static void accountList() {}
-	public static void deposit() {}
-	public static void withdraw() {}
+	public static void accountList() {
+		System.out.println("---------");
+		System.out.println("계좌목록");
+		System.out.println("---------");
+		for(Account acc : account) {
+			if(acc == null) break;
+			System.out.println(acc.getAno() + "\t" + acc.getOwner() +"\t"+acc.getBalace());
+		}
+	}
+	public static void deposit() {
+		System.out.println("---------");
+		System.out.println("예금");
+		System.out.println("---------");
+		System.out.print("계좌번호 : ");
+		int ano  = sc.nextInt();
+		System.out.print("예금액");
+		int money = sc.nextInt();
+		for(Account acc :  account) {
+			if (acc == null) break;
+			if (acc.getAno() == ano) {
+				acc.setBalance(acc.getBalace() + money);
+			}
+		}
+	}
+	public static void withdraw() {
+		System.out.println("---------");
+		System.out.println("출금");
+		System.out.println("---------");
+		System.out.print("계좌번호 : ");
+		int ano  = sc.nextInt();
+		System.out.print("예금액 : ");
+		int money = sc.nextInt();
+		for(Account acc :  account) {
+			if (acc == null) break;
+			if (acc.getAno() == ano) {
+				acc.setBalance(acc.getBalace() - money);
+			}
+		}
+	}
 }
+
+
+
+
