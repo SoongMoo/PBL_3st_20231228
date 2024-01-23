@@ -6,7 +6,7 @@ public class FourCalculatorEx {
 		FourCalculator calc = new FourCalculator(10, 0);
 		calc.div();
 		calc.add();
-
+		//Calculator calculator = new Calculator();
 	}
 
 }
