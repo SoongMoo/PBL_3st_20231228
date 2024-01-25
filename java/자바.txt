@@ -1,0 +1,67 @@
+int i; // 선언
+i = 10; // 대입
+// int i ; (x)
+int j = 10; // 초기화
+                                           자료형
+리터널(상수) : 정수      :   byte, short, int, long
+                                           char : unsigned(+)
+                    실수     :                    float, double
+                    문자     :            char           
+                    문자열  :                   String
+                     부울    :  boolean
+형변환 :  자동형변환 :   byte => short => int => long => float => double  
+                                정수 => 실수
+                                int x = 10;
+				long l = x;  // 자동형변환
+                               =================================>
+             강제형변환 :  <=================================
+				double d = 10.6
+				//int y = d; (x)
+				int y = (int)d;
+                                 큰자료형이 작은 자료형으로 변환하는 것
+연산자 : 일항 : 부호(-,+) , 증가감연산자 (++,--) : i++(후행), ++i(선행) 
+            이항 : 사직연산,%:나누기연산자, 대입연산, 비교연산, 논리연산
+            삼항 : 조건연산 ;  i > y ? 답1 : 답2
+제어문 : 조건문 : 단일 if, if ~ else , if ~ else if ~ elsif ~ ... ~ else , switch ~ case
+            반복문 : for , while, foreach, break, continue , do ~ while(x)
+                                                                          while(true){
+										if() break;
+									  }
+클래스 : 멤버변수, 생성자, setter/getter , 메서드, 
+           this : parameter와 멤버변수를 구별하기 위해서 this를 사용
+	   this(); this생성자 : 클래스내에 있는 다른 생성자를 샐행할 때 사용
+	   생성자의 역할 : 멤버변수의 초기화 , 클래스명과 같은 이름의 메서드
+메서드(함수) : 4가지방법
+        반환형 : 호출함수에게 전달되는 값, 메서드내 return뒤에 있는 값
+                    return 뒤에 값이 없다는 void : 반환할 값이 존재하지 않는다 (비어있다)
+	* 기본 유형
+	public 반환형 메서드명(parameter1, parameter2,...parameter_n){
+		명령어1; 명려어2;...; 명령어n;
+		return 값;
+	}
+ 	반환형자료형 변수 = 메서드명(argument1, arguiment2,..., argument_n);
+변수에 static : static int i = 10; 
+		   클래스명.i 
+객체생성 :  클래스명 변수 = new 생성자() 
+객체간의 협력 : 객체를 매개변수로 사용해서 객체를 객체내에 전달
+
+배열 : int [] i = new int[]{1,2,3,4}
+        int [] j = {1,2,3,4}
+        int [] x = new int[4];
+	       x[0] = 1; x[1]=2; x[2]=3; x[3] = 4
+        fro (int y : i) {System.out.println(y);}
+	int [][] z = {{1,2,3,4},{5,6,7},{8,9,10}}
+ArrayList<Integer> list = new ArrayList<Integer>();
+객체의 특징 : 은닉(잡근지정자:private < default < protected < public)
+		 상속 
+   		 다향성
+추상클래스 : 추상메서드를 가지고 있는 클래스
+                추상메서드 : 메서드의 몸체는 없고 머리만 있는 메서드
+		                완성되지 않은 메서드
+                상속해서 사용 (완성되지 않은 메서드가 있으므로 객체생성을 할수없다.: 생성자를 가질 수 없다)
+interface : 추상클래스대신 만들어진것 
+              interface에 있는 변수는 final변수이기 때문에 상수이다. 값을 변경할 수 없다.
+상속 : 클래스와 클래스의 상속은 단일 상속이고 extends를 사용
+        클래스와 interface의 상속은 다중상속이고 implememnts를 사용
+        interface와 interface의 상속은 다중상속이고 eatends를 사용한다.
+        클래스 상속에서 클래스와 interface를 동시에 상속할 수도 있다                         
