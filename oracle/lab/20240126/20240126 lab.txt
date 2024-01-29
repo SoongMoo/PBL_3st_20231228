@@ -1,0 +1,257 @@
+---숙제---
+---1번
+select employee_id, first_name, email, hire_date
+from hr.employees;
+---2번
+select employee_id, first_name, salary, salary+100
+from hr.employees;
+---3번
+select employee_id, last_name, job_id, salary*12
+from hr.employees;
+----4번
+select location_id, department_id, manager_id, department_id 
+from hr.departments;
+---5번
+select employee_id, hire_date, last_name, salary
+from hr.employees;
+---6번
+select employee_id, department_id, job_id, (salary+300)*12
+from hr.employees;
+---7번
+select employee_id, department_id, job_id, salary*12 + 300
+from hr.employees;
+---8번
+select employee_id, last_name, email, salary + commission_pct*0.3, commission_pct
+from hr.employees;
+---9번
+select employee_id, email, first_name, hire_date, salary, commission_pct
+from hr.employees;
+---10번
+select employee_id, email, first_name, hire_date, salary, commission_pct, commission_pct * salary
+from hr.employees;
+---11번
+select employee_id, email, first_name, hire_date, phone_number, department_id, salary, commission_pct, (commission_pct + 1 ) * salary * 12 
+from hr.employees;
+---12,13번
+select employee_id as eid, email, last_name as lname, hire_date as hd, phone_number as ph, department_id as did, salary as sal, commission_pct as comm, (commission_pct + 1 ) * salary * 12 as year_sal 
+from hr.employees;
+---14번
+select employee_id, '나의 성은 '|| last_name, first_name, salary
+from hr.employees;
+---15번
+select employee_id, first_name, salary, department_id, '2021-11-19', 35
+from hr.employees;
+---16번
+select employee_id, last_name|| first_name, salary, job_id
+from hr.employees;
+---17번
+select employee_id, last_name||' '|| first_name, salary, job_id
+from hr.employees;
+---18번
+select employee_id, last_name||' '|| first_name||'의 직무는 '|| job_id||'입니다', salary
+from hr.employees;
+---19번
+select department_id
+from hr.employees;
+---20번
+select DISTINCT department_id
+from hr.employees;
+---21번
+select *
+from hr.employees
+where department_id = 90;
+---23번
+select employee_id, last_name, first_name, salary
+from hr.employees;
+---24번
+select employee_id, last_name, first_name, salary
+from hr.employees
+where department_id = 90;
+---25번
+select hire_date, department_id, salary, commission_pct
+from hr.employees
+where first_name = 'Nancy';
+---26번
+select *
+from hr.employees
+where hire_date = '06/01/03';
+---27번
+select last_name, salary
+from hr.employees
+where salary >= 3000;
+---28번
+select employee_id, first_name, salary
+from hr.employees
+where hire_date > '06/01/03';
+---30번
+select *
+from hr.employees
+where salary != 3000;
+---31번
+select employee_id, first_name, salary, department_id, hire_date
+from hr.employees
+where salary between 2500 and 3500;
+---32번
+select *
+from hr.employees
+where last_name between 'King' and 'Smith';
+---33번
+select *
+from hr.employees
+where hire_date between '02/06/07' and '06/01/03';
+---34번
+select *
+from hr.employees
+where department_id in(50,70,90);
+---35번
+select *
+from hr.employees
+where manager_id in(100,101,102);
+---36번
+select *
+from hr.employees
+where last_name in('Hartstein', 'Vargas');
+---37번
+select *
+from hr.employees
+where manager_id = 100;
+---38번
+select *
+from hr.employees
+where last_name like '%s%';
+---39번
+select *
+from hr.employees
+where job_id like '%CL%';
+---40번
+select *
+from hr.employees
+where job_id like '%ST%';
+---41번
+select *
+from hr.employees
+where first_name like 'B%';
+---42번
+select *
+from hr.employees
+where last_name like '%a';
+---43번
+select *
+from hr.employees
+where hire_date like '02%';
+---44번
+select *
+from hr.employees
+where hire_date like '___02%';
+---45번
+select *
+from hr.employees
+where email like '_K%';
+---46번
+select *
+from hr.employees
+where last_name like '_o%';
+---47번
+select *
+from hr.employees
+where email like '__A%';
+---48번
+select *
+from hr.employees
+where email like '__O%';
+---49번
+select *
+from hr.employees
+where email like '%O';
+---50번
+select *
+from hr.employees
+where email like '_K%O_';
+---51번
+select *
+from hr.employees
+where job_id like 'IT%';
+---52번
+select *
+from hr.employees
+where hire_date like '___02%';
+---53번
+select *
+from hr.employees
+where commission_pct is null;
+---54번
+select *
+from hr.employees
+where manager_id is null;
+---55번
+select *
+from hr.departments
+where manager_id is null;
+---56번
+select *
+from hr.employees
+where department_id is null;
+---57번
+select *
+from hr.employees
+where job_id = 'AD_VP' and department_id = 90;
+---58번
+select *
+from hr.employees
+where job_id like '%MAN%' and salary >= 10000;
+---59번
+select *
+from hr.employees
+where salary between 5000 and 10000;
+---60번
+select *
+from hr.employees
+where hire_date > '03/06/17' and hire_date < '05/09/21';
+---61번
+select *
+from hr.employees
+where salary >= 10000;
+---62번
+select *
+from hr.employees
+where job_id like '%MAN%';
+---63번
+select *
+from hr.employees
+where job_id like '%MAN%' or salary >= 10000;
+---64번
+select *
+from hr.employees
+where job_id = 'SA_REP' or department_id = 100;
+---65번
+select *
+from hr.employees
+where job_id = 'SA_REP' and department_id = 100;
+---66번
+select *
+from hr.employees
+where job_id in('AD_PRES', 'AD_VP', 'IT_PROG');
+---66-2번
+select *
+from hr.employees
+where job_id in('IT_PROG', 'ST_MAN') and salary >= 6000;
+---67번
+select *
+from hr.employees
+where job_id not in('AD_PRES', 'AD_VP', 'IT_PROG');
+---68번
+select *
+from hr.employees
+where salary < 6000 or salary > 10000;
+---69번
+select *
+from hr.employees
+where commission_pct is null;
+select *
+from hr.employees
+where commission_pct is not null;
+---70번
+select *
+from hr.departments
+where manager_id is not null;
+
