@@ -285,3 +285,18 @@ from dual;
 select  last_name, first_name, hire_date
         ,next_day(hire_date -7 ,'일') ,  next_day(hire_date,'토')
 from hr.employees;
+
+
+----- 버그를 수정한 코드
+SELECT 
+    TRUNC(TO_DATE('2024-01-28', 'YYYY-MM-DD'), 'D') AS 주의_시작일,
+    TRUNC(TO_DATE('2024-01-28', 'YYYY-MM-DD'), 'D') + 6 AS 주의_종료일
+FROM
+    DUAL;
+24/01/28	24/02/03
+SELECT 
+    TRUNC(TO_DATE('2024-02-03', 'YYYY-MM-DD'), 'D') AS 주의_시작일,
+    TRUNC(TO_DATE('2024-02-03', 'YYYY-MM-DD'), 'D') + 6 AS 주의_종료일
+FROM
+    DUAL;
+24/01/28	24/02/03
