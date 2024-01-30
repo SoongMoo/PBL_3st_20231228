@@ -280,10 +280,11 @@ where next_day(hire_date, '금요일') like '__/__/02';
 
 --- 직원이 입사한날이 그주의 몇일 부터 몇일 사이에 있는 날인 지 출력하세요.
 --- 성, 이름 , 입사일 , 입사한 주의 일요일, 이사한 주의 토요일
-select next_day(sysdate -7,'일'),  next_day(sysdate,'토')
+select next_day(sysdate -7,'일'),  next_day(sysdate -7,'일') + 6
 from dual;
+
 select  last_name, first_name, hire_date
-        ,next_day(hire_date -7 ,'일') ,  next_day(hire_date,'토')
+        ,next_day(hire_date -7 ,'일') ,  next_day(hire_date -7 ,'일') + 6
 from hr.employees;
 
 
