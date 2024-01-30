@@ -125,5 +125,148 @@ select * from hr.employees;
 select email , UPPER(CONCAT(SUBSTR (email, 1, 4), '_KR')) --  함수 중첩
 from hr.employees;
 
--- 일반 함수:NVL, NVL2, NULLIF, COALESCE
+-- 일반 함수:NVL, COALESCE, NVL2, NULLIF
 -- 사원번호, 이름, 직무, 급여, 커미션을 포함한 년봉
+
+--- 값이 null인 경우 임의의 값을 부여하자.
+ select employee_id, first_name, job_id, salary , commission_pct
+        , nvl(commission_pct, 0)
+        , salary * ( 1 + commission_pct) * 12 year_sal
+        , salary * (1 + nvl(commission_pct, 0) ) * 12 year
+from hr.employees;
+
+select commission_pct            ---   exp1         exp2  exp3
+     , nvl(commission_pct, 0),  nvl2(commission_pct, 1   ,  0 )
+                               --- exp1이null아니면 exp2를 null이면 exp3
+     ,nvl2(commission_pct, 1 + commission_pct ,  1 ) * salary * 12 year_sal
+from hr.employees;              
+
+select commission_pct 
+     , nvl(commission_pct, 0)
+     , COALESCE(commission_pct, 0)
+     , COALESCE(null, null, 3)
+     , COALESCE(null, 1 , 2,  3)
+     , COALESCE(null, 1 , null,  3)
+     , COALESCE(null, null , null ,  4)
+from hr.employees;
+
+select first_name , last_name, salary
+      , 12 * salary * (1 + nvl(commission_pct , 0)) nvl_year
+      , 12 * salary * (1 + COALESCE(commission_pct , 0))  COALESCE_year
+from hr.employees;
+--- 부서가 없는 사원의 부서번호를 '미지정'으로 출력하세요
+select first_name, last_name, employee_id, nvl(to_char(department_id),'미지정')
+from hr.employees;
+
+--- 커미션이 있는 경우 커미션을 
+--- 커미션이 없는 경우 상사번호를 
+--- 커미션과 상사번호가 없는 경우에는 no 커미션 and 상사로 출력
+select first_name, commission_pct, manager_id
+      , COALESCE(to_char(commission_pct),to_c0har(manager_id) , 'no 커미션 and 상사' )
+from hr.employees;
+
+select first_name, last_name, length(first_name), length(last_name)
+      , nullif(length(first_name), length(last_name))
+from hr.employees; -- 두개의 값이 같으면 null을 다르면 앞의 값을 출력
+
+--- 조건문 : CASE, DECODE 
+--- 'IT_PROG' 이면 급여를 10% 더 주고
+--- 'ST_CLERK'이면 급여를 15% 더 주고
+--- 'SA_REP'이면 급여를 20% 더준다. 나머지 직무는 급여 그대로
+select employee_id, last_name, job_id, salary
+      , case when job_id = 'IT_PROG' then salary * 1.1
+             when job_id = 'ST_CLERK' then salary *1.15
+             when job_id = 'SA_REP' then salary * 1.2
+             else salary end sal
+from hr.employees;
+
+select employee_id, last_name, job_id, salary
+      ,case job_id when 'IT_PROG' then salary * 1.1
+                   when 'ST_CLERK' then salary *1.15
+                   when 'SA_REP' then salary * 1.2
+                   else salary end sal
+from hr.employees;
+
+select employee_id, last_name, job_id, salary
+      ,DECODE (job_id , 'IT_PROG'  , salary * 1.1
+                      , 'ST_CLERK' , salary *1.15
+                      , 'SA_REP'   , salary * 1.2
+                      , salary)  sal
+from hr.employees;
+--- 급여가 5000이하면 low를  10000이하면 'Medium'  20000이하면 'Good'
+--- 그 이상이면 'Excellent'가 출력되게 하시오.
+select last_name, salary 
+      , case when salary < 5000 then 'Low'
+             when salary < 10000 then 'Medium'
+             when salary < 20000 then 'Good'
+             else 'Excellent' end qualified_salary
+from hr.employees;
+
+select salary / 2000 , trunc(salary / 2000 , 0) from hr.employees;
+---값이 0이면 tax0,     1이면 tex 0.09, 2이면 tex 0.20 
+---    3        0.30   4        0.40  5         0.42
+---    6        0.44   그 이상이면 0.45이다. 
+--- 각 급여에 맞는tex를 출력하세요.
+select first_name, salary,
+      case  trunc(salary / 2000 , 0) when 0 then 0
+                                     when 1 then 0.09
+                                     when 2 then 0.20
+                                     when 3 then 0.30 
+                                     when 4 then 0.40 
+                                     when 5 then 0.42
+                                     when 6 then 0.44 
+                                     else 0.45 end tex
+from hr.employees;
+select first_name, salary,
+      decode ( trunc(salary / 2000 , 0) , 0 , 0
+                                        , 1 , 0.09
+                                        , 2 , 0.20
+                                        , 3 , 0.30 
+                                        , 4 , 0.40 
+                                        , 5 , 0.42
+                                        , 6 , 0.44 
+                                        , 0.45 ) tex
+from hr.employees;
+
+select * from hr.job_history;
+--- 임의 날짜(05/03/16)가 start_date와 end_date사이에 있으면 '진행중'
+--             start_date이전이면 '대기중'
+--             end_date이후라면 '종료'
+-- between A and B 사용 가능               
+
+select employee_id, start_date,  end_date, job_id
+      , case when to_date('05/03/16','yy/mm/dd') between  start_date and end_date then '진행중'
+             when start_date > to_date('05/03/16','yy/mm/dd')  then '대기중'
+             else '만료' end status
+from hr.job_history;
+
+---- 다중행 함수 : 그룹함수 : null포함하지 읺는다.
+--- 최고 급여를 많이 받는 사람. 
+select max(salary), min(salary), sum(salary) from hr.employees;
+--- 전체 직원의 수
+select count(*) , count(salary) , count(employee_id), count(commission_pct) from hr.employees;
+
+-- 80인 부서의 직원 수와 최대 급여와 최소급여를 구하시오.
+select count(*),  max(salary), min(salary)
+from hr.employees
+where department_id = 80;
+
+-- 'RE'가 포함된 직무를 하는 사원들의 수와 최대 급여와 최소 급여 그리고 평균 급여 구하시오.
+select count(*), max(salary), min(salary), avg(salary)
+from hr.employees
+where job_id like '%RE%';
+
+--- 부서를 출력하세요
+select department_id from hr.employees;
+-- 부서를 한번씩만  출력
+select DISTINCT(department_id) from hr.employees;
+-- 직원이 속해있는 부서의 수는
+select count(DISTINCT(department_id)) from hr.employees; -- nul을 포함하지 않음.
+-- 커미션의 평균을 구하시오,
+select avg(commission_pct), count(commission_pct) from hr.employees; 
+--- 직원 전체에 대한 커미션의 평균
+select sum(commission_pct) / count(*) , avg(nvl(commission_pct,0)) from hr.employees;
+--- 80인 부서에서 직무가 'SA_MAN'인 사원의 수와 커미션의 평균을 구하시오,\
+select count(*), avg(commission_pct)
+from hr.employees
+where department_id = 80 and job_id = 'SA_MAN';
