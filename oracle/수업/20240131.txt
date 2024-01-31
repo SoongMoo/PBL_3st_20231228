@@ -1,0 +1,151 @@
+--- 날짜 검색을 하지 않는다.
+SELECT * FROM EMPLOYEES WHERE TO_CHAR(HIRE_DATE, 'yyyy-MM-dd') > '25-04-2003'; --- 사전적인 의미
+                                        --        '26-04-2002' >  '25-04-2003'
+SELECT * FROM EMPLOYEES WHERE HIRE_DATE > TO_DATE('25-04-2003', 'DD-MM-YYYY'); -- 날짜의미
+
+select *
+from hr.employees
+where first_name = initcap('jaNette');
+
+SELECT FIRST_NAME, EMPLOYEE_ID
+FROM HR.EMPLOYEES
+WHERE upper(first_name) = upper('JANETTE');
+
+select max(salary), min(salary), avg(salary)
+from hr.employees;
+
+select * from hr.employees;
+
+--- 80인 부서
+select min(salary), max(salary) from hr.employees
+where department_id = 80;
+--- 90부서
+select min(salary), max(salary) from hr.employees
+where department_id = 90;
+--- 70부서
+select min(salary), max(salary) from hr.employees
+where department_id = 70;
+
+
+select department_id, min(salary), max(salary)
+from hr.employees
+group by department_id;
+
+--- 직무별 최대 급여와 최소급여 그리고 평균급여를 출력하시오. 같은 직무를 하는 사원의 수
+select job_id, max(salary), min(salary), avg(salary), count(*)
+from hr.employees
+group by job_id;
+
+select * from hr.employees;
+
+---  직무별 최대급여 , 최소급여, 급여의 합계, 직원수를 출력할 때 직원의 수가 3이상은 것만 출력하시오.
+select job_id,min(salary), max(salary), sum(salary), count(*)
+from hr.employees
+group by job_id 
+having count(*) >= 3;
+
+--- REP를 포함하고 있지 않은 직무들중에서 각 직무별 최대 급여 , 최소급여 , 급여합계를 출력하세요.
+-- 이때 급여합계가 13000이상인 것만 출력하시오.
+--       1          2           3           4
+select job_id , max(salary), min(salary), sum(salary) sal   --- 6
+from hr.employees                  --- 1
+where job_id not like '%REP'       --- 2
+group by job_id                    --- 3
+having sum(salary) >= 13000        --- 4
+order by 4;                        --- 5
+--- min(), max(), sum(), avg(), count()를 그룹함수
+-- having절은 그룹함수의 조건을 줄 때 사용
+
+--- 각 부서별 부서의 급여의 합계, 최대, 최소, 사원의 수, 평균을 출력하는데 평균은 소수점 2자리만 출력
+select sum(salary), max(salary), min(salary), count(*), round(avg(salary), 2)
+from hr.employees
+group by department_id;
+
+select department_id , job_id
+from hr.employees
+order by department_id, job_id;
+
+-- 부서에서 같은 직무를 하는 사원들의 최대 급여, 최소 급여, 평균급여 급여의 합계와 같은 직무를 하는 사원의 수를 출력
+select department_id , job_id, min(salary), max(salary), avg(salary) , sum(salary), count(*)
+from hr.employees
+group by department_id , job_id
+order by  department_id , job_id;
+
+-- 각부서에서 직무가 같은 사원들 중 입사일이 같은 사원의 수를 구하시오.
+-- 사원수가 2명이상만 출력
+select department_id, job_id, hire_date, count(*)
+from hr.employees
+group by department_id, job_id, hire_date
+having count(*) >= 2;
+
+--- 평균급여가 7000이상인 부서만 출력하시오.평균 급여 높은 것 부터 출력하시오.
+select department_id , avg(salary)
+from hr.employees
+group by department_id
+having avg(salary) >= 7000
+order by 2 desc;
+
+-- 각 부서의 평균급여 중 최대 평균급여를 출력하시오.
+select max(avg(salary))
+from hr.employees
+group by department_id;
+
+-- 현재 마지막 사원 번호는 206이다 이때 다음 사원의 사원번호는 1씩 증가하는 사원 번호를 보여해 줘야 한다.
+-- 1씩 증가하는 사원번호를 부여 할 수 있는 쿼리문을 작성 하시오.
+select max(employee_id) + 1 from hr.employees;
+
+-- 현재 사원 번호가 hk100001일 때 다음 사원번호는 hk100002가 되게 출력하시오.
+-- 테이블은  dual;
+select  concat('hk', nvl(max(substr(null, 3)), 100000) + 1)
+from dual;
+
+select * from hr.employees;
+select * from hr.departments;
+
+--- projection : 원하는 컬럼의 데이터를 가져오는 것 select ~ from
+--- selection : 원하는 행의 데이터를 가져어는 것 select ~ from ~ where 
+--- join : 여러 테이블에서 원하는 데이터를 가져오는 것
+
+select employee_id, first_name
+     , hr.departments.department_id, department_name   
+from hr.employees , hr.departments 
+where hr.employees.department_id = hr.departments.department_id;
+
+--- T-SQL join
+select employee_id, first_name
+     , d.department_id, department_name   
+from hr.employees e , hr.departments d --- T-SQL join
+where e.department_id = d.department_id; -- 조인 조건
+
+--- ANSI join : join ~ on
+select employee_id, first_name
+      ,hr.departments.department_id , department_name
+from hr.employees join hr.departments
+on hr.employees.department_id = hr.departments.department_id;
+
+select employee_id, first_name
+      ,e.department_id , department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id;
+
+-- inner join : inner: 두 테이블에 조건에 만족하는 것만 가지고 와라
+select employee_id, first_name
+      ,e.department_id , department_name
+from hr.employees e inner join hr.departments d
+on e.department_id = d.department_id;
+--- 부서 없는 직원과 사원이 없는 부서는 출력되지 않는다.
+
+select * from hr.departments; --- manager_id : 부서 장
+select * from hr.employees;   ---  managger_id : 직속 상사
+
+--- 각 부서의 부서명과 부서장을 상사로 둔 직원의 이름, 급여, 직무, 입사일을 출력하시오.
+select first_name, salary, job_id, hire_date, e.manager_id
+      , d.department_id , department_name, d.manager_id
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id and e.manager_id = d.manager_id;
+--- 두테이블의 컬럼명이 같은 것끼리 조건을 부여 : NATURAL
+select first_name, salary, job_id, hire_date, manager_id
+      , department_id , department_name, manager_id
+from hr.employees NATURAL join hr.departments 
+--- NATURAL은 모든 테이블에  이름이 같은 모든 열을 기반으로 하는 조건을 사용하는 것
+--- 컬럼 명이 같아도 데이터 타입이 다르면 오류가 발생
