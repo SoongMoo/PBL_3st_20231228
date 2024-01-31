@@ -1,0 +1,222 @@
+2024/01/31
+
+--1번
+select avg(salary), sum(salary), max(salary), min(salary), count(*)
+from hr.employees
+group by department_id;
+
+--2번
+select job_id, max(hire_date), min(hire_date)
+from hr.employees
+group by job_id;
+
+--3번
+select employee_id, first_name, hire_date, job_id, department_id
+from hr.employees
+order by department_id, job_id;
+
+--4번
+select avg(salary), sum(salary), count(*)
+from hr.employees
+group by department_id, job_id;
+
+--5번
+select avg(salary), sum(salary)
+from hr.employees
+where department_id = 90
+group by job_id;
+
+--6번
+select count(*)
+from hr.employees
+group by department_id, job_id, hire_date;
+--having count(*) >= 5;
+
+--7번
+select department_id, avg(salary)
+from hr.employees
+group by department_id
+having avg(salary) >= 5000
+order by avg(salary) desc;
+
+--8번
+select department_id, count(*)
+from hr.employees
+group by department_id
+having count(*) < 10;
+
+--9번
+select avg(salary), sum(salary), count(*), max(salary)
+from hr.employees
+group by job_id
+having job_id not like '%REP%' and max(salary) >= 13000;
+
+--10번
+select last_name, salary, hire_date
+     , j.job_id ,job_title
+from hr.employees e, hr.jobs j
+where e.job_id = j.job_id;
+
+--11번
+select *
+from hr.departments
+where department_id = 90;
+
+--12번
+select employee_id, first_name, salary
+     , department_id
+from hr.employees
+where department_id = 90;
+
+--13번
+select employee_id, first_name, salary
+     , department_id
+from hr.employees
+where department_id = 100;
+
+--14번
+select employee_id, first_name, salary
+     , d.department_id
+from hr.employees e, hr.departments d
+where e.department_id = d.department_id and (d.department_id = 90 or d.department_id = 100);
+
+--15번
+select employee_id, last_name, first_name, salary, job_id
+     , d.department_id, location_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id;
+
+--16번
+select employee_id, last_name, first_name, salary
+     , d.department_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id
+where d.department_id = 100;
+
+--17번
+select employee_id, last_name, first_name
+     , j.job_id, job_title
+from hr.employees e join hr.jobs j
+on e.job_id = j.job_id;
+
+select employee_id, last_name, first_name
+     , j.job_id, job_title
+from hr.employees e, hr.jobs j
+where e.job_id = j.job_id;
+
+select employee_id, last_name, first_name
+     , job_id, job_title
+from hr.employees natural join hr.jobs;
+
+select employee_id, last_name, first_name
+     , job_id, job_title
+from hr.employees join hr.jobs 
+using (job_id);
+
+--18번
+select employee_id, last_name, salary, hire_date
+     , d.department_id, d.manager_id
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id and e.manager_id = d.manager_id;
+
+select employee_id, last_name, salary, hire_date
+     , d.department_id, d.manager_id
+from hr.employees e, hr.departments d
+where e.department_id = d.department_id and e.manager_id = d.manager_id;
+
+select employee_id, last_name, salary, hire_date
+     , department_id, manager_id
+from hr.employees join hr.departments
+using (department_id, manager_id);
+
+select employee_id, last_name, salary, hire_date
+     , department_id, manager_id
+from hr.employees natural join hr.departments;
+
+--19번
+select last_name, first_name, phone_number, salary
+     , d.department_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id;
+
+select last_name, first_name, phone_number, salary
+     , d.department_id, department_name
+from hr.employees e, hr.departments d
+where e.department_id = d.department_id;
+
+select last_name, first_name, phone_number, salary
+     , department_id, department_name
+from hr.employees natural join hr.departments;
+
+select last_name, first_name, phone_number, salary
+     , department_id, department_name
+from hr.employees join hr.departments
+using (department_id);
+
+--20번
+select d.department_id, department_name, location_id
+     , d.manager_id, first_name
+from hr.departments d join hr.employees e
+on d.manager_id = e.employee_id;
+
+--21번
+select employee_id
+     , j.job_id, job_title
+from hr.employees e, hr.jobs j
+where e.job_id = j.job_id;
+
+--22번
+select employee_id
+     , d.department_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id;
+
+--23번
+select employee_id
+     , j.job_id, job_title
+     , d.department_id, department_name
+from hr.employees e, hr.jobs j, hr.departments d
+where e.job_id = j.job_id and e.department_id = d.department_id;
+
+select employee_id
+     , j.job_id, job_title
+     , d.department_id, department_name
+from hr.employees e join hr.jobs j
+on j.job_id = e.job_id join hr.departments d
+on e.department_id = d.department_id;
+
+select employee_id
+     , job_id, job_title
+     , department_id, department_name
+from hr.employees  natural join hr.jobs 
+                   natural join hr.departments;
+                   
+select employee_id
+     , job_id, job_title
+     , department_id, department_name
+from hr.employees  join hr.jobs 
+using(job_id) join hr.departments 
+using (department_id);
+
+--24번
+select d.manager_id, job_title
+from hr.employees e, hr.jobs j , hr.departments d
+where e.job_id = j.job_id and e.employee_id = d.manager_id;
+
+--25번
+select employee_id, last_name, first_name, salary, job_id
+     , d.department_id, location_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id(+);
+
+--26번
+select employee_id, last_name, first_name, salary, job_id
+     , d.department_id, location_id, department_name
+from hr.employees e right outer join hr.departments d
+on e.department_id = d.department_id;
+
+--27번
+select employee_id, last_name, first_name, salary, job_id
+     , d.department_id, location_id, department_name
+from hr.employees e full outer join hr.departments d
+on e.department_id = d.department_id;

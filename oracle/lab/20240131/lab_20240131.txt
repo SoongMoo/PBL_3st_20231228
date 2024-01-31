@@ -1,0 +1,193 @@
+-- lab
+-- 1.
+select department_id, avg(salary), sum(salary), max(salary), min(salary), count(*)
+from hr.employees
+group by department_id;
+-- 2.
+select job_id, min(hire_date), max(hire_date)
+from hr.employees
+group by job_id;
+-- 3.
+select employee_id, first_name, hire_date, job_id, department_id
+from hr.employees
+order by department_id, job_id;
+-- 4.
+select department_id, job_id, avg(salary), sum(salary), count(*)
+from hr.employees
+group by department_id, job_id;
+-- 5.
+select sum(salary), avg(salary)
+from hr.employees
+where department_id = 90
+group by job_id;
+-- 6.
+select department_id, job_id, hire_date, count(*)
+from hr.employees
+group by department_id, job_id, hire_date
+having count(*) >= 5;
+-- 7.
+select department_id, avg(salary)
+from hr.employees
+group by department_id
+having avg(salary) >= 5000
+order by avg(salary) desc;
+-- 8.
+select department_id
+from hr.employees
+group by department_id
+having count(department_id) < 10;
+-- 9.
+select job_id, avg(salary), sum(salary), min(salary), max(salary)
+from hr.employees
+group by job_id
+having job_id not like '%REP%' and sum(salary) >= 13000;
+-- 10.
+select last_name, salary, hire_date
+     , j.job_id, job_title
+from hr.employees e join hr.jobs j
+on e.job_id = j.job_id;
+-- 11.
+select * from hr.departments
+where department_id = 90;
+-- 12.
+select employee_id, first_name, last_name, department_id, job_id
+from hr.employees
+where department_id = 90;
+-- 13.
+select employee_id, first_name, last_name, department_id, job_id
+from hr.employees
+where employee_id = 100;
+-- 14.
+select d.department_id, department_name
+     , employee_id, first_name, last_name, job_id
+from hr.departments d join hr.employees e
+on d.department_id = e.department_id and d.department_id = 90;
+-- 15.
+select employee_id, last_name, first_name, salary, job_id
+     , d.department_id, location_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id;
+-- 16.
+select employee_id, last_name, first_name, salary
+     , d.department_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id and e.employee_id = 100;
+-- 17.
+-- T-SQL
+select employee_id, last_name, first_name
+     , j.job_id, job_title
+from hr.employees e, hr.jobs j
+where e.job_id = j.job_id;
+-- inner join
+select employee_id, last_name, first_name
+     , j.job_id, job_title
+from hr.employees e inner join hr.jobs j
+on e.job_id = j.job_id;
+-- using절
+select employee_id, last_name, first_name
+     , job_id, job_title
+from hr.employees join hr.jobs
+using(job_id);
+-- 18.
+-- T-SQL
+select employee_id, last_name, salary, hire_date, e.manager_id
+     , d.department_id, d.manager_id
+from hr.employees e, hr.departments d
+where e.department_id = d.department_id and e.manager_id = d.manager_id;
+-- inner join
+select employee_id, last_name, salary, hire_date, e.manager_id
+     , d.department_id, d.manager_id
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id and e.manager_id = d.manager_id;
+-- NATURAL join
+select employee_id, last_name, salary, hire_date, manager_id
+     , department_id, manager_id
+from hr.employees natural join hr.departments;
+-- using절
+select employee_id, last_name, salary, hire_date, manager_id
+     , department_id, manager_id
+from hr.employees join hr.departments
+using(department_id, manager_id);
+-- 19.
+select last_name, first_name, employee_id, phone_number, salary
+     , d.department_id, department_name
+from hr.employees e, hr.departments d
+where e.department_id = d.department_id;
+
+select last_name, first_name, employee_id, phone_number, salary
+     , d.department_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id;
+
+select last_name, first_name, employee_id, phone_number, salary
+     , department_id, department_name
+from hr.employees natural join hr.departments;
+
+select last_name, first_name, employee_id, phone_number, salary
+     , department_id, department_name
+from hr.employees join hr.departments
+using(department_id);
+--20.
+select d.department_id, department_name, d.manager_id
+     , employee_id, first_name
+from hr.departments d join hr.employees e
+on d.department_id = e.department_id
+where e.employee_id = d.manager_id;
+-- 21.
+select employee_id
+     , j.job_id, job_title
+from hr.employees e join hr.jobs j
+on e.job_id = j.job_id;
+-- 22.
+select employee_id
+     , d.department_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id;
+-- 23.
+select employee_id
+     , j.job_id, job_title
+     , d.department_id, department_name
+from hr.employees e, hr.jobs j, hr.departments d
+where e.job_id = j.job_id and e.department_id = d.department_id;
+
+select employee_id
+     , j.job_id, job_title
+     , d.department_id, department_name
+from hr.employees e join hr.jobs j
+on e.job_id = j.job_id join hr.departments d
+on e.department_id = d.department_id;
+
+select employee_id
+     , job_id, job_title
+     , department_id, department_name
+from hr.employees natural join hr.jobs
+                  natural join hr.departments;
+                  
+select employee_id
+     , job_id, job_title
+     , department_id, department_name
+from hr.employees join hr.jobs
+using(job_id) join hr.departments
+using(department_id);
+-- 24.
+select employee_id
+     , d.manager_id
+     , job_title
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id join hr.jobs j
+on e.job_id = j.job_id;
+-- 25.
+select employee_id, first_name, salary
+     , d.department_id, department_name
+from hr.employees e left outer join hr.departments d
+on e.department_id = d.department_id;
+-- 26.
+select employee_id, first_name, salary
+     , d.department_id, department_name
+from hr.employees e right outer join hr.departments d
+on e.department_id = d.department_id;
+-- 27.
+select employee_id, first_name, salary
+     , d.department_id, department_name
+from hr.employees e full outer join hr.departments d
+on e.department_id = d.department_id;
