@@ -1,0 +1,209 @@
+1. 각 부서별 부서의 급여의 평균, 합계, 최대, 최소, 사원의 수
+select department_id, trunc(avg(salary)),
+       sum(salary), max(salary), min(salary), count(*)
+from hr.employees
+group by department_id;
+2. 같은 직무를 하는 사원들 중 제일 먼저 들어 온 사원과 제일 늦게 들어온 사원의 입사일을 출력하시오.
+select job_id, max(hire_date), min(hire_date)
+from hr.employees
+group by job_id;
+3. 사원번호,  이름, 입사일, 직무, 부서를 출력할 때.
+--- 부서는 오름차순으로 정렬하고 각 부서의 직무를 오름차순으로 정렬하여 출력하시오.  
+select employee_id, first_name, hire_date, job_id, department_id
+from hr.employees
+order by 4 desc, 5 desc;
+4.  각 부서의 직무별 급여 평균 , 합계, 담당하는 사원의 수를 출력
+select department_id, job_id, trunc(avg(salary)), sum(salary), count(*)
+from hr.employees
+group by department_id, job_id;
+5. 90부서에서 직무별 급여 합계와 평균 구하시오.
+select department_id, job_id, sum(salary), trunc(avg(salary))
+from hr.employees
+group by department_id, job_id
+having department_id = 90;
+6. 각부서에서 직무가 같은 사원들 중 입사일이 같은 사원의 수를 구하시오.
+-- 사원수가 5명이상만 출력
+select department_id, job_id, hire_date, count(*)
+from hr.employees
+group by department_id, job_id, hire_date
+--- having count(*) >= 5; ?
+7. 평균급여가 5000이상인 부서만 출력하시오.평균 급여 높은 것 부터 출력하시오.
+select department_id, trunc(avg(salary))
+from hr.employees
+group by department_id
+order by trunc(avg(salary)) desc;
+8. 부서의 직원 수가 10명 미만이 부서를 출력하시오.
+select department_id, count(*)
+from hr.employees
+group by department_id
+having count(*) < 10;
+9. 직무에 'REP'가 포함되어 있지 않은 직무별 급여의 평균, 합계, 최소,
+--- 최대 값을 출력할때 급여의 합계가 13000이상인 직무만 출력하시오.
+select job_id, trunc(avg(salary)), sum(salary), min(salary), max(salary)
+from hr.employees
+group by job_id
+having sum(salary) >= 13000;
+10.  사원의 성, 급여 , 입사일, 직무를 출력할때 직무명도 같이 출력하시오.
+select last_name, salary, hire_date,
+       j.job_id, job_title
+from hr.employees e, hr.jobs j
+where e.job_id = j.job_id;
+11. 부서 테이블에서 90인 부서정보를 출력하시오.
+select department_id, department_name from hr.departments
+where department_id = 90;
+12. 90인 부서의 직원을 구하시오, -- 컬럼은 임의로
+select department_id, first_name, last_name from hr.employees
+where department_id = 90;
+13. 100번 사원 정보를 출력하시오.-- 컬럼은 임의로
+select first_name, last_name from hr.employees
+where employee_id = 100;
+14. 11부터 13번까지을 한번에 출력하세요.-- 컬럼은 임의로
+select first_name, last_name
+     , department_id, department_name
+from hr.employees join hr.departments
+using(department_id)
+where department_id = 90 or employee_id = 100;
+15. 직원번호, 성, 이름, 급여, 직무, 부서번호, 지역번호, 부서명을 출력
+select employee_id, last_name, first_name, salary
+      ,j.job_id, d.department_id, l.location_id, d.department_id
+from hr.employees e, hr.jobs j, hr.departments d, hr.locations l;
+16. 직원번호 .성, 이름 급여 부서번호, 부서명을 100 사원만 출력하시오.
+select employee_id, last_name, first_name, salary
+     , department_id, department_name
+from hr.employees join hr.departments
+using(department_id)
+where employee_id = 100;
+17. 직원 번호, 성, 이름 , 직무, 직무명을 출력하세요.
+T-SQL Join , Ansi-Join(inner Join, NATURAL JOIN , using절)모두 구현할 것
+--- T-SQL Join
+select e.employee_id, last_name, first_name
+     , j.job_id, job_title
+from hr.employees e, hr.jobs j
+where e.job_id = j.job_id;
+--- ANSI Join
+--- inner join
+select e.employee_id, last_name, first_name
+     , j.job_id, job_title
+from hr.employees e join hr.jobs j
+on e.job_id = j.job_id;
+--- natural join
+select employee_id, last_name, first_name
+     , job_id, job_title
+from hr.employees natural join hr.jobs;
+--- using
+select employee_id, last_name, first_name
+     , job_id, job_title
+from hr.employees join hr.jobs
+using(job_id);
+18. 부서장이 상사인 직원을 구하시오.
+  직원번호, 성, 급여 입사일, 부서번호, 부서장번호를 출력하시오.
+--- T-SQL Join , Ansi-Join(inner Join, NATURAL JOIN , using절)모두 구현할 것
+--- T-SQL Join
+select employee_id, last_name, salary, hire_date
+      ,d.department_id, d.manager_id
+from hr.employees e, hr.departments d
+where e.department_id = d.department_id and e.manager_id = d.manager_id;
+--- Ansi Join
+--- inner join
+select employee_id, last_name, salary, hire_date
+      ,d.department_id, d.manager_id
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id and e.manager_id = d.manager_id;
+--- natural join
+select employee_id, last_name, salary, hire_date
+      ,department_id, manager_id
+from hr.employees natural join hr.departments;
+--- using
+select employee_id, last_name, salary, hire_date
+      ,department_id, manager_id
+from hr.employees join hr.departments
+using(department_id, manager_id);
+19. 성 이름 직원번호 , 전화번호 , 급여 부서번호, 부서명을 출력
+T-SQL Join , Ansi-Join(inner Join, NATURAL JOIN , using절)모두 구현할 것
+--- T-SQL Join
+select last_name, first_name, employee_id, phone_number, salary
+     , d.department_id, department_name
+from hr.employees e, hr.departments d
+where e.department_id = d.department_id;
+--- ANSI Join
+--- inner join
+select last_name, first_name, employee_id, phone_number, salary
+     , d.department_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id;
+--- natural join
+select last_name, first_name, employee_id, phone_number, salary
+     , department_id, department_name
+from hr.employees natural join hr.departments;
+--- using
+select last_name, first_name, employee_id, phone_number, salary
+     , department_id, department_name
+from hr.employees join hr.departments
+using(department_id);
+20. 각 부서의 부서의 정보와 부서장의 이름을 출력 하시오
+--------------------[참고용]--------------------
+select * from hr.employees;
+select * from hr.departments;
+--------------------------------------------------
+select d.department_id, department_name
+     , first_name
+from hr.departments d, hr.employees e
+where d.department_id = e.department_id and d.manager_id = e.employee_id;
+select * from hr.departments;
+21. 직원번호, 직무번호 ,직무내용
+select employee_id
+     , j.job_id, job_title
+from hr.employees e, hr.jobs j
+where e.job_id = j.job_id;
+22. 직원번호, 부서번호, 부서명
+select employee_id
+     , d.department_id, department_name
+from hr.employees e, hr.departments d
+where e.department_id = d.department_id;
+23. 각 직원의 직원번호, 직무번호, 직무 내용, 부서번호, 부서명
+T-SQL Join , Ansi-Join(inner Join, NATURAL JOIN , using절)모두 구현할 것
+--- T-SQL Join
+select employee_id
+     , j.job_id, job_title
+     , d.department_id, department_name
+from hr.employees e, hr.jobs j, hr.departments d
+where e.job_id = j.job_id and e.department_id = d.department_id;
+--- ANSI Join
+--- inner join
+select employee_id
+     , j.job_id, job_title
+     , d.department_id, department_name
+from hr.employees e join hr.jobs j on e.job_id = j.job_id
+join hr.departments d on e.department_id = d.department_id;
+--- natural join
+select employee_id
+     , job_id, job_title
+     , department_id, department_name
+from hr.employees natural join hr.jobs
+natural join hr.departments;
+--- using
+select employee_id
+     , job_id, job_title
+     , department_id, department_name
+from hr.employees join hr.jobs using(job_id)
+join hr.departments using(department_id);
+24. 부서장의 직무내용을 출력하시오. 부서장 번호, 직무내용,
+select d.manager_id
+      ,j.job_title
+from hr.employees e, hr.departments d, hr.jobs j
+where e.employee_id = d.manager_id and e.job_id = j.job_id;
+25. 부서가 없는 직원도 같이 출력
+select first_name, last_name
+     , d.department_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id = d.department_id(+);
+26. 직원이 없는 부서 를 출력
+select first_name, last_name
+     , d.department_id, department_name
+from hr.employees e join hr.departments d
+on e.department_id(+) = d.department_id;
+27. 부서가 없는 직원과 직원이 없는 부서까지 모두 출력
+select first_name, last_name
+     , d.department_id, department_name
+from hr.employees e full outer join hr.departments d
+on e.department_id = d.department_id;
