@@ -183,7 +183,7 @@ select * from hr.employees where salary > 9000;
 select * from hr.employees where salary >  -- 단일행 
                     (select  max(salary) from hr.employees where job_id = 'FI_ACCOUNT');
 --- 
-select * from hr.employees where salary > ALL  -- 중행 
+select * from hr.employees where salary > ALL  -- 다중행 
                     (select  salary from hr.employees where job_id = 'FI_ACCOUNT');
 ---  다중행 연산자.
 ---  > ANY : 작은 보다 크다
