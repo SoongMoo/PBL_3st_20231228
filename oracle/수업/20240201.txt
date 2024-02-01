@@ -197,3 +197,214 @@ select * from hr.employees where salary in  -- 다중행
                     (select  salary from hr.employees where job_id = 'FI_ACCOUNT');     
 select * from hr.employees where salary in (9000, 8200, 7700, 7800, 6900); -- 다중행
 select * from hr.employees where salary = 9000 or salary = 8200 or salary = 7700; -- 단일행
+
+--- 부하직원이 있는 사원을 모두 구하시오.
+select * from hr.employees 
+where employee_id in (select manager_id from hr.employees ) ;
+--  상사를 출력
+select manager_id from hr.employees;
+-- 부하직원이 없는 직원들을 구하시오.. -- 
+--- 다중행에 null이 있으면 결과가 안나오게 된다.
+select * from hr.employees 
+where employee_id not in (select manager_id from hr.employees ) ;
+--- null을 제외하고 값을 가지고와야 한다.
+select * from hr.employees 
+where employee_id not in (select manager_id from hr.employees where manager_id is not null) ;
+
+--- 단일행연산  : <, > , <= , >= , =, 사직연산
+--- 다중행인 경우 다중행 연산자 : ANY, ALL, IN
+--
+--  집합 (set 연산) : 합집합(union) , 교집합(intersector) , 차집합 (minus),
+--- 집합은 중복 데이터를 허용하지 않는 것을 말한다.
+--- A
+select first_name , salary, job_id
+from hr.employees
+where department_id = 80
+union
+--- B
+select first_name , salary, job_id
+from hr.employees
+where department_id = 30;
+
+select first_name , salary, job_id
+from hr.employees
+where department_id = 80 or department_id = 30;
+
+
+select * from hr.job_history;
+
+--- A
+select employee_id, job_id, department_id 
+from hr.employees
+where department_id in (50, 90 , 80)
+union   -- 교집합은 1번만 : 중복데이터를 허용하지 않는다.
+--- B
+select employee_id, job_id, department_id
+from hr.job_history
+where department_id in (50, 90 , 80);
+
+--- A
+select employee_id, job_id, department_id 
+from hr.employees
+where department_id in (50, 90 , 80)
+union all -- 중복데이터 허용
+--- B
+select employee_id, job_id, department_id
+from hr.job_history
+where department_id in (50, 90 , 80);
+
+--- A
+select employee_id, job_id, department_id 
+from hr.employees
+where department_id in (50, 90 , 80)
+INTERSECT
+--- B
+select employee_id, job_id, department_id
+from hr.job_history
+where department_id in (50, 90 , 80);
+
+
+--- A
+select employee_id, job_id, department_id 
+from hr.employees
+where department_id in (50, 90 , 80)
+minus -- A-B
+--- B
+select employee_id, job_id, department_id
+from hr.job_history
+where department_id in (50, 90 , 80);
+
+---B
+select employee_id, job_id, department_id
+from hr.job_history
+where department_id in (50, 90 , 80)
+minus -- B-A
+-- A
+select employee_id, job_id, department_id 
+from hr.employees
+where department_id in (50, 90 , 80);
+
+select department_id , department_name  -- 대응되는 컬럼의 데이터 타입이 일치하면 된다.
+from hr.departments
+union
+select location_id, state_province
+from hr.locations;
+
+select department_id , to_char(hire_date,'yy-mm-dd')  -- 대응되는 컬럼의 데이터 타입이 일치하면 된다.
+from hr.employees
+union
+select location_id, state_province
+from hr.locations;
+
+--- 위 쿼리문에 있는 heading name을 따른다.
+select department_id , hire_date        ,  to_char(null) state
+from hr.employees
+union
+select location_id,    to_date(null)        ,state_province
+from hr.locations;
+
+SELECT employee_id, job_id,salary
+FROM hr.employees
+union
+select EMPLOYEE_ID, JOB_ID , 0
+from  hr.job_history;
+
+---- 응용.... 회원, 직원있을 때 아이디가 중복되서는 안된다. 
+--- 아이디 중복 확인--- 로그인 ---
+--- 회원테이블은 member : 회원아이디 : mem_id, 이메일 : mem_email
+--- 직원테이블은 employees : 직원아이디 :emp_id, 이메일 : emp_email
+--- 찾고자 하는 아이디는 high
+select mem_id, mem_email , 'mem' grade 
+from member where mem_id = 'high'
+union
+select emp_id, emp_email , 'emp'
+from employees where emp_id = 'high';
+ 
+select employee_id, last_name, 'emp' grade
+from hr.employees
+where last_name = 'King';
+
+
+SELECT employee_id, job_id,salary
+FROM hr.employees
+union
+select EMPLOYEE_ID, JOB_ID , 0
+from  hr.job_history
+order by employee_id;
+---- projection, selection, join
+---=========================================================================---
+--- 데이터 조작어 (DML) -- insert , update, delete
+--- 확장된 DML :  insert(Create), select(Read) , update(Update), delete(Delete) : CRUD
+drop table employees;
+create table employees
+as
+select * from hr.employees
+where 1 = 2;
+--==================================
+select * from employees;
+--==================================
+create table departments
+as
+select * from hr.departments
+where 1=2;
+---=====================================
+select * from departments;
+desc departments;
+
+--- Create : insert : C
+insert into departments (DEPARTMENT_ID,DEPARTMENT_NAME,MANAGER_ID,LOCATION_ID )
+values                   (70,       'Public Relations',  100     , 1700);
+select * from departments;
+
+insert into departments(DEPARTMENT_ID, DEPARTMENT_NAME)
+values                  (100, 'Finance'); -- 값을 주지 않으면 null이 들어간다.
+select * from departments;
+
+insert into departments  --- DEPARTMENT_ID, DEPARTMENT_NAME, MANAGER_ID, LOCATION_ID
+values      (30,'Purchasing', null, null  );
+DESCRIBE departments;
+select * from departments;
+
+insert into employees(employee_id,first_name,last_name,email,phone_number,hire_date
+                    ,job_id,salary,commission_pct,MANAGER_ID,DEPARTMENT_ID)
+values                (113,       'Louis',    'Popp', 'LPOPP', '010-7146-1970', sysdate
+                    , 'AC_ACCOUNT', 6900,  null, 205, 110);
+select * from employees;
+select sysdate from dual;
+
+insert into employees                                   -- 'yy-mm-dd'
+values (114, 'Den','Raphealy', 'DRAPHEAL', '010-4561-1112', to_date('01-31-24','mm-dd-yy')
+        ,'SA_REP', 11000, 0.2, 100, 60);
+desc employees;
+select * from employees;
+insert into employees (last_name, first_name, hire_date, phone_number, salary, department_id
+                    , email, job_id)
+values ('이', '숭무' , '24-01-31', '010-2345-2354' ,  1000, 110, 'high', '샘');
+select * from employees;
+
+--- 다른 테이블에서 행 복사
+insert into employees (employee_id, last_name, first_name, hire_date,phone_number
+                      , salary, department_id, email,job_id)
+--- 서브쿼리
+select employee_id, last_name, first_name, hire_date,phone_number
+                      , salary, department_id, email,job_id
+from hr.employees
+where job_id like '%REP%';
+
+select * from employees;
+
+delete from employees;
+--- 첫번째 사원의 번호는 101이다.
+--- 사원번호는 현재 사원번호에 1증가한 값이어야 하고 이름은 상범, 성은 이 , 입사일은 오늘
+--- 급여 1000, 이메일 sang, 직무는 군인, 연락처 010-1234-1234
+insert into employees(employee_id,first_name,last_name,hire_date,salary
+                    ,email,job_id,phone_number)
+values((select nvl(max(employee_id),100) + 1 from employees),'상범','이',sysdate
+        ,1000, 'sang', '군인', '010-1234-1234' );
+select * from employees;
+select nvl(max(employee_id),100) + 1 from employees;
+
+insert into employees
+select * from hr.employees;
+
+select * from employees;
