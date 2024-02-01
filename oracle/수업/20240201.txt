@@ -175,25 +175,7 @@ select * from hr.employees where salary < ANY(
 --- 직무가 FI_ACCOUNT인 사원의 급여를 출력
 select salary from hr.employees where job_id = 'FI_ACCOUNT'; -- 9000 8200 7700 7800 6900 -- 다중행
 -- 직무가 FI_ACCOUNT인 사원의 급여중 최대 급여는 
-select  max(salary) from hr.employees where job_id = 'FI_ACCOUNT'; --- 9000
---- 9000보다 더 많이 받는 사원은?
--- < , > , <= , >=, = : 단일행 연산자
-select * from hr.employees where salary > 9000;
---- 직무가 FI_ACCOUNT인 사원의 급여중 최대 급여보다 더 많이 받는 사원은?
-select * from hr.employees where salary >  -- 단일행 
-                    (select  max(salary) from hr.employees where job_id = 'FI_ACCOUNT');
---- 
-select * from hr.employees where salary > ALL  -- 단중행 
-                    (select  salary from hr.employees where job_id = 'FI_ACCOUNT');
---- 다중행 일때 : 다중행 연산자.
----  > ANY : 작은 보다 크다
----  < ANY : 큰것 보다 작다
----  = ANY : IN
---- > ALL : 큰것 보다 크다
---- < ALL : 작은 것보다 작다.
-select * from hr.employees where salary = ANY  -- 단중행 
-                    (select  salary from hr.employees where job_id = 'FI_ACCOUNT');
-select * from hr.employees where salary in  -- 단중행 
+다중행 
                     (select  salary from hr.employees where job_id = 'FI_ACCOUNT');     
-select * from hr.employees where salary in (9000, 8200, 7700, 7800, 6900);
-select * from hr.employees where salary = 9000 or salary = 8200 or salary = 7700;
+select * from hr.employees where salary in (9000, 8200, 7700, 7800, 6900); -- 다중행
+select * from hr.employees where salary = 9000 or salary = 8200 or salary = 7700; -- 단일행
