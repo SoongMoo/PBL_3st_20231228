@@ -185,12 +185,12 @@ select * from hr.employees where salary >  -- 단일행
 --- 
 select * from hr.employees where salary > ALL  -- 단중행 
                     (select  salary from hr.employees where job_id = 'FI_ACCOUNT');
---- 다중행 일때 : 다중행 연산자.
+---  다중행 연산자.
 ---  > ANY : 작은 보다 크다
 ---  < ANY : 큰것 보다 작다
 ---  = ANY : IN
---- > ALL : 큰것 보다 크다
---- < ALL : 작은 것보다 작다.
+---  > ALL : 큰것 보다 크다
+---  < ALL : 작은 것보다 작다.
 select * from hr.employees where salary = ANY  -- 다중행 
                     (select  salary from hr.employees where job_id = 'FI_ACCOUNT');
 select * from hr.employees where salary in  -- 다중행 
