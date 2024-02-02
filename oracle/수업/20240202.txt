@@ -1,0 +1,374 @@
+-- insert(Create) : C, Select (Read) r , update(Update) : U , delete(Delete) : D => CRUD
+-- update
+select first_name, department_id
+from employees
+where employee_id = 113; 
+
+select * from employees;
+
+update employees
+set department_id = 200
+WHERE employee_id = 113;
+
+select * from employees;
+
+update employees
+set department_id = 300;
+
+select * from employees;
+
+select * from employees
+where last_name = 'Ernst';
+
+select * from employees;
+
+update employees
+set email = 'AAAA', salary = 12000;
+ROLLBACK; -- TCL
+
+update employees
+set email = 'AAAA', salary = 12000
+where last_name = 'Ernst';
+
+select * from employees;
+ROLLBACK; -- TCL
+--- 사원번호가 205, 114번인 사원의 직무를 'ST_CLERK'로 변경하시오.
+select * from employees
+where employee_id in (205, 114);
+
+update employees
+set job_id = 'ST_CLERK'
+where employee_id in (205, 114);
+
+select * from employees
+where employee_id in (205, 114);
+rollback;
+--TCL commit, rollbak
+-- commit : 종료
+-- rollback :  commit이 실행된 상태
+
+select * from employees where employee_id = 118; -- PU_CLERK, 2600
+select * from employees where employee_id = 110; -- FI_ACCOUNT, 8200
+
+update employees
+set job_id = 'FI_ACCOUNT' , salary = '8200'
+where employee_id = 118;
+
+select * from employees where employee_id = 118;
+rollback;
+select job_id from employees where employee_id = 110; --- FI_ACCOUNT
+select salary from employees where employee_id = 110; --- 8200
+
+update employees
+set   job_id = (select job_id from employees where employee_id = 110) -- 서브쿼리
+    , salary = (select salary from employees where employee_id = 110)
+where employee_id = 118;
+
+desc employees;
+/*
+select EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL,PHONE_NUMBER
+      ,HIRE_DATE, JOB_ID, SALARY
+      ,COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID
+from employees;
+
+insert into employees(EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL,PHONE_NUMBER
+                    ,HIRE_DATE, JOB_ID, SALARY
+                    ,COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID
+)
+values(1);
+*/
+SELECT job_id  FROM employees where employee_id = 200; -- AD_ASST
+select manager_id from employees where employee_id = 140; --- 123
+select job_id, manager_id from employees where employee_id = 130;  --- ST_CLERK	121
+--- 130의 직무와 상사를 200번의 직무와 140번의 상사로 변경하고 싶다.
+update employees
+set job_id = 'AD_ASST'
+   ,manager_id = 123
+where employee_id = 130;
+select * from employees where employee_id = 130;
+ROLLBACK;
+update employees
+set job_id = (SELECT job_id  FROM employees where employee_id = 200)
+   ,manager_id = (select manager_id from employees where employee_id = 140)
+where employee_id = 130;
+select * from employees where employee_id = 130;
+ROLLBACK;
+
+create table emp
+as
+select * from employees; --- 
+
+select * from emp;
+select * from employees;
+-- employees테이블에 있는 100번 사원의 급여와 
+-- employees테이블에 있는 114번 사원의 직무를
+-- emp테이블에 있는 130번 사원에게 적용시키세요.
+select salary from employees where employee_id = 100; -- 24000
+select job_id from employees where employee_id = 114; -- PU_MAN
+select salary, job_id from emp where employee_id = 130; -- 2800	ST_CLERK
+
+update emp
+set salary = 24000
+    ,job_id = 'PU_MAN'
+where employee_id = 130;
+
+update emp
+set salary = (select salary from employees where employee_id = 100)
+    ,job_id = (select job_id from employees where employee_id = 114)
+where employee_id = 130;
+
+ROLLBACK;
+-- 200번 사원이 가진 직무와 같은 사원들의 부서를 사원번호 114인 부서로 변경하시오.
+select job_id from employees where employee_id = 200; -- AD_ASST
+select department_id from employees where employee_id = 114; -- 30 
+select department_id from employees where job_id = 'AD_ASST'; -- 10
+update employees
+set department_id = 30
+where job_id = 'AD_ASST';
+select department_id from employees where job_id = 'AD_ASST';
+ROLLBACK;
+update employees
+set department_id = (select department_id from employees where employee_id = 114)
+where job_id = (select job_id from employees where employee_id = 200);
+--- update에서 조건절에 서브쿼리를 사용할 수 있다.
+ROLLBACK;
+
+-- 114번의 직무와 급여를 205번 사원과 같게 변경하시오.
+update employees
+set salary = (select salary from employees where employee_id = 205)
+    ,job_id = (select job_id from employees where employee_id = 205)
+where employee_id = 114;
+ROLLBACK;
+update employees
+set (salary ,job_id) = (select salary, job_id from employees where employee_id = 205)
+where employee_id = 114;
+ROLLBACK;
+
+--- 80번 부서의 사원 급여와 직무가 같은 사원들을 모두 출력하시오. 모든 정보들을 출력
+--- 
+select DISTINCT salary, job_id from employees where department_id = 80;
+select * from employees
+where (salary, job_id) in (select DISTINCT salary, job_id from employees where department_id = 80);
+
+-- 114번의 사원의 급여 직무가 같은 사원의 모든 정보를 출력하세요. ( = ,> ,<)
+select salary, job_id from employees where employee_id = 114;
+
+select * from employees
+where salary = 11000 and job_id = 'PU_MAN';
+
+select * from employees
+where (salary,job_id) in (select salary, job_id from employees where employee_id = 114) ;
+--- 114번의 이름 , 직무 , 급여를 출력하시오.
+select first_name, job_id, salary 
+from employees where employee_id = 114;
+
+delete from departments;
+insert into departments
+select * from hr.departments;
+commit;
+--- 부서명에 대소문자 구분 없이 pu가 포함되어 있는 부서의 직원들을 
+--  120번 사원의 급여로 변경하시오.
+select salary from employees where employee_id = 120; --- 8000
+select department_id from departments where lower(department_name) like '%pu%'; -- 30, 70
+update employees
+set salary = 8000
+where department_id in (30, 70);
+
+update employees
+set salary = (select salary from employees where employee_id = 120)
+where department_id in --- 다중행 연산자 (IN , ANY, ALL)
+        (select department_id from departments where lower(department_name) like '%pu%');
+
+
+select * from employees where employee_id = 114;
+select * from employees;
+delete from employees
+where employee_id = 114; --- 조건절
+select * from employees where employee_id = 114;
+select * from employees;
+
+delete from employees; 
+ROLLBACK;
+
+--- 114번 사원과 130번 사원을 삭제하시오.
+select * from employees where employee_id in (114, 130);
+
+delete from employees
+where employee_id in(114, 30);
+
+ROLLBACK;
+
+
+--- 직무가 REP를 포함하고 있는 사원들을 삭제 하시오...
+select * from employees where job_id like '%REP%';
+
+delete from employees
+where job_id in (select job_id from employees where job_id like '%REP%');
+
+ROLLBACK;
+
+delete from employees;
+TRUNCATE table employees; -- 조건절을 사용할 수 없다.
+insert into employees
+select * from hr.employees;
+commit;
+
+select FIRST_NAME, SALARY
+from EMPLOYEES
+
+---- insert(Create) : C , select(Read) R, update(Upfate) : U , delete(Delete) D ==> CRUD
+---  DML : insert , update , delete
+--- 확장된 DML : insert select update delete
+
+-- DDL -- 데이터 정의어  : 데이터베이스 객체에 대한 : 테이블, 뷰, 시퀀스, index 
+  ------- create, alter, drop : 
+  --- TCL을 사용하지 못한다.
+  --- DDL문을 사용하게 되면 자동 commit이 된다,
+select * from employees;
+drop table employees;
+-- rollback;
+select * from departments;
+drop table departments;
+--- 회원 테이블 :member : 회원번호:mem_num, 회원이름 mem_name
+---                     , 회원주소:mem_addr, 성별mem_gender, 연락처:phone_number
+---                     , 생년월일:mem_birth, 등록일:mem_regist
+create table member(
+    mem_num number,
+    mem_name varchar2(200),
+    mem_addr varchar2(300),
+    mem_gender char(3),
+    phone_number varchar2(13),
+    mem_birth date,
+    mem_regist timestamp
+);
+desc member;
+select * from member;
+
+/*
+public class member{
+    int memNum;
+    String memName;
+    String memAddr;
+    char memGender;
+    String phoneNumber;
+    Date memBirth;
+    Timestamp memRegist;
+}
+*/
+select * from member;
+insert into member 
+values(100001, '이숭무', '성남', 'M', '010-1234-1234'
+     ,'95-05-25', sysdate);
+
+select * from member;
+commit;
+delete from member;
+commit;
+insert into member 
+values((select nvl(max(mem_num), 100000 )+ 1 from member)
+        , '이숭무', '성남', 'M', '010-1234-1234'
+     ,'95-05-25', sysdate);
+select * from member;
+commit;
+
+-- DATE     :  세기 년 월 일
+-- TIMESTAMP:  세기 년 월 일 시 분 초 미리세컨드
+
+drop table member;
+create table member(
+    mem_num number,
+    mem_name varchar2(200),
+    mem_addr varchar2(300),
+    mem_gender char(3),
+    phone_number varchar2(13),
+    mem_birth date,
+    mem_regist timestamp default sysdate --- default를 사용하게 되면값을 주지 않을 경우 default값이 들어간다.
+);
+insert into member(mem_num, mem_name,mem_addr, mem_gender, phone_number,mem_birth)
+values((select nvl(max(mem_num), 100000 )+ 1 from member)
+        , '이숭무', '성남', 'M', '010-1234-1234' ,'95-05-25');
+select * from member;
+insert into member(mem_num, mem_name,mem_addr, mem_gender, phone_number,mem_birth, mem_regist)
+values((select nvl(max(mem_num), 100000 )+ 1 from member)
+        , '이숭무', '성남', 'M', '010-1234-1234' ,'95-05-25', null);
+select * from member;
+
+---------------------------------------------
+--DEPARTMENT_ID   NOT NULL NUMBER(4)    
+--DEPARTMENT_NAME NOT NULL VARCHAR2(30) 
+--MANAGER_ID               NUMBER(6)    
+--LOCATION_ID              NUMBER(4)
+---------------------------------------------
+create table departments(
+    DEPARTMENT_ID NUMBER(4) NOT NULL,
+    DEPARTMENT_NAME VARCHAR2(30) NOT NULL,
+    MANAGER_ID NUMBER(6),
+    LOCATION_ID NUMBER(4)
+);
+insert into departments(MANAGER_ID, LOCATION_ID)
+values(100, 13000);
+insert into departments(DEPARTMENT_ID, DEPARTMENT_NAME) -- notnull인 경우에는 꼭 값을 지정해주어야 한다.
+values(10, '교무부');
+select * from departments;
+
+create table employees
+as 
+select * from hr.employees;
+insert into employees(EMPLOYEE_ID, FIRST_NAME, PHONE_NUMBER)
+values (100, '숭무', '010-1234-1234');
+desc employees;
+drop table employees;
+
+drop table member;
+create table member(
+    mem_num number,
+    mem_name varchar2(200) not null,  --- *
+    mem_addr varchar2(300) not null,  --- *
+    mem_gender char(3),
+    phone_number varchar2(13) not null,
+    mem_birth date,
+    mem_regist timestamp default sysdate --- 세기 년 월 일 시 분 초 미리세컨드
+);
+insert into member(mem_num, mem_name, mem_addr, mem_gender, phone_number, mem_birth)
+values           (100001, '이숭무', '성남', null, '010-124-1234', null);
+select * from member;
+
+desc hr.employees;
+drop table employees;
+create table employees(
+    EMPLOYEE_ID number(6) not null,
+    FIRST_NAME varchar2(20),
+    LAST_NAME varchar2(25) not null,
+    EMAIL    varchar2(20) not null,
+    PHONE_NUMBER varchar2(13) null,
+    HIRE_DATE date  default sysdate null, --- 세기 년 월 일
+    JOB_ID varchar2(10) not null,
+    SALARY number(8, 2),
+    COMMISSION_PCT  number(2,2), --- 0.0 ~ 0.99
+    MANAGER_ID number,
+    DEPARTMENT_ID  NUMBER(4)
+);
+
+insert into employees(EMPLOYEE_ID, FIRST_NAME, LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                       , JOB_ID,SALARY,COMMISSION_PCT,MANAGER_ID, DEPARTMENT_ID   )
+values(105, null, 'Austin', 'DAUSTIN', null,sysdate, 'IT_PROG',	4800,null , null,	60);
+select * from employees;
+
+insert into employees(EMPLOYEE_ID, FIRST_NAME, LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                       , JOB_ID,SALARY,COMMISSION_PCT,MANAGER_ID, DEPARTMENT_ID   )
+values ( 108 ,'Nancy','Greenberg','NGREENBE','515.124.4569', 
+        to_date('31-01-24','dd-mm-yy'),'FI_MGR',12008,null,101,100);
+
+--- hr에 있는 employees테이블에서 90인 부서만 employees에 저장하시오.
+-- EMPLOYEE_ID,LAST_NAME, EMAIL, HIRE_DATE, JOB_ID
+insert into employees(EMPLOYEE_ID,LAST_NAME, EMAIL, HIRE_DATE, JOB_ID  )
+select EMPLOYEE_ID,LAST_NAME, EMAIL, HIRE_DATE, JOB_ID from hr.employees
+where department_id = 90;
+
+alter table employees
+modify (PHONE_NUMBER varchar2(30));
+
+--- hr에 있는 employees테이블에서 직무에 'SA'가 있는 사원들을 모두 복사하시오.
+insert into employees
+select * from hr.employees where job_id like '%SA%';
+--- default, null
