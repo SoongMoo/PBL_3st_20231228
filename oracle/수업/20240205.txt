@@ -318,6 +318,7 @@ create table departments(
 --- 자식테이블이 있을 때 부모 테이블 삭제 
 drop table departments cascade CONSTRAINTS;
 select * from employees;
+drop table departments;
 drop table employees;
 -----=============================
 create table departments(
@@ -363,3 +364,189 @@ add constraint emp_department_id_FK foreign key(department_id)
     REFERENCES departments
 add constraint emp_manager_id_FK foreign key(manager_id)
     REFERENCES employees(employee_id);
+
+--- 테이블 제약조건 삭제
+ALTER TABLE DEPARTMENTS
+drop constraint dep_department_id_PK; --- primary 
+--- ORA-02273: 고유/기본 키가 외부 키에 의해 참조되었습니다
+--- primary key를 삭제하려면 foreign key를 먼저 삭제
+select * from user_cons_columns where table_name = 'DEPARTMENTS';
+
+alter table departments
+drop constraint DEPT_MANAGER_ID_FK;
+
+select * from user_cons_columns where table_name = 'EMPLOYEES';
+alter table EMPLOYEES
+drop CONstraint  EMP_DEPARTMENT_ID_FK;
+
+alter table EMPLOYEES
+drop CONstraint  EMP_MANAGER_ID_FK;
+
+--- constraint 확인 할 때
+select * from user_cons_columns where table_name = 'EMPLOYEES';
+
+alter table EMPLOYEES
+drop CONstraint  EMP_EMPLOYEE_ID_PK;
+
+alter table EMPLOYEES
+drop CONstraint  EMP_EMAIL_UU;
+
+alter table EMPLOYEES
+drop CONstraint  EMP_PHONE_NUMBER_UU;
+
+select * from user_cons_columns where table_name = 'DEPARTMENTS';
+alter table departments
+drop constraint DEP_DEPARTMENT_ID_PK;
+
+alter table employees
+add ( constraint emp_employee_id_PK primary key (employee_id)
+     ,constraint emp_email_UU unique(email) 
+     , constraint emp_PHONE_NUMBER_UU unique(PHONE_NUMBER));
+     
+----================================
+create table test11(
+    t1 number primary key,
+    t2 varchar2(20)
+);
+create table test12(
+    t1 number REFERENCES test11,
+    t11 varchar2(20)
+);
+insert into test11 values(1,1);
+insert into test12 values(1, 2);
+select * from test11;
+select * from test12;
+delete from test11
+where t1 = 1;
+--ORA-02292: 무결성 제약조건(RHEE.SYS_C008469)이 위배되었습니다- 자식 레코드가 발견되었습니다
+/*
+delete from test12
+where t1 = 1;
+delete from test11
+where t1 = 1;
+*/
+drop table test12;
+drop table test11;
+create table test11(
+    t1 number,
+    t2 varchar2(20)
+);
+create table test12(
+    t1 number,
+    t11 varchar2(20)
+);
+
+alter table test11
+add constraint test11_t1_PK primary key(t1);
+
+alter table test12
+add constraint test12_t1_FK foreign key(t1)
+    references test11 on delete cascade;
+
+insert into test11 values(1,1);
+insert into test12 values(1, 2);
+select * from test11;
+select * from test12;
+delete from test11
+where t1 = 1;
+select * from test11;
+select * from test12;
+
+
+
+drop table test12;
+drop table test11;
+create table test11(
+    t1 number,
+    t2 varchar2(20)
+);
+create table test12(
+    t1 number,
+    t11 varchar2(20)
+);
+alter table test11
+add constraint test11_t1_PK primary key(t1);
+
+alter table test12
+add constraint test12_t1_FK foreign key(t1)
+    references test11 on delete set null;
+    
+insert into test11 values(1,1);
+insert into test12 values(1, 2);
+select * from test11;
+select * from test12;
+delete from test11
+where t1 = 1;
+select * from test11;
+select * from test12;
+
+----====================================
+create table a(
+    a1 number,   --- pk
+    a2 varchar2(15)
+);
+create table b(
+    a1 number,  ---pk/FK
+    b1 number,  ---pk
+    b2 varchar2(15)
+);
+create table c(
+     a1 number, -- PK /FK
+     b1 number, -- pk /FK
+     c1 number, -- pk      
+     c2 varchar2(2)
+);
+create table d(
+    d1 number, --- pk
+    d2 varchar2(20),
+    a1 number,  ---FK
+    b1 number  ---FK
+);
+alter table a
+add constraint a_a1_PK primary key(a1);
+
+alter table b  --- primary key는 하나이고 속성 두개이다.
+add constraint b_a1_b1_PK primary key(a1, b1);
+--- a1 , b1
+--- 1    1
+--- 1    1 ---(x) 중복
+--- 1    2
+alter table c --- primary key는 하나이고 속성 세개이다. --- 복합 식별자
+add constraint c_a1_b1_c1_PK primary key(a1, b1, c1);
+--- a1    b1   c1
+--- 1     1    1
+--- 1     1    1 --- (x):중복
+--- 1     1    2
+--- 1     2    1
+--- 1     2    3
+alter table d
+add constraint d_d1_pk primary key(d1);
+
+alter table b
+add constraint b_a1_FK foreign key(a1)
+    references a on delete cascade;
+
+alter table c
+add constraint c_a1_b1_FK foreign key(a1, b1)
+    references b (a1, b1) on delete cascade;
+    
+alter table d
+add constraint d_a1_b1_FK foreign key(a1, b1)
+    references b(a1 , b1) on delete set null;
+
+insert into a(a1, a2) values(1, 'a');
+insert into b(b1,b2, a1) values(11, 'b11', 1);
+insert into c(c1,c2,a1, b1) values(111, 'c1', 1, 11);
+insert into d(d1,d2, a1, b1) values(1111,'d111', 1, 11);
+select * from a;
+select * from b;
+select * from c;
+select * from d;
+
+delete from a
+where a1 = 1;
+
+select * from a;
+select * from b;
+select * from c;
+select * from d;
