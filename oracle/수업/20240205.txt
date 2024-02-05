@@ -1,0 +1,365 @@
+---상품 문의
+CREATE TABLE review(
+    review_num number,
+    goods_num varchar2(20),
+    review_date date DEFAULT sysdate,
+    review_content CLOB, -- 4G
+    member_id varchar2(30)
+);
+insert into review(review_num, goods_num, review_date, review_content, member_id)
+values(1, 'hk100001', sysdate, '내용', 'highland0');
+SELECT *
+FROM review;
+insert into review(review_num, goods_num, review_date, review_content, member_id)
+values(2, 'hk100001', DEFAULT, '내용', 'highland0');
+SELECT * FROM review;
+
+
+DROP TABLE review;
+CREATE TABLE review(
+    review_num number GENERATED ALWAYS as IDENTITY(start WITH 1 increment BY 1),
+    goods_num varchar2(20),
+    review_date date DEFAULT sysdate,
+    review_content CLOB, -- 4G
+    member_id varchar2(30)
+);
+insert into review( goods_num, review_date, review_content, member_id)
+values( 'hk100001', sysdate, '내용', 'highland0');
+SELECT * FROM review;
+
+
+DROP TABLE review;
+CREATE TABLE review(
+    review_num number,
+    goods_num varchar2(20),
+    review_date date DEFAULT sysdate,
+    review_content CLOB, -- 4G
+    member_id varchar2(30)
+);
+insert into review(review_num, goods_num, review_date, review_content, member_id)
+values(1, 'hk100001', sysdate, '내용', 'highland0');
+SELECT * FROM review;
+
+
+--제약 조건
+DROP TABLE review;
+CREATE TABLE review(
+    review_num number PRIMARY KEY, --- 중복값을 허용해서는 안되는 칼럼에 PRIMARY KEY
+    goods_num varchar2(20),
+    review_date date DEFAULT sysdate,
+    review_content CLOB, -- 4G
+    member_id varchar2(30)
+);
+insert into review(review_num, goods_num, review_date, review_content, member_id)
+values(1, 'hk100001', sysdate, '내용', 'highland0');
+SELECT * FROM review;
+
+
+DROP TABLE review;
+CREATE TABLE review(
+    ---열 레벨
+    review_num number constraint rv_review_num_PK PRIMARY KEY, --- 중복값을 허용해서는 안되는 칼럼에 PRIMARY KEY
+    goods_num varchar2(20),
+    review_date date DEFAULT sysdate,
+    review_content CLOB, -- 4G
+    member_id varchar2(30)
+);
+insert into review(review_num, goods_num, review_date, review_content, member_id)
+values(1, 'hk100001', sysdate, '내용', 'highland0');
+SELECT * FROM review;
+
+
+DROP TABLE review;
+CREATE TABLE review(
+    review_num number,
+    goods_num varchar2(20),
+    review_date date DEFAULT sysdate,
+    review_content CLOB, -- 4G
+    member_id varchar2(30),
+    --- table 레벨
+    CONSTRAINT rv_review_num_PK PRIMARY KEY(review_num)
+);
+insert into review(review_num, goods_num, review_date, review_content, member_id)
+values(1, 'hk100001', sysdate, '내용', 'highland0');
+SELECT * FROM review;
+
+
+desc hr.departments;
+drop table departments;
+create table departments(
+    DEPARTMENT_ID number(4) not null constraint dept_DEPARTMENT_ID_PK primary key , 
+    DEPARTMENT_NAME VARCHAR2(30) not null,
+    MANAGER_ID NUMBER(6),
+    LOCATION_ID NUMBER(4)
+);
+select * from hr.departments;
+insert into departments(DEPARTMENT_ID,DEPARTMENT_NAME,MANAGER_ID,LOCATION_ID )
+values(10,	'Administration',	200	,1700);
+--- DEPARTMENT_ID에 들어가는 값이 중복되서는 안된다.
+select * from departments;
+
+desc hr.employees;
+drop table employees;
+create table employees(
+    EMPLOYEE_ID number(6) ,
+    FIRST_NAME  VARCHAR2(20) null,
+    LAST_NAME VARCHAR2(25) not null,
+    EMAIL VARCHAR2(25) ,
+    PHONE_NUMBER VARCHAR2(20),
+    HIRE_DATE Date  default sysdate not null,
+    JOB_ID VARCHAR2(10) not null,
+    SALARY NUMBER(8,2),
+    COMMISSION_PCT NUMBER(2,2),
+    MANAGER_ID NUMBER(6),
+    DEPARTMENT_ID NUMBER(4) ,
+    --- 테이블에는 하나의 기본 키만 가질 수 있습니다.
+    CONSTRAINT emp_EMPLOYEE_ID_PK primary key(EMPLOYEE_ID),
+    CONSTRAINT emp_EMAIL_UU UNIQUE(EMAIL) -- primary key를 주지 못하는 컬럼에 UNIQUE를 준다.
+                                          -- 중복을 허용하지 않는다.
+);
+select * from hr.employees;
+insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                      , JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+values(null,	'Steven',	'King',	'SKING',	'515.123.4567',	'03/06/17'
+      ,'AD_PRES'	,24000, null, null,	90);
+--- NULL을 ("RHEE"."EMPLOYEES"."EMPLOYEE_ID") 안에 삽입할 수 없습니다.
+--- primary key컬럼에는 null값을 줄 수 없다.
+--- primary key컬럼은 not null이 기본 값이다.
+insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                      , JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+values(100,	'Steven',	'King',	null,	'515.123.4567',	'03/06/17'
+      ,'AD_PRES'	,24000, null, null,	90);
+
+select * from employees;
+select * from hr.employees;
+insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                      , JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+values(101,	'Neena',	'Kochhar',null,	'515.123.4568',	'05/09/21',
+       'AD_VP',	17000, null,100,90); -- null중복을 허용한다.
+select * from employees;
+select * from hr.employees;
+insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                      , JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+values(102,	'Lex',	'De Haan',	'LDEHAAN'	,'515.123.4569',	'01/01/13'
+       ,'AD_VP',17000, null,100,90);
+insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                      , JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+values(103,'Alexander',	'Hunold',	'LDEHAAN','590.423.4567','06/01/03'
+        ,'IT_PROG',9000,null,102,60);
+-- 무결성 제약 조건(RHEE.EMP_EMAIL_UU)에 위배됩니다. email값이 같은 값을 저장하려고 하면 오류
+
+
+drop table employees;
+create table employees(
+    EMPLOYEE_ID number(6) ,
+    FIRST_NAME  VARCHAR2(20) null,
+    LAST_NAME VARCHAR2(25) not null,
+    EMAIL VARCHAR2(25) ,
+    PHONE_NUMBER VARCHAR2(20),
+    HIRE_DATE Date  default sysdate not null,
+    JOB_ID VARCHAR2(10) not null,
+    SALARY NUMBER(8,2),
+    COMMISSION_PCT NUMBER(2,2),
+    MANAGER_ID NUMBER(6),
+    DEPARTMENT_ID NUMBER(4) ,
+    CONSTRAINT emp_EMPLOYEE_ID_PK primary key(EMPLOYEE_ID),
+    --- UNIQUE는 테이블에 여러개 사용할 수 있다.
+    CONSTRAINT emp_EMAIL_UU UNIQUE(EMAIL),
+    CONSTRAINT emp_PHONE_NUMBER_UU UNIQUE(PHONE_NUMBER) 
+);
+
+select * from departments;
+
+delete from departments;
+
+insert into departments
+select * from hr.departments;
+
+select * from hr.employees;
+
+select * from hr.departments;
+
+insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                      , JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+values(104,'Alexander',	'Hunold',	'LDEHAAN','590.423.4567','06/01/03'
+        ,'IT_PROG',9000,null,102,280);
+select * from employees;
+
+
+drop table employees;
+create table employees(
+    EMPLOYEE_ID number(6) ,
+    FIRST_NAME  VARCHAR2(20) null,
+    LAST_NAME VARCHAR2(25) not null,
+    EMAIL VARCHAR2(25) ,
+    PHONE_NUMBER VARCHAR2(20),
+    HIRE_DATE Date  default sysdate not null,
+    JOB_ID VARCHAR2(10) not null,
+    SALARY NUMBER(8,2),
+    COMMISSION_PCT NUMBER(2,2),
+    MANAGER_ID NUMBER(6),
+    DEPARTMENT_ID NUMBER(4) constraint emp_dep_id_dept_dept_id_FK 
+                            REFERENCES departments(department_id) ,
+    CONSTRAINT emp_EMPLOYEE_ID_PK primary key(EMPLOYEE_ID),
+    CONSTRAINT emp_EMAIL_UU UNIQUE(EMAIL),
+    CONSTRAINT emp_PHONE_NUMBER_UU UNIQUE(PHONE_NUMBER) 
+);
+insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                      , JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+values(104,'Alexander',	'Hunold',	'LDEHAAN','590.423.4567','06/01/03'
+        ,'IT_PROG',9000,null,102,280);
+--  무결성 제약조건(RHEE.EMP_DEP_ID_DEPT_DEPT_ID_FK)이 위배되었습니다- 부모 키가 없습니다
+drop table employees;
+create table employees( -- 자식 테이블
+    EMPLOYEE_ID number(6) ,
+    FIRST_NAME  VARCHAR2(20) null,
+    LAST_NAME VARCHAR2(25) not null,
+    EMAIL VARCHAR2(25) ,
+    PHONE_NUMBER VARCHAR2(20),
+    HIRE_DATE Date  default sysdate not null,
+    JOB_ID VARCHAR2(10) not null,
+    SALARY NUMBER(8,2),
+    COMMISSION_PCT NUMBER(2,2),
+    MANAGER_ID NUMBER(6),
+    DEPARTMENT_ID NUMBER(4),
+    CONSTRAINT emp_EMPLOYEE_ID_PK primary key(EMPLOYEE_ID),
+    CONSTRAINT emp_EMAIL_UU UNIQUE(EMAIL),
+    CONSTRAINT emp_PHONE_NUMBER_UU UNIQUE(PHONE_NUMBER) ,
+    CONSTRAINT emp_dept_id_dept_dept_id_FK FOREIGN key(department_id)
+    REFERENCES departments  -- 부모테이블
+);
+
+select * from hr.employees;
+
+drop table employees;
+create table employees( -- 자식 테이블
+    EMPLOYEE_ID number(6) ,
+    FIRST_NAME  VARCHAR2(20) null,
+    LAST_NAME VARCHAR2(25) not null,
+    EMAIL VARCHAR2(25) ,
+    PHONE_NUMBER VARCHAR2(20),
+    HIRE_DATE Date  default sysdate not null,
+    JOB_ID VARCHAR2(10) not null,
+    SALARY NUMBER(8,2),
+    COMMISSION_PCT NUMBER(2,2),
+    MANAGER_ID NUMBER(6),
+    DEPARTMENT_ID NUMBER(4),
+    CONSTRAINT emp_EMPLOYEE_ID_PK primary key(EMPLOYEE_ID),
+    CONSTRAINT emp_EMAIL_UU UNIQUE(EMAIL),
+    CONSTRAINT emp_PHONE_NUMBER_UU UNIQUE(PHONE_NUMBER) ,
+    CONSTRAINT emp_dept_id_dept_dept_id_FK FOREIGN key(department_id)
+    REFERENCES departments,  -- 부모테이블
+    constraint emp_emp_id_mng_id_FK FOREIGN KEY(manager_id)
+    REFERENCES employees(employee_id) --- 자기 참조 관계
+);
+insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                      , JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+values(100,	'Steven',	'King',	null,	'515.123.4567',	'03/06/17'
+      ,'AD_PRES'	,24000, null, null,	90); -- null허용
+      
+select * from employees;
+insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                      , JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+values(101,	'Steven',	'King',	null,	'515.123.4568',	'03/06/17'
+      ,'AD_PRES'	,24000, null, 102,	90);
+--- ORA-02291: 무결성 제약조건(RHEE.EMP_EMP_ID_MNG_ID_FK)이 위배되었습니다- 부모 키가 없습니다
+insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER, HIRE_DATE
+                      , JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+values(101,	'Neena',	'Kochhar',null,	'515.123.4568',	'05/09/21',
+       'AD_VP',	17000, null,100, null ); -- null중복을 허용한다.
+select * from employees;
+
+
+
+create table test1(
+    a number,
+    b number
+);
+--- 기본키가 없는 테이블은 참조할 수가 없다.
+create table test2(
+    a number constraint test1_a_test2_a_FK REFERENCES test1 ,
+    c number
+);
+---------========================================
+drop table test1;
+create table test1(
+    a number primary key,
+    b number
+);
+create table test2(
+    a number REFERENCES test1 ,
+    c number
+);
+insert into test1 values(1,1);
+select * from test1;
+insert into test2(c) values(2); 
+select * from test2;
+insert into test2(a,c) values(2,2); 
+--- ORA-02291: 무결성 제약조건(RHEE.SYS_C008433)이 위배되었습니다- 부모 키가 없습니다.
+select * from test2;
+insert into test2(a,c) values(1,2); 
+select * from test1; -- 부모 
+select * from test2; -- 자식
+delete from test1;
+--ORA-02292: 무결성 제약조건(RHEE.SYS_C008433)이 위배되었습니다- 자식 레코드가 발견되었습니다
+delete from test2;  -- 자식
+delete from test1;  -- 부모 
+--- 자식 데이터가 있으면 부모 데이터를 삭제 할 수 없으므로 자식데이터를 삭제 후 부모데이터를 삭제 한다.
+
+drop table departments; -- 부모
+--- ORA-02449: 외래 키에 의해 참조되는 고유/기본 키가 테이블에 있습니다
+--- 자식 테이블이 있어서 부모 테이블을 삭제할 수 없다.
+create table departments(
+    DEPARTMENT_ID number(4) not null constraint dept_DEPARTMENT_ID_PK primary key , 
+    DEPARTMENT_NAME VARCHAR2(30) not null,
+    MANAGER_ID NUMBER(6) ,
+    LOCATION_ID NUMBER(4)
+);
+--- 자식테이블이 있을 때 부모 테이블 삭제 
+drop table departments cascade CONSTRAINTS;
+select * from employees;
+drop table employees;
+-----=============================
+create table departments(
+    DEPARTMENT_ID number(4) not null , 
+    DEPARTMENT_NAME VARCHAR2(30) not null,
+    MANAGER_ID NUMBER(6) ,
+    LOCATION_ID NUMBER(4)
+);
+create table employees(
+    EMPLOYEE_ID number(6) ,
+    FIRST_NAME  VARCHAR2(20) null,
+    LAST_NAME VARCHAR2(25) not null,
+    EMAIL VARCHAR2(25) ,
+    PHONE_NUMBER VARCHAR2(20),
+    HIRE_DATE Date  default sysdate not null,
+    JOB_ID VARCHAR2(10) not null,
+    SALARY NUMBER(8,2),
+    COMMISSION_PCT NUMBER(2,2),
+    MANAGER_ID NUMBER(6),
+    DEPARTMENT_ID NUMBER(4)
+);
+
+--- primary key
+alter table departments
+add CONSTRAINT dep_department_id_PK primary key(department_id);
+/* -- 열 레벨
+alter table employees
+modify ( employee_id  constraint emp_employee_id_PK primary key);
+*/
+-- 테이블 레벨
+alter table employees
+add constraint emp_employee_id_PK primary key (employee_id)
+add constraint emp_email_UU unique(email) 
+add constraint emp_PHONE_NUMBER_UU unique(PHONE_NUMBER);
+
+---- foreign key
+alter table departments
+add constraint dept_manager_id_FK foreign key(manager_id)
+    REFERENCES employees(employee_id);
+    
+alter table employees
+add constraint emp_department_id_FK foreign key(department_id)
+    REFERENCES departments
+add constraint emp_manager_id_FK foreign key(manager_id)
+    REFERENCES employees(employee_id);
