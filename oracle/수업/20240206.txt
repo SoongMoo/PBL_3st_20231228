@@ -1,0 +1,576 @@
+--- null
+drop table test13;
+create table test13(
+    a number constraint test13_a_NN not null,
+    b number
+);
+insert into test13(b) values(1);
+--ORA-01400: NULL을 ("RHEE"."TEST13"."A") 안에 삽입할 수 없습니다
+--- not null은 제약조건 이름을 보통은 부여하지 않는다.
+/*  not null은 테이블 레벨을 사용할 수 없다.
+drop table test13;
+create table test13(
+    a number ,
+    b number,
+    constraint test13_a_NN not null ()
+);
+--- primary key, foreign key, unique
+*/
+----- check constraint
+create table CHECKEXAM(
+    city VARCHAR2(20) constraint ch_city_CK check( 
+                                city in ('서울', '인천', '부산', '대구', '대전')
+                            )
+);
+insert into CHECKEXAM values('성남');
+--- ORA-02290: 체크 제약조건(RHEE.CH_CITY_CK)이 위배되었습니다
+insert into CHECKEXAM values('서울');
+
+
+create table CHECKEXAM1(
+    eid number check (eid > 0),
+    value1 integer not null constraint ch_value1_CK check (value1 between 1 and 100),
+    value2 number not null ,
+    name1 varchar2(20),
+    gender varchar2(20),
+    constraint ch_value2_CK check (value1 < value2),
+    constraint ch_gender_CK check (gender in ('M','F'))
+);
+insert into CHECKEXAM1(eid, value1, value2, name1, gender)
+values(-1, 10, 11, '이숭무', 'M');
+--- ORA-02290: 체크 제약조건(RHEE.SYS_C008486)이 위배되었습니다
+insert into CHECKEXAM1(eid, value1, value2, name1, gender)
+values(1, 10, 11, '이숭무', 'M');
+----
+insert into CHECKEXAM1(eid, value1, value2, name1, gender)
+values(1, 101, 111, '이숭무', 'M');
+--- ORA-02290: 체크 제약조건(RHEE.CH_VALUE1_CK)이 위배되었습니다
+insert into CHECKEXAM1(eid, value1, value2, name1, gender)
+values(1, 99, 111, '이숭무', 'M');
+----------
+insert into CHECKEXAM1(eid, value1, value2, name1, gender)
+values(1, 99, 98, '이숭무', 'M');
+--- ORA-02290: 체크 제약조건(RHEE.CH_VALUE2_CK)이 위배되었습니다
+
+--- 제약조건 : null, unique, primary key, foreign key, check
+
+---- alter : 테이블 정보를 변경할 때 사용
+/*
+• 새 열 추가
+• 기존 열 정의 수정
+• 새 열에 기본값 정의
+• 열 삭제
+• 열 이름 바꾸기
+• 읽기 전용 상태로 테이블 변경
+*/
+------
+drop table departments cascade CONSTRAINTS;
+desc hr.departments;
+create table departments(
+    DEPARTMENT_ID NUMBER(4) not null,
+    MANAGER_ID  NUMBER(6)
+);
+alter table departments
+add (DEPARTMENT_NAME varchar2(30) not null); --- 데이터가 없는 경우엔 not null을 줄 수 있다.
+
+drop table departments;
+create table departments(
+    DEPARTMENT_ID NUMBER(4) not null,
+    MANAGER_ID  NUMBER(6)
+);
+insert into departments values(10, 100);
+select * from departments;
+/*
+alter table departments
+add (DEPARTMENT_NAME varchar2(30) not null); --- 데이터가 있는 경우에는 not null을 줄수 없다.
+*/
+alter table departments
+add (DEPARTMENT_NAME varchar2(30));
+select * from departments;
+
+desc departments;
+/*
+DEPARTMENT_ID   NOT NULL NUMBER(4)    
+MANAGER_ID               NUMBER(6)       --  null
+DEPARTMENT_NAME          VARCHAR2(30)    --- null
+*/
+alter table departments
+modify (MANAGER_ID not null); -- 데이터에 null이 없어서 not null로 변경이 된다.
+
+drop table departments;
+
+create table departments(
+    DEPARTMENT_ID NUMBER(4) not null,
+    MANAGER_ID  NUMBER(6)
+);
+
+insert into departments(DEPARTMENT_ID) values(10);
+select * from departments;
+alter table departments
+modify (MANAGER_ID not null); --- 데이터에 null이 포함되어 있어서 not null로 변경할 수 없다.
+
+desc departments;
+desc hr.departments;
+alter table departments
+add (DEPARTMENT_NAME VARCHAR2(30)
+    ,LOCATION_ID NUMBER(4));
+desc departments;
+select * from departments;
+
+alter table departments
+modify (department_id integer null);
+
+alter table departments
+modify (department_id varchar2(20) null);
+--- ORA-01439: 데이터 유형을 변경할 열은 비어 있어야 합니다
+--- 숫자타입을 문자타입으로 변경하려면 열이 비어 있어야 한다. 
+alter table departments
+modify (DEPARTMENT_NAME varchar2(10) ); --- 큰 데이터 타입에서 작은 데이터 타입으로 변경 할 경우 
+                                        --- 작은 데이터 타입보다 큰 데이터가 있으면 안된다.
+alter table departments
+modify (manager_id default 100);
+
+alter table departments
+drop COLUMN manager_id;
+
+alter table departments
+drop constraint dept_manager_FK;
+
+desc departments;
+alter table departments
+RENAME column LOCATION_ID to lid;
+desc departments;
+
+drop table departments;
+create table departments(
+    DEPARTMENT_ID NUMBER(4) not null,
+    MANAGER_ID  NUMBER(6),
+    location_id number
+);
+alter table departments read ONLY; -- DML작업을 못하고 읽기만 가능
+insert into departments values(20, 100, 1500);
+---SQL 오류: ORA-12081: "RHEE"."DEPARTMENTS" 테이블에 작업을 업데이트하는 것이 허용되지 않습니다
+select * from departments;
+
+alter table departments read WRITE; --- DML작업을 할 수 있게 수정
+insert into departments values(20, 100, 150);
+
+--- DDL : create, alter , drop 
+--- DML : CRUD : insert, select , update, delete
+--- TCL : commit, rollback , savepoint
+
+--- 기타 객체 : 뷰 , 시퀀스, index
+
+drop table departments;
+create table departments
+as
+select * from hr.departments; --- 쿼리문안에 있는 select를 서브쿼리
+
+select * from departments;
+
+drop table employees;
+create table employees
+as 
+select * from hr.employees;
+select * from employees;
+
+--- 사번, 이름, 직무, 급여, 입사일 , 커미션을 포함한 급여 (year_sal : 년봉은 null이될수 없음) 을 출력할 때
+--  직무에 'REP'가 포함된 사원들만 출력하시오.
+select employee_id, salary, job_id, first_name, hire_date
+       , salary * ( 1 + nvl(commission_pct,0)) year_sal
+from employees
+where job_id like '%REP%';
+
+create view rep_view
+as 
+select employee_id, salary, job_id, first_name, hire_date
+       , salary * ( 1 + nvl(commission_pct,0)) year_sal
+from employees
+where job_id like '%REP%';
+
+select * from rep_view;
+desc rep_view;
+
+
+create or REPLACE view rep_view --- 뷰를 수정 할 때는 일부만 수정할 수 없다. 
+as                              --- 뷰는 서브쿼리를 이용하여 데이터를 보여 줌
+select employee_id, salary, job_id, first_name, hire_date
+       , salary * ( 1 + nvl(commission_pct,0)) year_sal , department_id
+from employees
+where job_id like '%REP%';
+
+select * from rep_view;
+
+--- 80인 부서의 사원들만 출력하시오.
+select * from employees
+where department_id = 90;
+
+create OR REPLACE view vw_90
+as 
+select * from employees
+where department_id = 90;
+
+select * from vw_90;
+
+--- 개인정보 중에서 연락처, 입사일, 급여, 컴미션은 보여줘서는 안된다.
+select * from employees;
+
+create or REPLACE view emp
+as 
+select employee_id, first_name, last_name, email, job_id, manager_id, department_id
+from employees;
+
+select * from emp;   --- 은닉을 하기 위해서 
+
+create or REPLACE view emp1
+as 
+select employee_id , first_name , last_name , email, job_id 
+     , manager_id , department_id 
+from employees;
+
+create or REPLACE view emp1
+as 
+select employee_id eid, first_name fname, last_name lname, email, job_id jid
+     , manager_id mid, department_id did
+from employees;
+select * from emp1;
+
+create or REPLACE view emp1
+(eid, fname, lname, email, jid, mid, did)
+as 
+select employee_id , first_name , last_name , email, job_id 
+     , manager_id , department_id 
+from employees;
+
+select * from emp1;
+
+
+--- 각 부서의 급여의 합계, 최소 급여, 최대 급여, 급여의 평균, 부서의 사원수를 출력하시오.
+select department_id, sum(salary), min(salary),max(salary), avg(salary), count(*)
+from employees
+group by department_id;
+
+--- 단순 뷰에 그룸함수를 사용하려면 별칭을 사용해야 한다. 
+create or REPLACE view sal_vw
+(did, sum_sal, min_sal, max_sal, avg_sal, cnt)
+as 
+select department_id, sum(salary), min(salary),max(salary), avg(salary), count(*)
+from employees
+group by department_id;
+
+select * from sal_vw;
+
+desc employees;
+
+create or REPLACE view emp50vw
+as
+select employee_id, last_name, email, hire_date, job_id
+from employees
+where department_id = 50;
+
+select * from emp50vw;
+
+--- view를 이용해서 DML작업
+insert into emp50vw 
+values(300, '이', 'highland0', sysdate, 'SA_REP');
+
+---- employee_id, last_name, email, hire_date, job_id
+insert into emp50vw
+values(              300,          '이', 'highland0', sysdate, 'SA_REP'  , 50);
+--- SQL 오류: ORA-00913: 값의 수가 너무 많습니다
+
+
+select * from emp50vw;
+
+select * from employees;
+
+
+
+create or REPLACE view emp50vw
+as
+select employee_id, last_name, email, hire_date, job_id, department_id
+from employees
+where department_id = 50;
+insert into emp50vw
+values(              310,          '이', 'highland0', sysdate, 'SA_REP'  , 50); 
+select * from emp50vw;
+---- 뷰를 통해서 뷰의 컬럼에 맞으면 보이는 데이터든 안 보이는 데이터든 다 들어간다.
+update emp50vw
+set salary = 3000  -- 뷰에서 보이지 않는 컬럼이므로 
+where department_id = 50;
+--- SQL 오류: ORA-00904: "SALARY": 부적합한 식별자
+update emp50vw
+set email = 3000  
+where department_id = 80; --- 뷰를통해서 보이지 않는 데이터는 수정할 수가 없다.
+---0개 행 이(가) 업데이트되었습니다.
+update emp50vw
+set last_name = '박'
+where employee_id = 310;   -- 뷰를 통해서 보이는 데이터는 수정이 가능하다.
+--1 행 이(가) 업데이트되었습니다.
+select * from emp50vw;
+
+delete from emp50vw
+where department_id = 80;   -- 뷰를 통해서 보이지 않는 데이터는 삭제 할수가 없다.
+--- 0개 행 이(가) 삭제되었습니다.
+
+delete from emp50vw
+where employee_id = 310;
+-- 1 행 이(가) 삭제되었습니다.
+
+------ 부서번호, 부서명, 사번, 이름, 급여 출력
+select d.department_id, department_name
+      ,employee_id, first_name, salary
+from departments d join employees e
+on d.department_id = e.department_id;
+
+
+create or REPLACE view dep_emp_vw
+as 
+select d.department_id, department_name
+      ,employee_id, first_name, salary
+from departments d join employees e
+on d.department_id = e.department_id;
+
+select * from dep_emp_vw;
+
+--- 각 부서번호와 부서명 그리고  급여 합계, 급여의 최소, 급여의 최대, 급여의 평균, 부서의 사원수를 출력
+select d.department_id, department_name, sum(salary), min(salary), max(salary), avg(salary),count(*)
+from departments d join employees e
+on e.department_id = d.department_id
+group by  d.department_id, department_name;
+
+
+create or REPLACE view dept_sal
+as
+select d.department_id, department_name
+      , sum(salary) sum_sal, min(salary) min_sal, max(salary) max_sal, avg(salary) avg_sal
+      , count(*) cnt
+from departments d join employees e
+on e.department_id = d.department_id
+group by  d.department_id, department_name;
+
+select * from dept_sal;
+
+create table viewupd1(
+    c1 number,
+    c2 int
+);
+create table viewupd2(
+    c1 number,
+    c3 number
+);
+insert into viewupd1 values(1,1);
+insert into viewupd2 values(1,1);
+
+create or replace view v_viewupd
+as   ---- 복합 뷰 
+select v1.c1, c2, c3
+from viewupd1 v1 join viewupd2 v2
+on v1.c1 = v2.c1;
+
+select * from v_viewupd;
+---- DML 작업
+insert into v_viewupd(c1, c2)
+values(2, 2); --- 복합에서는 하나의 테이블에만 데이터를 저장할 수 없다.,
+insert into v_viewupd(c1,c2, c3) values(2,2,2);
+--- 복합뷰에서는 insert를 할 수 없다.
+
+delete from v_viewupd
+where c1 = 1;   ---- 복합 뷰에서는 불가능
+
+update v_viewupd
+set c2 = 10    -- 테이블 각각은 수정 가능하다
+where c1 = 1;
+
+select * from v_viewupd;
+
+update v_viewupd
+set c2 = 20, c3 = 10 -- 동시에 여러개의 테이블을 수정할 수는 없다.
+where c1 = 1;
+
+
+--- 부서가 10인 사원의 사번, 이름, 직무를 출력하세요.
+select employee_id, last_name, email, hire_date, job_id, department_id
+from employees
+where department_id = 10;
+
+
+create or REPLACE view empvu10
+as
+select employee_id, last_name, email, hire_date, job_id, department_id
+from employees
+where department_id = 10;
+
+select * from empvu10;
+insert into empvu10
+values(330, '숭', 'high',sysdate, 'SA_ERP' , 10);
+
+select * from empvu10;
+select * from employees;
+
+--- DML작업을 하지 못하는 뷰를 만들자
+create or REPLACE view empvu10
+as
+select employee_id, last_name, email, hire_date, job_id, department_id
+from employees
+where department_id = 10
+with read only; --- 읽기 전용 뷰에서는 DML 작업을 수행할 수 없습니다.
+
+insert into empvu10
+values(340, '숭', 'high',sysdate, 'SA_ERP' , 10);
+
+
+
+create or REPLACE view empvu30
+as
+select employee_id, last_name, email, hire_date, job_id, department_id
+from employees
+where department_id = 30;
+
+insert into empvu30
+values(360, '숭', 'high',sysdate, 'SA_ERP' , 10);
+
+select * from employees;
+
+--- DML에 작업을 했을 때 뷰에 보이는 것만 DML을 할 수 있게 하자.
+create or REPLACE view empvu30
+as
+select employee_id, last_name, email, hire_date, job_id, department_id
+from employees
+where department_id = 30
+with CHECK OPTION constraint empvu30_ck;
+
+insert into empvu30
+values(360, '숭', 'high',sysdate, 'SA_ERP' , 10);
+--- SQL 오류: ORA-01402: 뷰의 WITH CHECK OPTION의 조건에 위배 됩니다.
+
+--- 뷰 제거 
+drop view empvu30;
+
+
+create table test30(
+    a varchar2(10),
+    b varchar2(20)
+);
+---- a: hk100001 , b : '냉무'
+insert into test30(a, b) 
+values ((select concat('hk' ,nvl(max(substr(a, 3)), 100000) + 1) from test30) ,'냉무')
+;
+
+select concat('hk' ,nvl(max(substr(a, 3)), 100000) + 1) from test30;
+
+select * from test30;
+
+--- 시퀀스
+CREATE SEQUENCE dept_seq
+increment by 10
+start with 10
+maxvalue 9990
+NOCACHE
+NOCYCLE;
+
+delete from departments;
+select * from hr.departments;
+select * from departments;
+insert into departments values(dept_seq.nextval, 'Administration' , 200, 1700);
+select * from departments;
+insert into departments values(dept_seq.nextval, 'Marketing' , 201, 1800);
+select * from departments;
+
+select * from test30;
+delete from test30;
+
+CREATE SEQUENCE test30_seq
+INCREMENT BY 1
+START WITH 100001;
+
+insert into test30(a, b) 
+values ( concat('hk' , test30_seq.nextval) ,'냉무');
+
+select * from test30;
+
+select test30_seq.currval from dual; --- 현재 사용된 값
+
+create table test31(
+    a varchar2(10),
+    b varchar2(20)
+);
+select * from test31;
+insert into test31(a, b) 
+values ( concat('hk' , test30_seq.nextval) ,'냉무');
+
+select * from test31;
+
+CREATE SEQUENCE seq; -- 1부터 1씩 증가하는 시퀀스가 된다.
+select seq.nextval , seq.currval from dual;
+
+create table test32(
+    a number GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    b varchar2(20)
+);
+insert into test32(b) values('1');
+
+alter SEQUENCE test30_seq
+INCREMENT BY 1
+maxvalue 9999999;
+
+drop SEQUENCE seq;
+
+-- index
+-- 조건절에 많이 사용하는 컬럼에 index를 만들어 준다.
+
+---- 80인 부서의 사번, 이름, 급여를
+select employee_id, first_name , salary  --- 3
+from employees                   ---- 1 
+where department_id = 80;        ---- 2
+
+create index idx_did
+on employees(department_id);
+
+---- 사원번호, 이름, 급여, 직무, 부서를 출력할 때 직무에 'REP'가 포함된 사원들만 출력
+select employee_id, first_name, salary , job_id, department_id
+from employees
+where job_id like '%REP%';
+
+create index emp_hob_idx
+on employees(job_id);
+
+--- 급여가 5000부터 20000사이인 직원들  중 80인부서의 사원들을 출력
+select * from employees
+where salary between 5000 and 20000 and department_id = 80;
+
+
+create index emp_sal_dept_idx 
+on emplyees(salary, department_id);
+
+---  급여가 15000보다 큰 사원과 job_id가 'IT_PROG'인 사원을 출력하시오
+select * from employees
+where salary > 15000 or job_id = 'IT_PROG';
+
+create index sal_idx
+on employees(salary);
+
+--- 이름의 앞에서 두글자가 'Oc'인 직원을 출력하시오.
+select * from employees
+where substr(first_name,1,2) = 'Oc';
+
+create index sub_idx --  함수기반의 index
+on employees(substr(first_name,1,2));
+
+drop index sub_idx;
+
+--- 각부서의 급여의 평균이 10000인 부서와 평균급여를 출력하시오.
+select department_id , avg(salary)
+from employees
+group by department_id
+having avg(salary) = 10000;
+
+create index avg_idx
+on employees(salary);
+/*
+평균값과 같은 집계 함수를 직접 인덱스에 적용할 수 없다.
+특정 열(column)이나 열의 조합에 대한 데이터의 검색을 최적화하는 데 사용.
+*/
+
+--- index가 자동으로 만들어지는 경우 : primary key , unique가 있는 컬럼
+-- 2 ~ 4%
