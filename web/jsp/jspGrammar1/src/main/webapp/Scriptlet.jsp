@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.Calendar, java.util.Date" %>
 <%@ page import="java.util.ArrayList" %>
-
 <%! // 선언부 : 변수선언, 함수선언
 	int iii = 100;
 	public int calc(int num1, int num2, String otp){
@@ -157,7 +156,7 @@ str1 : <%= str1 %>
 str1.indexOf("ing") : <%= str1.indexOf("ing") %><br />
 str2.indexOf('s') : <%= str1.indexOf('s') %><br />
 str2.indexOf('s', 3) : <%= str1.indexOf('s', 3) %><br />
-str1.indexOf('s', 4) : <%= str1.indexOf('s', str1.indexOf('s') + 1 %><br />
+str1.indexOf('s', 4) : <%= str1.indexOf('s', str1.indexOf('s') + 1) %><br />
 str1.length() : <%= str1.length() %><br />
 str1.charAt(4) : <%= str1.charAt(4) %><br />
 str1.substring(6, 6 + 3) : <%= str1.substring(6, 6 + 3) %><br />
