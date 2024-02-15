@@ -1,0 +1,113 @@
+server : 무엇이든 제공하는 쪽을 의미
+client :  무엇이든 제공 받는 쪽을 의미
+
+데이터베이스 서버 : 데이터를 제공해주는 것 : oracle 
+데이터베이스 클라이언트 : 데이터를 제공 받는 것 : sql developer
+
+파일서버 : 파일을  제공하는 것
+공유서버 : 데이터나 파일을 공유해주는 것
+ 
+                                      ACSII/UTF
+                 http://www.naver.com/index.html    naver.com
+웹브라우져 =======================>    W/S 
+                <====================== index.html 
+                                      ASCII/UTF
+
+                                    ASCII/UTF                 80                                  8080
+                 http://www.naver.com/xxxx.nhn    naver.com          xxxx.nhn
+웹브라우져 =======================>    W/S       ===========>  WAS
+                                                              ????.html                            xxxx.nhn
+                                                                                                          ||
+                             xxxx.nhn == html                                                       ||
+               <=======================                 <===========   html
+				 ASCII/UTF
+
+	           https://www.hrd.go.kr/index.jsp     apache                   tomcat  : servlet으로 되어 있는 문서를 html로 변환
+웹브라우저 ========================>   W/S    =======>   WAS     
+                                                                 html                      xxxx.jsp  동적
+                                                                 정적                         ||
+                                                                                                ||
+               <=======================               <======    HTML
+client                                                                       server
+                                                              front-end                  back-end
+jsp 역사
+servlet으로 먼저  웹 프로그램을 개발 
+servlet은 자바로 만든 프로그램 : 자바코드에 html코드를 넣어만든 프로그램
+
+servlet에서  jsp로 변환 
+jsp는 html코드에 자바코드를 넣은 프로그램
+jsp ==> servlet ==> html
+
+
+
+jsp로 만든 웹 프로그램을 model1이라고 하고 
+MVC로 분리해서 만든 코드를 model2라고 합니다.
+
+front : jsp에는 html만 코드 작성
+back : servlet인 즉java로 되어 있는 코드
+
+MVC :
+M :  Model : DTO / DAO
+V  :  View : jsp : front - end 
+C  :  Controller : servlet : back - end  
+
+                      http://www.hrd.go.kr/newIndexRenewal.do 
+웹브러우저 ================================>  WAS
+                                                                                  ||
+                                                                                  ||  
+                                       jsp파일을 전달                        || 
+                <============================ Front - Controller : 요청주소를 가지고 있음
+                                                           
+                                                            
+                 http://www.hrd.go.kr/search.naver?query=jsp
+웹브라우저 =============================== >  WAS : tomcat
+                                  search.naver ===>html                  ||
+                <==============================Front - Controller : 요청주소를 가지고 있음
+                                                                                 /||
+                                                                                  || query=jsp
+                                                                                  ||/               query=jsp          jsp
+                                                                      Page - Controller     ======> DAO ====> DB
+                                                                                                 <======         <====
+
+jsp ====> servlet =====> html
+
+
+sysdm.cpl ,3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
