@@ -1,0 +1,43 @@
+                    주소전달  
+웹브라우저  ===========> Front-Controller
+                                                ||
+					        ||
+                                               View : jsp
+                     boardList.naver
+웹브라우저 ================> FrontController
+                                                      RequestDispatcher
+                 <================   boardList.jsp : html code
+
+		    boardWrite.naver
+웹브라우저 ==================>FrontController
+							RequestDispatcher
+							boardForm.jsp	
+
+              boardWrite.naver   데이터전달 request
+웹브라우저 =================>FrontController
+							||  데이터전달 request
+	      <==================	||              DTO
+			redirect   	       Page-Controller ====-=> DAO =====>DB
+                                                                  <======       <=====
+						BoardWriteService
+
+
+https://search.naver.com/board/boardList.naver?sm=top_hty&fbm=0&ie=utf8&query=jsp
+<------------------------------------------------------------------------------------------------> url
+                                <-----------------------><!------------------------------------------>
+                                        uri                               쿼리스트링
+				<-----> contextPath
+
+
+
+
+
+
+
+
+
+
+
+
+
+
