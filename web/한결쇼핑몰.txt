@@ -1,0 +1,322 @@
+CREATE TABLE employees (
+	emp_num VARCHAR(40) NOT NULL,
+	EMP_ID VARCHAR(30),
+	EMP_PW VARCHAR(255),
+	EMP_NAME VARCHAR(50),
+	EMP_ADDR VARCHAR(255),
+	EMP_ADDR_detail VARCHAR(255),
+	EMP_post INTEGER,
+	EMP_PHONE VARCHAR(30),
+	emp_jumin VARCHAR(13),
+	EMP_EMAIL VARCHAR(40),
+	emp_enter_date DATE
+);
+
+CREATE TABLE members (
+	MEMBER_NUM VARCHAR(40) NOT NULL,
+	member_Name VARCHAR(50),
+	member_Id VARCHAR(30),
+	member_Pw VARCHAR(255),
+	member_addr VARCHAR(255),
+	member_addr_detail VARCHAR(255),
+	member_post INTEGER,
+	member_regist DATE,
+	gender CHAR(1),
+	member_phone1 VARCHAR(30),
+	member_phone2 VARCHAR(30),
+	member_email VARCHAR(40),
+	member_birth DATE,
+	member_point INTEGER,
+	member_email_conf CHAR(1)
+);
+
+
+CREATE TABLE retired (
+	emp_num VARCHAR(40) NOT NULL,
+	RETIRED_DATE DATE,
+	REASON VARCHAR2(2000),
+	JOB_TITLE VARCHAR2(2000)
+);
+
+CREATE TABLE goods (
+	GOODS_NUM VARCHAR(40) NOT NULL,
+	goods_name VARCHAR(50),
+	goods_price INTEGER,
+	goods_content VARCHAR2(2000),
+	goods_main_store VARCHAR2(2000),
+	goods_main_store_img VARCHAR2(2000),
+	goods_images  VARCHAR2(2000),
+	goods_images_img VARCHAR2(2000),
+	delivery_cost INTEGER,
+	visit_count INTEGER,
+	emp_num VARCHAR(40),
+	goods_regist DATE,
+	update_emp_num VARCHAR(40),
+	goods_update_date DATE
+);
+
+CREATE TABLE goodsIpgo (
+	IPGO_NUM VARCHAR(40) NOT NULL,
+	GOODS_NUM VARCHAR(40) NOT NULL,
+	ipgo_qty INTEGER,
+	made_date TIMESTAMP,
+	ipgo_price INTEGER,
+	ipgo_date DATE,
+	emp_num VARCHAR(40)
+);
+
+CREATE TABLE goods_inquire (
+	INQUIRE_NUM INTEGER NOT NULL,
+	MEMBER_NUM VARCHAR(40) NOT NULL,
+	GOODS_NUM VARCHAR(40) NOT NULL,
+	inquire_subject VARCHAR(255),
+	inquire_content VARCHAR2(2000),
+	inquire_kind VARCHAR(50),
+	inquire_date DATE,
+	inquire_answer VARCHAR2(2000),
+	inquire_answer_date DATE,
+	emp_num VARCHAR(40)
+);
+
+CREATE TABLE wish (
+	MEMBER_NUM VARCHAR(40) NOT NULL,
+	GOODS_NUM VARCHAR(40) NOT NULL,
+	wish_date DATE
+);
+
+
+CREATE TABLE PURCHASE (
+	PURCHASE_NUM VARCHAR(40) NOT NULL,
+	purchase_date DATE,
+	purchase_price INTEGER,
+	delivery_addr VARCHAR(255),
+	delivery_addr_detail VARCHAR(255),
+	delivery_post INTEGER,
+	delivery_phone VARCHAR(30),
+	message VARCHAR(50),
+	purchase_status VARCHAR(40),
+	MEMBER_NUM VARCHAR(40)
+);
+
+ 
+
+CREATE TABLE PURCHASE_LIST (
+	GOODS_NUM VARCHAR(40) NOT NULL,
+	PURCHASE_NUM VARCHAR(40) NOT NULL,
+	purchase_qty INTEGER,
+	total_price INTEGER
+);
+
+CREATE TABLE PAYMENT (
+	PURCHASE_NUM VARCHAR(40) NOT NULL,
+	confirmNumber VARCHAR(50),
+	cardNum VARCHAR(50),
+	tid VARCHAR(50),
+	totalPrice INTEGER,
+	resultMessage  VARCHAR(50),
+	payMethod VARCHAR(50),
+	applDate VARCHAR(50),
+	applTime VARCHAR(50),
+	purchaseName VARCHAR(50)
+);
+
+CREATE TABLE DELIVERY (
+	PURCHASE_NUM VARCHAR(40) NOT NULL,
+	delivery_num INTEGER,
+	delivery_date DATE,
+	DELIVERY_STATE VARCHAR(40)
+);
+
+
+CREATE TABLE CART (
+	MEMBER_NUM VARCHAR(40) NOT NULL,
+	GOODS_NUM VARCHAR(40) NOT NULL,
+	cart_date DATE,
+	cart_qty INTEGER
+);
+
+
+CREATE TABLE REVIEWS (
+	review_num INTEGER NOT NULL,
+	GOODS_NUM VARCHAR(40) NOT NULL,
+	PURCHASE_NUM VARCHAR(40) NOT NULL,
+	review_date DATE,
+	score INTEGER,
+	review_content VARCHAR2(2000),
+	member_Id VARCHAR(30)
+);
+
+
+ALTER TABLE employees
+	ADD
+		CONSTRAINT PK_employees
+		PRIMARY KEY (
+			emp_num
+		);
+ALTER TABLE members
+	ADD
+		CONSTRAINT PK_members
+		PRIMARY KEY (
+			MEMBER_NUM
+		);
+ALTER TABLE retired
+	ADD
+		CONSTRAINT PK_retired
+		PRIMARY KEY (
+			emp_num
+		);
+ALTER TABLE goods
+	ADD
+		CONSTRAINT PK_goods
+		PRIMARY KEY (
+			GOODS_NUM
+		);
+ALTER TABLE goodsIpgo
+	ADD
+		CONSTRAINT PK_goodsIpgo
+		PRIMARY KEY (
+			IPGO_NUM,
+			GOODS_NUM
+		);
+ALTER TABLE goods_inquire
+	ADD
+		CONSTRAINT PK_goods_inquire
+		PRIMARY KEY (
+			INQUIRE_NUM,
+			MEMBER_NUM,
+			GOODS_NUM
+		);
+
+ALTER TABLE wish
+	ADD
+		CONSTRAINT PK_wish
+		PRIMARY KEY (
+			MEMBER_NUM,
+			GOODS_NUM
+		);
+ALTER TABLE PURCHASE
+	ADD
+		CONSTRAINT PK_PURCHASE
+		PRIMARY KEY (
+			PURCHASE_NUM
+		);
+ALTER TABLE PURCHASE_LIST
+	ADD
+		CONSTRAINT PK_PURCHASE_LIST
+		PRIMARY KEY (
+			GOODS_NUM,
+			PURCHASE_NUM
+		);
+ALTER TABLE PAYMENT
+	ADD
+		CONSTRAINT PK_PAYMENT
+		PRIMARY KEY (
+			PURCHASE_NUM
+		);
+
+ALTER TABLE DELIVERY
+	ADD
+		CONSTRAINT PK_DELIVERY
+		PRIMARY KEY (
+			PURCHASE_NUM
+		);
+
+ALTER TABLE CART
+	ADD
+		CONSTRAINT PK_CART
+		PRIMARY KEY (
+			MEMBER_NUM,
+			GOODS_NUM
+		);
+
+ALTER TABLE REVIEWS
+	ADD
+		CONSTRAINT PK_REVIEWS
+		PRIMARY KEY (
+			review_num,
+			GOODS_NUM,
+			PURCHASE_NUM
+		);
+
+
+
+
+
+
+
+
+
+
+
+
+ALTER TABLE retired
+ADD CONSTRAINT FK_employees_TO_retired 	FOREIGN KEY (emp_num)
+    REFERENCES employees (	emp_num	) on delete cascade ;
+
+ALTER TABLE goods
+ADD CONSTRAINT FK_employees_TO_goods FOREIGN KEY (emp_num)
+    REFERENCES employees ( emp_num) on delete set null ;
+
+ALTER TABLE goods
+ADD CONSTRAINT FK_employees_TO_goods2 FOREIGN KEY (	update_emp_num	)
+    REFERENCES employees (emp_num) on delete set null;
+
+ALTER TABLE goodsIpgo
+ADD CONSTRAINT FK_goods_TO_goodsIpgo FOREIGN KEY (GOODS_NUM	)
+    REFERENCES goods (GOODS_NUM);
+
+ALTER TABLE goodsIpgo
+ADD CONSTRAINT FK_employees_TO_goodsIpgo FOREIGN KEY (emp_num)
+    REFERENCES employees (emp_num) on delete set null;
+
+ALTER TABLE goods_inquire
+ADD CONSTRAINT FK_members_TO_goods_inquire FOREIGN KEY (MEMBER_NUM)
+    REFERENCES members (MEMBER_NUM) on  delete cascade;
+
+ALTER TABLE goods_inquire
+ADD CONSTRAINT FK_goods_TO_goods_inquire FOREIGN KEY (GOODS_NUM	)
+    REFERENCES goods (	GOODS_NUM	) on delete cascade;
+
+ALTER TABLE goods_inquire
+ADD CONSTRAINT FK_employees_TO_goods_inquire	FOREIGN KEY (emp_num)
+	REFERENCES employees (emp_num) on delete set null;
+
+ALTER TABLE wish
+ADD CONSTRAINT FK_members_TO_wish FOREIGN KEY (	MEMBER_NUM	)
+    REFERENCES members (MEMBER_NUM) on delete cascade;
+
+ALTER TABLE wish
+ADD CONSTRAINT FK_goods_TO_wish	FOREIGN KEY (GOODS_NUM)
+    REFERENCES goods (GOODS_NUM) on delete cascade;
+
+ALTER TABLE PURCHASE
+ADD CONSTRAINT FK_members_TO_PURCHASE FOREIGN KEY (	MEMBER_NUM)
+    REFERENCES members (MEMBER_NUM) on delete set null;
+
+ALTER TABLE PURCHASE_LIST
+ADD CONSTRAINT FK_goods_TO_PURCHASE_LIST FOREIGN KEY (GOODS_NUM)
+    REFERENCES goods (GOODS_NUM	);
+
+ALTER TABLE PURCHASE_LIST
+ADD CONSTRAINT FK_PURCHASE_TO_PURCHASE_LIST FOREIGN KEY (PURCHASE_NUM)
+    REFERENCES PURCHASE ( PURCHASE_NUM	) on delete  CASCADE;
+
+ALTER TABLE PAYMENT
+ADD CONSTRAINT FK_PURCHASE_TO_PAYMENT FOREIGN KEY (	PURCHASE_NUM)
+    REFERENCES PURCHASE (PURCHASE_NUM) ;
+
+ALTER TABLE DELIVERY
+ADD CONSTRAINT FK_PURCHASE_TO_DELIVERY	FOREIGN KEY ( PURCHASE_NUM	)
+    REFERENCES PURCHASE (PURCHASE_NUM);
+
+ALTER TABLE CART
+ADD CONSTRAINT FK_members_TO_CART	FOREIGN KEY (	MEMBER_NUM	)
+    REFERENCES members (MEMBER_NUM	) on delete CASCADE;
+
+ALTER TABLE CART
+ADD CONSTRAINT FK_goods_TO_CART	FOREIGN KEY (GOODS_NUM)
+	REFERENCES goods (	GOODS_NUM	) on DELETE CASCADE ;
+
+ALTER TABLE REVIEWS
+ADD CONSTRAINT FK_PURCHASE_LIST_TO_REVIEWS	FOREIGN KEY (GOODS_NUM,PURCHASE_NUM	)
+    REFERENCES PURCHASE_LIST (	GOODS_NUM,	PURCHASE_NUM) on delete CASCADE;
