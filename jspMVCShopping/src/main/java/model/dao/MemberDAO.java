@@ -126,7 +126,31 @@ public class MemberDAO extends DataBaseInfo{
 		return dto;
 	}
 	
-	
+	public void memberUpdate(MemberDTO dto) {
+		con = getConnection();
+		sql = " update members "
+			+ " set MEMBER_NAME =?, MEMBER_ADDR = ?"
+			+ "    ,MEMBER_ADDR_DETAIL =?, MEMBER_POST =?"
+			+ "    ,GENDER = ?, MEMBER_PHONE1 =?,MEMBER_PHONE2= ?"
+			+ "    ,MEMBER_EMAIL = ?, MEMBER_BIRTH = ? "
+			+ " where MEMBER_NUM = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dto.getMemberName());
+			pstmt.setString(2, dto.getMemberAddr());
+			pstmt.setString(3, dto.getMemberAddrDetail());
+			pstmt.setString(4, dto.getMemberPost());
+			pstmt.setString(5, dto.getMemberGender());
+			pstmt.setString(6, dto.getMemberPhone1());
+			pstmt.setString(7, dto.getMemberPhone2());
+			pstmt.setString(8, dto.getMemberEmail());
+			pstmt.setDate(9, new Date(dto.getMemberBirth().getTime()));
+			pstmt.setString(10, dto.getMemberNum());
+			int i = pstmt.executeUpdate();
+			System.out.println(i+"개가 수정되었습니다.");
+		}catch(Exception e) {e.printStackTrace();}
+		finally {close();}
+	}
 	
 	
 	

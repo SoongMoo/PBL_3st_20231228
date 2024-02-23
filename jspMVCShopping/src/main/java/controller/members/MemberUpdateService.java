@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import model.dao.MemberDAO;
 import model.dto.MemberDTO;
 
-public class MemberWriteService {
+public class MemberUpdateService {
 	public void execute(HttpServletRequest request) {
 		try {		
 			request.setCharacterEncoding("utf-8");
@@ -52,6 +52,6 @@ public class MemberWriteService {
 		dto.setMemberPw(memberPw);
 		
 		MemberDAO dao = new MemberDAO();
-		dao.memberWrite(dto);
+		dao.memberUpdate(dto);
 	}
 }
