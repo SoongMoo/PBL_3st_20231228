@@ -9,5 +9,6 @@
 <body>
 이제 쇼핑몰을 시작하겠습니다.<br />
 <a href="memberList.mem">회원 목록</a>
+<a href="employeeList.emp">직원 목록</a>
 </body>
 </html>

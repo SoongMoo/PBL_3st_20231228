@@ -54,6 +54,10 @@ public class MemberFrontController extends HttpServlet
 			action.execute(request);
 			response.sendRedirect("memberDetail.mem?memberNum="+
 						request.getParameter("memberNum") );
+		}else if(command.equals("/memberDelete.mem")) {
+			MemberDeleteService action = new MemberDeleteService();
+			action.execte(request);
+			response.sendRedirect("memberList.mem");
 		}
 	}
 	@Override

@@ -152,7 +152,18 @@ public class MemberDAO extends DataBaseInfo{
 		finally {close();}
 	}
 	
-	
+	public void memberDelete(String memberNum) {
+		con = getConnection();
+		sql = "delete from members where member_num = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, memberNum);
+			int i = pstmt.executeUpdate();
+			System.out.println(i + "개가 삭제되었습니다.");
+		}catch(Exception e) {e.printStackTrace();}
+		finally {close();}
+		
+	}
 	
 	
 	
