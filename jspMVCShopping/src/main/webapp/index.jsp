@@ -10,5 +10,23 @@
 이제 쇼핑몰을 시작하겠습니다.<br />
 <a href="memberList.mem">회원 목록</a>
 <a href="employeeList.emp">직원 목록</a>
+<table border="1" align="center">
+	<tr><td colspan="2">
+			 자동로그인 | 아이디저장
+		</td></tr>
+	<tr><td>
+			<input type="text" name="userId"  placeholder="아이디" />
+		</td>
+		<td rowspan="2">
+			<input type="submit" value="로그인" />
+		</td></tr>
+	<tr><td>
+			<input type="password" name="userPw" placeholder="비밀번호"/>
+		</td></tr>
+	<tr><td colspan="2">
+			아이디 / 비밀번호 찾기 | 
+			<a href="userAgree.nhn">회원가입</a>
+		</td></tr>
+</table>
 </body>
 </html>

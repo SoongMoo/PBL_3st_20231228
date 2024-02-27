@@ -1,0 +1,35 @@
+package model.dao;
+
+import java.sql.Date;
+import java.sql.SQLException;
+
+import model.dto.MemberDTO;
+
+public class UserDAO extends DataBaseInfo{
+	public void userInsert(MemberDTO dto) {
+		con = getConnection();
+		sql = "insert into members(MEMBER_NUM,MEMBER_NAME,MEMBER_ID,MEMBER_PW,MEMBER_ADDR,MEMBER_ADDR_DETAIL"
+				+ "               ,MEMBER_POST,MEMBER_REGIST,GENDER,MEMBER_PHONE1,MEMBER_PHONE2,MEMBER_EMAIL"
+				+ "               ,MEMBER_BIRTH, MEMBER_POINT) "
+				+ " values ((select concat('mem' ,nvl(max(substr(MEMBER_NUM,4)),100000) + 1) from members)"
+				+ "        ,?,?,?,?,?,?,sysdate,?,?,?,?,?,0)";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dto.getMemberName());
+			pstmt.setString(2, dto.getMemberId());
+			pstmt.setString(3, dto.getMemberPw());
+			pstmt.setString(4, dto.getMemberAddr());
+			pstmt.setString(5, dto.getMemberAddrDetail());	
+			pstmt.setString(6, dto.getMemberPost());
+			pstmt.setString(7, dto.getMemberGender());
+			pstmt.setString(8, dto.getMemberPhone1());
+			pstmt.setString(9, dto.getMemberPhone2());
+			pstmt.setString(10, dto.getMemberEmail());
+			pstmt.setDate(11, new Date(dto.getMemberBirth().getTime()));
+			int i = pstmt.executeUpdate();
+			System.out.println(i + "개행이(가) 삽입되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}
+	}
+}

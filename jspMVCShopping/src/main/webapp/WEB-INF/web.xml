@@ -8,9 +8,9 @@
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
+    <welcome-file>rhee.jsp</welcome-file>
   </welcome-file-list>
-  
-  
+
   <servlet>
   	<servlet-name>mem</servlet-name>
   	<servlet-class>controller.members.MemberFrontController</servlet-class>
@@ -20,7 +20,7 @@
   	<url-pattern>*.mem</url-pattern>
   </servlet-mapping>
   
-    <servlet>
+  <servlet>
   	<servlet-name>employee</servlet-name>
   	<servlet-class>controller.employees.EmployeeFrontController</servlet-class>
   </servlet>
@@ -28,4 +28,20 @@
   	<servlet-name>employee</servlet-name>
   	<url-pattern>*.emp</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>user</servlet-name>
+  	<servlet-class>controller.user.UserFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>user</servlet-name>
+  	<url-pattern>*.nhn</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  
+  
+  
+  
 </web-app>

@@ -1,8 +1,9 @@
 package model.dto;
 
 import java.util.Date;
-
+// DTO/VO
 public class MemberDTO {
+	//VO
 	String memberNum;
 	String memberId;
 	String memberPw;
@@ -17,6 +18,8 @@ public class MemberDTO {
 	Date memberBirth;
 	
 	Date memberRegist;
+	
+	//DTO
 	public Date getMemberRegist() {
 		return memberRegist;
 	}
