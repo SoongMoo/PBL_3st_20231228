@@ -3,6 +3,7 @@ package model.dao;
 import java.sql.Date;
 import java.sql.SQLException;
 
+import model.dto.AuthInfoDTO;
 import model.dto.MemberDTO;
 
 public class UserDAO extends DataBaseInfo{
@@ -32,4 +33,43 @@ public class UserDAO extends DataBaseInfo{
 			e.printStackTrace();
 		}finally {close();}
 	}
+	public AuthInfoDTO loginSelect(String userId) {
+		AuthInfoDTO dto = null;
+		con = getConnection();
+		sql = " select member_id, member_pw, member_name, member_Email, 'mem' grade "
+			+ " from members "
+			+ " where member_id = ? "
+			+ " union "
+			+ " select emp_id, emp_pw, emp_name, emp_email, 'emp' grade "
+			+ " from employees "
+			+ " where emp_id = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			pstmt.setString(2, userId);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				dto = new AuthInfoDTO();
+				dto.setGrade(rs.getString("grade"));
+				dto.setUserEmail(rs.getString("member_Email"));
+				dto.setUserId(rs.getString("member_id"));
+				dto.setUserName(rs.getString("member_name"));
+				dto.setUserPw(rs.getString("member_pw"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close();
+		}
+		
+		return dto;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

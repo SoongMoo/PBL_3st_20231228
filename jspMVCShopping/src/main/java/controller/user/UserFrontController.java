@@ -27,6 +27,12 @@ public class UserFrontController extends HttpServlet implements Servlet{
 			UserWriteService action = new UserWriteService();
 			action.execute(request);
 			response.sendRedirect(request.getContextPath());
+		}else if(command.equals("/idCheck.nhn")) {
+			IDCheckService action = new IDCheckService();
+			action.execute(request);
+			RequestDispatcher dispatcher = 
+					request.getRequestDispatcher("/user/idCheck.jsp");
+			dispatcher.forward(request, response);
 		}
 		
 	}

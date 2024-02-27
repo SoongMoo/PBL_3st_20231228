@@ -19,9 +19,12 @@ $(function(){
 			return false;
 		}
 	});
+	
+	$("#userId").bind("click","focusin", function(){
+		$("#userId").val("");
+		window.open("idCheck.nhn","아이디검색","width=400, height=200, left=130, top=150");
+	});
 });
-
-
 </script>
 </head>
 <body>
@@ -30,7 +33,8 @@ $(function(){
 	<caption>회원 가입 페이지</caption>
 	<tr><td>*아이디</td>
 		<td>
-			<input type="text" name="memberId" required="required" />
+			<input type="text" name="memberId" id="userId"
+				 required="required" readonly="readonly" /> 아이디 중복확인
 		</td></tr>
 	<tr><td>*비밀번호</td>
 		<td>
