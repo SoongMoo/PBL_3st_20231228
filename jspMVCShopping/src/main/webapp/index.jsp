@@ -11,9 +11,18 @@
 
 <c:if test="${!empty auth }">
 이제 쇼핑몰을 시작하겠습니다.<br />
-<a href="memberList.mem">회원 목록</a>
-<a href="employeeList.emp">직원 목록</a>
-<a href="logout.login">로그아웃</a>
+<ul>
+	<c:if test="${auth.grade == 'emp' }">
+		<li><a href="memberList.mem">회원 목록</a></li>
+		<li><a href="employeeList.emp">직원 목록</a></li>
+		<li><a href="empMyPage.my">내정보 보기</a></li>
+	</c:if>
+
+	<c:if test="${auth.grade == 'mem' }">
+		<li><a href="memberMyPage.my">내정보 보기</a></li>
+	</c:if>
+		<li><a href="logout.login">로그아웃</a></li>
+</ul>
 </c:if>
 
 
@@ -35,7 +44,8 @@
 			<div style="color:red">${errPw }</div>
 		</td></tr>
 	<tr><td colspan="2">
-			아이디 / 비밀번호 찾기 | 
+			<a href="idInquiry.help">아이디</a> / 
+			<a href="pwInquiry.help">비밀번호 찾기</a> | 
 			<a href="userAgree.nhn">회원가입</a>
 		</td></tr>
 </table>

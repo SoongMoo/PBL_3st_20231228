@@ -6,8 +6,9 @@
 <meta charset="UTF-8">
 <title>userForm.jsp</title>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
 <script type="text/javascript" src ="js/daumAddressScript.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+
 <script type="text/javascript" >
 $(function(){
 	$("#frm").submit(function(){

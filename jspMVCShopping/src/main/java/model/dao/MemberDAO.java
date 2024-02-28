@@ -1,6 +1,7 @@
 package model.dao;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -164,8 +165,75 @@ public class MemberDAO extends DataBaseInfo{
 		finally {close();}
 		
 	}
-	
-	
+	public String memberNumSelect(String memberId) {
+		String memberNum = null;
+		con = getConnection();
+		sql = " select member_num from members where member_id = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, memberId);
+			rs = pstmt.executeQuery();
+			rs.next();
+			memberNum = rs.getString(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();} 
+		return memberNum;
+	}
+
+	public void memberInfoUpdate(MemberDTO dto) {
+		con = getConnection();
+		sql = " update members "
+			+ " set MEMBER_NAME =?, MEMBER_ADDR = ?"
+			+ "    ,MEMBER_ADDR_DETAIL =?, MEMBER_POST =?"
+			+ "    ,GENDER = ?, MEMBER_PHONE1 =?,MEMBER_PHONE2= ?"
+			+ "    ,MEMBER_EMAIL = ?, MEMBER_BIRTH = ? "
+			+ " where MEMBER_Id = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dto.getMemberName());
+			pstmt.setString(2, dto.getMemberAddr());
+			pstmt.setString(3, dto.getMemberAddrDetail());
+			pstmt.setString(4, dto.getMemberPost());
+			pstmt.setString(5, dto.getMemberGender());
+			pstmt.setString(6, dto.getMemberPhone1());
+			pstmt.setString(7, dto.getMemberPhone2());
+			pstmt.setString(8, dto.getMemberEmail());
+			pstmt.setDate(9, new Date(dto.getMemberBirth().getTime()));
+			pstmt.setString(10, dto.getMemberId());
+			int i = pstmt.executeUpdate();
+			System.out.println(i+"개가 수정되었습니다.");
+		}catch(Exception e) {e.printStackTrace();}
+		finally {close();}
+	}
+	public void memberPwUpdate(String userPw, String userId) {
+		con = getConnection();
+		sql = " update members "
+			+ " set member_pw = ? "
+			+ " where member_id = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, userPw);
+			pstmt.setString(2, userId);
+			int i = pstmt.executeUpdate();
+			System.out.println("비밀번호가 변경되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}
+	}
+	public void memberDrop(String memberId) {
+		con = getConnection();
+		sql = " delete from members "
+			+ " where member_id = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, memberId);
+			int i = pstmt.executeUpdate();
+			System.out.println("회원이 삭제 되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}
+	}
 	
 	
 	

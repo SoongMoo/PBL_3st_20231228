@@ -10,7 +10,7 @@ public class UserLoginService {
 	public int execute(HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 		String userPw = request.getParameter("userPw");
-		
+
 		UserDAO dao = new UserDAO();
 		AuthInfoDTO auth = dao.loginSelect(userId); 		
 		HttpSession session = request.getSession();
