@@ -1,5 +1,7 @@
 package model.dto;
 
+import java.util.Date;
+
 public class GoodsDTO {
 	String goodsNum;
 	String goodsName;
@@ -8,6 +10,35 @@ public class GoodsDTO {
 	int deliveryCost;
 	
 	String empNum;
+	
+	int visitCount;
+	Date goodsRegist;
+	String updateEmpNum;
+	Date goodsUpdateDate;
+	public int getVisitCount() {
+		return visitCount;
+	}
+	public void setVisitCount(int visitCount) {
+		this.visitCount = visitCount;
+	}
+	public Date getGoodsRegist() {
+		return goodsRegist;
+	}
+	public void setGoodsRegist(Date goodsRegist) {
+		this.goodsRegist = goodsRegist;
+	}
+	public String getUpdateEmpNum() {
+		return updateEmpNum;
+	}
+	public void setUpdateEmpNum(String updateEmpNum) {
+		this.updateEmpNum = updateEmpNum;
+	}
+	public Date getGoodsUpdateDate() {
+		return goodsUpdateDate;
+	}
+	public void setGoodsUpdateDate(Date goodsUpdateDate) {
+		this.goodsUpdateDate = goodsUpdateDate;
+	}
 	public String getEmpNum() {
 		return empNum;
 	}
