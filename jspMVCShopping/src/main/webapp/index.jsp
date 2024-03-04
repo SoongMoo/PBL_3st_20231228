@@ -15,6 +15,8 @@
 	<c:if test="${auth.grade == 'emp' }">
 		<li><a href="memberList.mem">회원 목록</a></li>
 		<li><a href="employeeList.emp">직원 목록</a></li>
+		<li><a href="goodsList.goods">상품리스트</a></li>	
+			
 		<li><a href="empMyPage.my">내정보 보기</a></li>
 	</c:if>
 

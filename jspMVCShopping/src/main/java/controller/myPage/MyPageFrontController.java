@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import controller.employees.EmployeeDetailService;
 import controller.members.MemberDetailService;
 import model.dto.AuthInfoDTO;
 
@@ -95,6 +96,20 @@ public class MyPageFrontController extends HttpServlet implements Servlet{
 						request.getRequestDispatcher("myPage/memberDrop.jsp");
 				dispatcher.forward(request, response);
 			}
+		}else if(command.equals("/empMyPage.my")) {
+			EmployeeDetailService action = 
+					new EmployeeDetailService();
+			action.execute(request);
+			RequestDispatcher dispatcher =
+					request.getRequestDispatcher("myPage/employeeMyPage.jsp");
+			dispatcher.forward(request, response);
+		}else if(command.equals("/empUpdate.my")) {
+			EmployeeDetailService action = 
+					new EmployeeDetailService();
+			action.execute(request);
+			RequestDispatcher dispatcher = 
+					request.getRequestDispatcher("myPage/empModify.jsp");
+			dispatcher.forward(request, response);
 		}
 	}
 	@Override
