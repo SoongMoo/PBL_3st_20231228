@@ -19,7 +19,16 @@
 	<caption>입고현황</caption>
 	<tr><td>번호</td><td>입고번호</td><td>상품번호</td><td>상품가격</td><td>수량</td><th>입고일</th></tr>
 	
-	<tr><td>번호</td><td>입고번호</td><td>상품번호</td><td>상품가격</td><td>수량</td><th>입고일</th></tr>
+	<c:forEach items="${dtos }" var="dto" varStatus="status">
+		<tr><td>${status.count }</td>
+			<td><a href="goodsIpgoDetail.ipgo?ipgoNum=${dto.goodsIpgoNum }&num=${dto.goodsNum }">
+				${dto.goodsIpgoNum }</a></td>
+			<td><a href="goodsIpgoDetail.ipgo?ipgoNum=${dto.goodsIpgoNum }&num=${dto.goodsNum }">
+				${dto.goodsNum }</a></td>
+			<td>${dto.ipgoPrice }</td><th>${dto.ipgoQty }</th>
+			<td>${dto.ipgoDate }</td>
+		</tr>
+	</c:forEach>
 </table>
 </body>
 </html>
