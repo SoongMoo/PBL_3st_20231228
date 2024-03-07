@@ -15,6 +15,42 @@ public class GoodsDTO {
 	Date goodsRegist;
 	String updateEmpNum;
 	Date goodsUpdateDate;
+	
+	String goodsMainStore;
+	String goodsMainStoreImg;
+	
+	String goodsImages;
+	String goodsImagesImg;
+	public String getGoodsImages() {
+		return goodsImages;
+	}
+	public void setGoodsImages(String goodsImages) {
+		this.goodsImages = goodsImages;
+	}
+	public String getGoodsImagesImg() {
+		return goodsImagesImg;
+	}
+	public void setGoodsImagesImg(String goodsImagesImg) {
+		this.goodsImagesImg = goodsImagesImg;
+	}
+	
+	
+	
+	public String getGoodsMainStore() {
+		return goodsMainStore;
+	}
+	public void setGoodsMainStore(String goodsMainStore) {
+		this.goodsMainStore = goodsMainStore;
+	}
+	public String getGoodsMainStoreImg() {
+		return goodsMainStoreImg;
+	}
+	public void setGoodsMainStoreImg(String goodsMainStoreImg) {
+		this.goodsMainStoreImg = goodsMainStoreImg;
+	}
+	
+	
+	
 	public int getVisitCount() {
 		return visitCount;
 	}

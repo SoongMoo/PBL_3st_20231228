@@ -53,5 +53,37 @@
 </table>
 </form>
 </c:if>
+
+<table align = "center"  >
+	<colgroup>
+		<col span="3" width="300" height="300" />
+	</colgroup>
+	<tr>
+		<c:forEach items="${dtos }" var="dto" varStatus="status" >
+			<td><img src="goods/images/${dto.goodsMainStore }" width="300" height="150"/><br />
+				${dto.goodsName }<br />
+				${dto.goodsPrice }원<br />
+				<c:if test="${dto.deliveryCost == 0 }">무료배송</c:if> 
+				<c:if test="${dto.deliveryCost > 0 }">${dto.deliveryCost}원</c:if> 
+			</td>
+			<c:if test="${status.count % 3 == 0 }">
+			</tr><tr>
+			</c:if>
+		</c:forEach>	
+	</tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

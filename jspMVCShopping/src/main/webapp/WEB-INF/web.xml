@@ -4,7 +4,6 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
@@ -84,6 +83,13 @@
   	<url-pattern>*.ipgo</url-pattern>
   </servlet-mapping>
   
-   
+  <servlet>
+  	<servlet-name>main</servlet-name>
+  	<servlet-class>controller.main.MainFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>main</servlet-name>
+  	<url-pattern></url-pattern>
+  </servlet-mapping> 
   
 </web-app>

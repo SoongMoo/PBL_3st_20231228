@@ -11,8 +11,11 @@ public class GoodsDAO extends DataBaseInfo {
 		con = getConnection();
 		sql = " insert into goods (goods_Num, goods_name, goods_price"
 			+ "                   ,goods_content,delivery_cost,emp_num"
-			+ "					  ,goods_regist, visit_count) "
-			+ " values(?,?,?,?,?,?,sysdate,0)";
+			+ "					  ,goods_regist, visit_count"
+			+ " 				  ,goods_main_store, goods_main_store_img "
+			+ " 				  ,goods_images, goods_images_img "
+			+ "                   ) "
+			+ " values(?,?,?,?,?,?,sysdate,0,?,?,?,?)";
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, dto.getGoodsNum());
@@ -21,6 +24,10 @@ public class GoodsDAO extends DataBaseInfo {
 			pstmt.setString(4, dto.getGoodsContent());
 			pstmt.setInt(5, dto.getDeliveryCost());
 			pstmt.setString(6, dto.getEmpNum());
+			pstmt.setString(7, dto.getGoodsMainStore());
+			pstmt.setString(8, dto.getGoodsMainStoreImg());
+			pstmt.setString(9, dto.getGoodsImages());
+			pstmt.setString(10, dto.getGoodsImagesImg());
 			int i = pstmt.executeUpdate();
 			System.out.println(i + "개행이(가) 삽입되었습니다.");
 		} catch (SQLException e) {
@@ -68,6 +75,10 @@ public class GoodsDAO extends DataBaseInfo {
 				dto.setGoodsContent(rs.getString(4));
 				dto.setDeliveryCost(rs.getInt(5));
 				dto.setEmpNum(rs.getString(7));
+				dto.setGoodsMainStore(rs.getString("goods_main_store"));
+				dto.setGoodsMainStoreImg(rs.getString("goods_main_store_img"));
+				dto.setGoodsImages(rs.getString("goods_images"));
+				dto.setGoodsImagesImg(rs.getString("goods_images_img"));
 				list.add(dto);
 			}
 		} catch (SQLException e) {
@@ -106,6 +117,10 @@ public class GoodsDAO extends DataBaseInfo {
 				dto.setGoodsRegist(rs.getDate(8));
 				dto.setUpdateEmpNum(rs.getString(9));
 				dto.setGoodsUpdateDate(rs.getDate(10)); 
+				dto.setGoodsMainStore(rs.getString("goods_main_store"));
+				dto.setGoodsMainStoreImg(rs.getString("goods_main_store_img"));
+				dto.setGoodsImages(rs.getString("goods_images"));
+				dto.setGoodsImagesImg(rs.getString("goods_images_img"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -137,7 +152,7 @@ public class GoodsDAO extends DataBaseInfo {
 		
 		
 	}
-	public void goodsDelete(String goodsNum) {
+	public int goodsDelete(String goodsNum) {
 		con = getConnection();
 		sql = " delete from goods "
 			+ " where  goods_num = ? ";
@@ -147,9 +162,10 @@ public class GoodsDAO extends DataBaseInfo {
 			pstmt.setString(1, goodsNum);
 			int i = pstmt.executeUpdate();
 			System.out.println(i + "개 행이(가) 수정되었습니다.");
-			
+			return i;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return 0;
 		}finally {close();}		
 	}
 }

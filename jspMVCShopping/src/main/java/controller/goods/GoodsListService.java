@@ -19,6 +19,7 @@ public class GoodsListService {
 		GoodsDAO dao = new GoodsDAO();
 		List<GoodsDTO> list = dao.goodsSelectList(goodsWord);
 		request.setAttribute("dtos", list);
+		System.out.println("GoodsListService" + list.size());
 		request.setAttribute("search", goodsWord);
 	}
 }
