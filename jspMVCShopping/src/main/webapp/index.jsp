@@ -21,6 +21,7 @@
 	</c:if>
 
 	<c:if test="${auth.grade == 'mem' }">
+		<li><a href="wishList.item">관심상품</a></li>
 		<li><a href="memberMyPage.my">내정보 보기</a></li>
 	</c:if>
 		<li><a href="logout.login">로그아웃</a></li>
@@ -60,11 +61,13 @@
 	</colgroup>
 	<tr>
 		<c:forEach items="${dtos }" var="dto" varStatus="status" >
-			<td><img src="goods/images/${dto.goodsMainStore }" width="300" height="150"/><br />
+			<td><a href="detailView.item?goodsNum=${dto.goodsNum }">
+				<img src="goods/images/${dto.goodsMainStore }" width="300" height="150"/><br />
 				${dto.goodsName }<br />
 				${dto.goodsPrice }원<br />
 				<c:if test="${dto.deliveryCost == 0 }">무료배송</c:if> 
-				<c:if test="${dto.deliveryCost > 0 }">${dto.deliveryCost}원</c:if> 
+				<c:if test="${dto.deliveryCost > 0 }">${dto.deliveryCost}원</c:if>
+				</a> 
 			</td>
 			<c:if test="${status.count % 3 == 0 }">
 			</tr><tr>

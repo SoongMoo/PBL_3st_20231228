@@ -168,6 +168,21 @@ public class GoodsDAO extends DataBaseInfo {
 			return 0;
 		}finally {close();}		
 	}
+	public void visitCount(String goodsNum) {
+		con = getConnection();
+		sql = " update goods "
+			+ " set VISIT_COUNT = VISIT_COUNT + 1 "
+			+ " where GOODS_NUM = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, goodsNum);
+			int i = pstmt.executeUpdate();
+			System.out.println("조회수가 1증가했습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}		
+		
+	}
 }
 
 
