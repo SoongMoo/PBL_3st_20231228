@@ -44,7 +44,8 @@ function itemsDel(){
 	}
 }
 function itemDel(goodsNums){
-	location.href="cartItemsDel.item?goodsNums="+goodsNums;
+	con = confirm ("정말 삭제하시겠나?");
+	if(con)location.href="cartItemsDel.item?goodsNums="+goodsNums;
 }
 function goodsCartAdd(goodsNum, idx, goodsPrice){
 	option = {
