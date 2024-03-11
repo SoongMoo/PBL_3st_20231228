@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.dto.CartDTO;
+import model.dto.CartListDTO;
 import model.dto.WishListDTO;
 
 public class ItemDAO extends DataBaseInfo {
@@ -88,4 +90,67 @@ public class ItemDAO extends DataBaseInfo {
 			e.printStackTrace();
 		}finally {close();}
 	}
+	public void cartInsert(CartDTO dto) {
+		con = getConnection();
+		sql = " merge into cart c "
+			+ " using (select goods_num from goods where goods_num = ?) g "
+			+ " on (c.goods_num = g.goods_num and MEMBER_NUM = ? ) "
+			+ " WHEN MATCHED THEN "
+			+ " update set cart_qty =  cart_qty + ? "
+			+ " WHEN NOT MATCHED THEN "
+			+ " insert (MEMBER_NUM, GOODS_NUM, CART_DATE , CART_QTY) "
+			+ " values (?, g.goods_num, sysdate, ? ) ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dto.getGoodsNum());
+			pstmt.setString(2, dto.getMemberNum());
+			pstmt.setInt(3, dto.getCartQty());
+			pstmt.setString(4, dto.getMemberNum());
+			pstmt.setInt(5, dto.getCartQty());
+			int i = pstmt.executeUpdate();
+			System.out.println(i + "개가 삽입되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}
+	}
+	public List<CartListDTO> cartSelectList(String memberNum) {
+		List<CartListDTO> list = new ArrayList<CartListDTO>();
+		con = getConnection();
+		sql = " select g.goods_Num , goods_Name, goods_Price, goods_main_store "
+			+ "   	  ,MEMBER_NUM, CART_QTY, CART_DATE"
+			+ "       ,goods_Price * CART_QTY  total_price "
+			+ " from goods g join cart c "
+			+ " on g.goods_num = c.goods_num "
+			+ " where MEMBER_NUM = ? "
+			+ " order by g.goods_Num desc ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, memberNum);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				CartListDTO dto = new CartListDTO();
+				dto.setCartDate(rs.getDate("CART_DATE"));
+				dto.setCartQty(rs.getInt("CART_QTY"));
+				dto.setGoodsName(rs.getString("goods_name"));
+				dto.setGoodsNum(rs.getString("GOODS_NUM"));
+				dto.setMemberNum(rs.getString("MEMBER_NUM"));
+				dto.setTotalPrice(rs.getInt("total_price"));
+				dto.setGoodsImage(rs.getString("goods_main_store"));
+				dto.setGoodsPrice(rs.getInt("goods_price"));
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}
+		return list;
+	}
 }
+
+
+
+
+
+
+
+
+

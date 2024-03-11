@@ -11,7 +11,30 @@
 $(function(){
 	$("#cartBtn").click(function(){
 		if(${!empty auth}){
-			
+			option = {
+					type:"post",
+					/*
+					url:"cart.item?goodsNum=${dto.goodsNum}$cartQty="+$("#cartQty").val()
+					data는 적어주지 않는다.
+					또는
+					url:"cart.item",
+					data:"goodsNum=${dto.goodsNum}$cartQty="+$("#cartQty").val()
+					첫버째와 두번째는 같은 방법이다.(get방식)
+					*/
+					url:"cart.item",
+					data:{"goodsNum":"${dto.goodsNum}","cartQty":$("#cartQty").val()},
+					success:function(result){
+						con = confirm("장바구니로 이동하시겠습니까?"); // true/false
+						if(con){
+								location.href="cartList.item";
+						}
+					},
+					error:function(){
+						alert("로그 아웃되었습니다. 다시로그인 해주세요.");
+						window.open("loginCk.login","loginck","width=400,height=400");
+					}
+			}
+			$.ajax(option);
 		}else{
 			window.open("loginCk.login","loginck","width=400,height=400");
 		}
@@ -48,7 +71,7 @@ $(function(){
 <tr>                <td>${dto.goodsPrice }</td></tr>
 <tr>                <td><c:if test="${dto.deliveryCost == 0}">무료배송</c:if>	
 						<c:if test="${dto.deliveryCost != 0}">${dto.deliveryCost}</c:if></td></tr>
-<tr>                <td>수량 : <input type="number" min="1" step="1" value="1" /> </td></tr>
+<tr>                <td>수량 : <input type="number" min="1" step="1" value="1" id="cartQty"/> </td></tr>
 <tr>                <td><button type="button" id="cartBtn">장바구니</button> | 
  						바로구매 
 					<c:if test="${empty isTrue }">
