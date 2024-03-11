@@ -20,6 +20,14 @@ public class CartListService {
 		ItemDAO dao = new ItemDAO();
 		List<CartListDTO> list = dao.cartSelectList(memberNum);
 		
+		Integer totPri = 0;
+		Integer totQty = 0;
+		for (CartListDTO dto : list) {
+			totPri = totPri + dto.getTotalPrice();
+			totQty = totQty + dto.getCartQty();
+		}
 		request.setAttribute("dtos", list);
+		request.setAttribute("totQty", totQty);
+		request.setAttribute("totPri", totPri);
 	}
 }

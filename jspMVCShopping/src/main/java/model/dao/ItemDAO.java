@@ -108,7 +108,7 @@ public class ItemDAO extends DataBaseInfo {
 			pstmt.setString(4, dto.getMemberNum());
 			pstmt.setInt(5, dto.getCartQty());
 			int i = pstmt.executeUpdate();
-			System.out.println(i + "개가 삽입되었습니다.");
+			System.out.println(i + "개가 병합되었습니다.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {close();}
@@ -156,6 +156,22 @@ public class ItemDAO extends DataBaseInfo {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void itemQtyDown(String goodsNum, String memberNum) {
+		con = getConnection();
+		sql = " update cart "
+			+ " set CART_QTY = CART_QTY - 1 "
+			+ " where goods_num = ? and  member_num = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, goodsNum);
+			pstmt.setString(2, memberNum);
+			int i = pstmt.executeUpdate();
+			System.out.println(i + "개가 수정되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}		
 	}
 }
 

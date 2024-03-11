@@ -15,6 +15,7 @@ $(function(){
 		}else{
 			$(":checkbox[name='prodCk']").prop("checked",false);
 		}
+		prodChk();
 	});
 	
 	$("input[name='prodCk']").click(function(){
@@ -22,6 +23,7 @@ $(function(){
 		var checked = $("input[name='prodCk']:checked").length;
 		if(checkCnt != checked) $("#checkBoxs").prop("checked", false);
 		else $("#checkBoxs").prop("checked", true);
+		prodChk();
 	});
 });
 
@@ -34,7 +36,7 @@ function itemsDel(){
 		if(con){
 			var goodsNums = "";
 			$("input[name='prodCk']:checked").each(function(){
-				goodsNums += $(this).val() + "`";
+				goodsNums += $(this).val() + "-";
 			});
 			console.log(goodsNums);
 			location.href="cartItemsDel.item?goodsNums="+goodsNums;
@@ -42,24 +44,98 @@ function itemsDel(){
 	}
 }
 function itemDel(goodsNums){
-	location.href="cartItemsDel.item?goodsNums="+goodsNums+"`";
+	location.href="cartItemsDel.item?goodsNums="+goodsNums;
 }
+function goodsCartAdd(goodsNum, idx, goodsPrice){
+	option = {
+			type: "post",
+			url: "cart.item",
+			data:{"goodsNum":goodsNum,"cartQty":1},
+			success : function(){
+				$(".cartQty:eq("+idx+")").text(
+						Number($(".cartQty:eq("+idx+")").text()) + 1			
+				);
+				$(".cartPrice:eq("+idx+")").text(
+						Number($(".cartPrice:eq("+idx+")").text()) + goodsPrice
+				);
+			},
+			error:err,
+			complete:prodChk
+	};
+	$.ajax(option);
+}
+function prodChk(){
+	var cnt = 0; // 상품 수
+	var totalPrice = 0; // 총 상품 금액
+	var totalQty = 0; // 총 상품의 갯수
+	
+	for(var idx = 0; idx < ${dtos.size() } ; idx++  ){
+		if($("input:checkbox[name='prodCk']")[idx].checked){
+			cnt ++;
+			totalPrice += Number($(".cartPrice:eq("+idx+")").text());
+			totalQty += Number($(".cartQty:eq("+idx+")").text());
+		}
+		$("#prodCnt").text(cnt);
+		$("#totQty").text(totalQty);
+		$("#totalPrice").text(totalPrice);
+	}
+}
+function checkQty(goodsNum, idx, goodsPrice){
+	var qty = $(".cartQty:eq("+idx+")").text();
+	if(qty <= 1){
+		alert("최소 수량은 1개 이상이어야 합니다.");
+	}else{
+		$.ajax({
+			type: "post",
+			url: "cartQtyDown.item",
+			data:{"goodsNum":goodsNum},
+			success:function(){
+				$(".cartQty:eq("+idx+")").text(
+						Number($(".cartQty:eq("+idx+")").text()) - 1			
+				);
+				$(".cartPrice:eq("+idx+")").text(
+						Number($(".cartPrice:eq("+idx+")").text()) - goodsPrice
+				);
+			},
+			error :err,
+			complete:prodChk
+		});
+	}
+}
+function err(){
+	alert("로그 아웃되었습니다. 다시로그인 해주세요.");
+	window.open("loginCk.login","loginck","width=400,height=400");
+}
+
+
 </script>
 </head>
 <body>
+<form action="itemBuy.item" method="post" >
 <table width="600" align = "center">
 	<tr><td><input type="checkbox" id="checkBoxs" checked="checked" /></td>
 		<td>이미지</td><td>제품이름</td><td>수량</td><td>합계금액</td>
 		<td><button type="button" onclick="itemsDel();" >선택상품삭제</button></td></tr>
-	<c:forEach items="${dtos }" var="dto">
+	<c:forEach items="${dtos }" var="dto" varStatus="status">
 	<tr><td><input type="checkbox" name="prodCk" value="${dto.goodsNum }" checked="checked" /></td>
 		<td><img src="goods/images/${dto.goodsImage }" width="30"/></td>
 		<td>${dto.goodsName }</td>
-		<td>${dto.cartQty }</td>
-		<td>${dto.totalPrice }</td>
+		<td> <a href="javascript:checkQty('${dto.goodsNum }', ${status.index },${dto.goodsPrice })">[-]</a> 
+			 <span class="cartQty">${dto.cartQty }</span>
+			 <a href="javascript:goodsCartAdd('${dto.goodsNum }', ${status.index },${dto.goodsPrice });">[+]</a> 
+		</td>
+		<td><span class="cartPrice">${dto.totalPrice }</span></td>
 		<td><button type="button" onclick="itemDel('${dto.goodsNum }');" >삭제</button></td>
 	</tr>
 	</c:forEach>
+	<tr><td colspan="6" align="right">
+			상품수 : <span id="prodCnt">${dtos.size() }</span>개<br />
+			총수량 : <span id="totQty">${totQty }</span>개<br />
+			전체 합계 : <span id="totalPrice">${totPri }</span>원
+		</td>
+	</tr>
+	<tr><td colspan="6" align="right"><input type="submit" value="구매하기"/></td></tr>
 </table>
+</form>
 </body>
 </html>

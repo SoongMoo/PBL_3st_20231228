@@ -52,6 +52,9 @@ public class ItemFrontController extends HttpServlet implements Servlet{
 			CartItemsDeleteService action = new CartItemsDeleteService();
 			action.execute(request);
 			response.sendRedirect("cartList.item");
+		}else if(command.equals("/cartQtyDown.item")) {
+			CartQtyDownService action = new CartQtyDownService();
+			action.execute(request);
 		}
 	}
 	@Override
