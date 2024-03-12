@@ -6,6 +6,7 @@ import java.util.List;
 
 import model.dto.CartDTO;
 import model.dto.CartListDTO;
+import model.dto.PurchaseDTO;
 import model.dto.WishListDTO;
 
 public class ItemDAO extends DataBaseInfo {
@@ -204,6 +205,77 @@ public class ItemDAO extends DataBaseInfo {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {close();}
+		return dto;
+	}
+	
+	public void purchaseInsert(PurchaseDTO dto) {
+		con = getConnection();
+		sql = " insert into purchase(PURCHASE_NUM, PURCHASE_DATE, PURCHASE_PRICE "
+				+ "					,DELIVERY_ADDR, DELIVERY_ADDR_DETAIL, DELIVERY_POST"
+				+ "                 ,DELIVERY_PHONE, MESSAGE, PURCHASE_STATUS, MEMBER_NUM"
+				+ "                 ,DELIVERY_NAME, PURCHASE_NAME)"
+			+ " values(?, sysdate, ?, ?, ?, ?, ?, ?, '결제대기중', ?, ?, ?)  ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dto.getPurchaseNum());
+			pstmt.setLong(2, dto.getPurchasePrice());
+			pstmt.setString(3, dto.getDeliveryAddr());
+			pstmt.setString(4, dto.getDeliveryAddrDetail());
+			pstmt.setString(5, dto.getDeliveryPost());
+			pstmt.setString(6, dto.getDeliveryPhone());
+			pstmt.setString(7, dto.getMessage());
+			pstmt.setString(8, dto.getMemberNum());
+			pstmt.setString(9, dto.getDeliveryName());
+			pstmt.setString(10, dto.getPurchaseName());
+			int i = pstmt.executeUpdate();
+			System.out.println(i + "개 행이(가) 삽입되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close();
+		}
+	}
+	
+	public int purchaseListInsert( String purchaseNum,String goodsNum, String memberNum) {
+		int i = 0;
+		con = getConnection();
+		sql = " insert into purchase_list(PURCHASE_NUM,GOODS_NUM,PURCHASE_QTY,total_price ) "
+			+ " select ?, c.GOODS_NUM , cart_qty, cart_qty * goods_price "
+			+ " from cart c join goods g "
+			+ " on c.goods_num = g.goods_num "
+			+ " where member_num = ?  and c.goods_num =?  ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, purchaseNum);
+			pstmt.setString(2, memberNum);
+			pstmt.setString(3, goodsNum);
+			i = pstmt.executeUpdate();
+			System.out.println(i + "개가 삽입되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}
+		return i;
+	}
+	
+	public PurchaseDTO purchaseSelectOne(String purchaseNum) {
+		System.out.println(purchaseNum);
+		PurchaseDTO dto = new PurchaseDTO();
+		con = getConnection();
+		sql = " select purchase_price,delivery_name,delivery_Phone, purchase_Name "
+			+ " from purchase  "
+			+ " where purchase_num = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, purchaseNum);
+			rs = pstmt.executeQuery();
+			rs.next();
+			dto.setDeliveryName(rs.getString("delivery_name"));
+			dto.setPurchasePrice(rs.getLong("purchase_price"));
+			dto.setDeliveryPhone(rs.getString("delivery_Phone"));
+			dto.setPurchaseName(rs.getString("purchase_Name"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}
 		return dto;
 	}
 }

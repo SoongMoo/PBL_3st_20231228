@@ -63,11 +63,11 @@ public class ItemFrontController extends HttpServlet implements Servlet{
 			dispatcher.forward(request, response);
 		}else if(command.equals("/goodsOrder.item")) {
 			GoodsOrderService action = new GoodsOrderService();
-			action.execute(request);			
+			String purchaseNum = action.execute(request);			
 			
 			IniPayReqService action1 = new IniPayReqService();
 			try {
-				action1.execute(request);
+				action1.execute(request, purchaseNum);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -77,6 +77,10 @@ public class ItemFrontController extends HttpServlet implements Servlet{
 		}else if(command.equals("/close.item")) {
 			RequestDispatcher dispatcher =
 					request.getRequestDispatcher("item/close.jsp");
+			dispatcher.forward(request, response);
+		}else if(command.equals("/purchaseList.item")) {
+			RequestDispatcher dispatcher =
+					request.getRequestDispatcher("item/purchaseList.jsp");
 			dispatcher.forward(request, response);
 		}
 	}
