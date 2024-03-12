@@ -56,10 +56,14 @@ public class ItemFrontController extends HttpServlet implements Servlet{
 			CartQtyDownService action = new CartQtyDownService();
 			action.execute(request);
 		}else if(command.equals("/itemBuy.item")) {
-			CartListService action = new CartListService();
+			GoodsItemService action = new GoodsItemService();
 			action.execute(request);
 			RequestDispatcher dispatcher =
 					request.getRequestDispatcher("item/goodsOrder.jsp");
+			dispatcher.forward(request, response);
+		}else if(command.equals("/goodsOrder.item")) {
+			RequestDispatcher dispatcher =
+					request.getRequestDispatcher("item/payment.jsp");
 			dispatcher.forward(request, response);
 		}
 	}

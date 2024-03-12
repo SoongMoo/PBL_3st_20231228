@@ -174,6 +174,38 @@ public class ItemDAO extends DataBaseInfo {
 			e.printStackTrace();
 		}finally {close();}		
 	}
+	public CartListDTO ItemSelectOne(String goodsNum, String memberNum) {
+		CartListDTO dto = new CartListDTO();
+		System.out.println(goodsNum);
+		System.out.println(memberNum);
+		con = getConnection();
+		sql = " select g.goods_Num,goods_Name,goods_Price,goods_main_store,delivery_Cost"
+			+ "        ,MEMBER_NUM, CART_QTY, CART_DATE"
+			+ "        ,goods_Price * CART_QTY  total_price"
+			+ " from goods g join cart c "
+			+ " on g.goods_num = c.goods_num "
+			+ " where MEMBER_NUM = ? and g.goods_num = ?   "
+			+ " order by g.goods_Num desc";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, memberNum);
+			pstmt.setString(2, goodsNum);
+			rs = pstmt.executeQuery();
+			rs.next();
+			dto.setCartDate(rs.getDate("CART_DATE"));
+			dto.setCartQty(rs.getInt("CART_QTY"));
+			dto.setGoodsName(rs.getString("goods_name"));
+			dto.setGoodsNum(rs.getString("GOODS_NUM"));
+			dto.setMemberNum(rs.getString("MEMBER_NUM"));
+			dto.setTotalPrice(rs.getInt("total_price"));
+			dto.setGoodsImage(rs.getString("goods_main_store"));
+			dto.setGoodsPrice(rs.getInt("goods_price"));  
+			dto.setDeliveryCost(rs.getInt("delivery_Cost"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {close();}
+		return dto;
+	}
 }
 
 
