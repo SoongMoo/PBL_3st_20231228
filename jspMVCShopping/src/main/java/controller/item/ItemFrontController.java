@@ -62,8 +62,21 @@ public class ItemFrontController extends HttpServlet implements Servlet{
 					request.getRequestDispatcher("item/goodsOrder.jsp");
 			dispatcher.forward(request, response);
 		}else if(command.equals("/goodsOrder.item")) {
+			GoodsOrderService action = new GoodsOrderService();
+			action.execute(request);			
+			
+			IniPayReqService action1 = new IniPayReqService();
+			try {
+				action1.execute(request);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			RequestDispatcher dispatcher =
 					request.getRequestDispatcher("item/payment.jsp");
+			dispatcher.forward(request, response);
+		}else if(command.equals("/close.item")) {
+			RequestDispatcher dispatcher =
+					request.getRequestDispatcher("item/close.jsp");
 			dispatcher.forward(request, response);
 		}
 	}
