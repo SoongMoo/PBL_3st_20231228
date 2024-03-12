@@ -108,11 +108,17 @@ function err(){
 	window.open("loginCk.login","loginck","width=400,height=400");
 }
 
+function goodsCheck(){
+	if($("input:checkbox[name='prodCk']:checked").length<= 0 ){
+		alert("주문하실 상품을 선택해주세요.");
+		return false;
+	}
+}
 
 </script>
 </head>
 <body>
-<form action="itemBuy.item" method="post" >
+<form action="itemBuy.item" method="post" onsubmit="return goodsCheck();">
 <table width="600" align = "center">
 	<tr><td><input type="checkbox" id="checkBoxs" checked="checked" /></td>
 		<td>이미지</td><td>제품이름</td><td>수량</td><td>합계금액</td>

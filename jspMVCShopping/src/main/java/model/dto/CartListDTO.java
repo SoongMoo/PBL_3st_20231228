@@ -13,7 +13,14 @@ public class CartListDTO {
 	Date cartDate;
 	
 	int totalPrice;
-
+	
+	int deliveryCost; 
+	public int getDeliveryCost() {
+		return deliveryCost;
+	}
+	public void setDeliveryCost(int deliveryCost) {
+		this.deliveryCost = deliveryCost;
+	}
 	public String getGoodsNum() {
 		return goodsNum;
 	}

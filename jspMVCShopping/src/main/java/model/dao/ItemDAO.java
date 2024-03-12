@@ -116,7 +116,7 @@ public class ItemDAO extends DataBaseInfo {
 	public List<CartListDTO> cartSelectList(String memberNum) {
 		List<CartListDTO> list = new ArrayList<CartListDTO>();
 		con = getConnection();
-		sql = " select g.goods_Num , goods_Name, goods_Price, goods_main_store "
+		sql = " select g.goods_Num , goods_Name, goods_Price, goods_main_store, delivery_Cost "
 			+ "   	  ,MEMBER_NUM, CART_QTY, CART_DATE"
 			+ "       ,goods_Price * CART_QTY  total_price "
 			+ " from goods g join cart c "
@@ -137,6 +137,7 @@ public class ItemDAO extends DataBaseInfo {
 				dto.setTotalPrice(rs.getInt("total_price"));
 				dto.setGoodsImage(rs.getString("goods_main_store"));
 				dto.setGoodsPrice(rs.getInt("goods_price"));
+				dto.setDeliveryCost(rs.getInt("delivery_Cost"));
 				list.add(dto);
 			}
 		} catch (SQLException e) {
