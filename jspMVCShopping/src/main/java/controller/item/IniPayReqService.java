@@ -11,8 +11,9 @@ import model.dao.ItemDAO;
 import model.dto.PurchaseDTO;
 
 public class IniPayReqService {
-	public void execute(HttpServletRequest request, String purchaseNum) throws Exception{
+	public void execute(HttpServletRequest request) throws Exception{
 		//System.out.println(purchaseNum);
+		String purchaseNum = request.getParameter("purchaseNum");
 		ItemDAO  dao = new ItemDAO();
 		PurchaseDTO dto = dao.purchaseSelectOne(purchaseNum);
 		

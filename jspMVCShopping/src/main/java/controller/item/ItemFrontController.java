@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.catalina.connector.Response;
+
 import controller.goods.GoodsDetailService;
 import controller.goods.GoodsVisitCountService;
 
@@ -65,22 +67,32 @@ public class ItemFrontController extends HttpServlet implements Servlet{
 			GoodsOrderService action = new GoodsOrderService();
 			String purchaseNum = action.execute(request);			
 			
-			IniPayReqService action1 = new IniPayReqService();
+			response.sendRedirect("paymentOk.item?purchaseNum="+purchaseNum);
+		}else if(command.equals("/close.item")) {
+			RequestDispatcher dispatcher =
+					request.getRequestDispatcher("item/close.jsp");
+			dispatcher.forward(request, response);
+		}else if(command.equals("/purchaseList.item")) {
+			PurchaseListService action = new PurchaseListService();
+			action.execute(request);
+			RequestDispatcher dispatcher =
+					request.getRequestDispatcher("item/purchaseList.jsp");
+			dispatcher.forward(request, response);
+		}else if(command.equals("/paymentOk.item")) {
+			IniPayReqService action = new IniPayReqService();
 			try {
-				action1.execute(request, purchaseNum);
+				action.execute(request);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			RequestDispatcher dispatcher =
 					request.getRequestDispatcher("item/payment.jsp");
 			dispatcher.forward(request, response);
-		}else if(command.equals("/close.item")) {
-			RequestDispatcher dispatcher =
-					request.getRequestDispatcher("item/close.jsp");
-			dispatcher.forward(request, response);
-		}else if(command.equals("/purchaseList.item")) {
-			RequestDispatcher dispatcher =
-					request.getRequestDispatcher("item/purchaseList.jsp");
+		}else if(command.equals("/INIstdpay_pc_return.item")) {
+			INIstdpayPcReturn action = new INIstdpayPcReturn();
+			action.execute(request);
+			RequestDispatcher dispatcher = 
+					request.getRequestDispatcher("item/buyfinished.jsp");
 			dispatcher.forward(request, response);
 		}
 	}

@@ -6,7 +6,9 @@ import java.util.List;
 
 import model.dto.CartDTO;
 import model.dto.CartListDTO;
+import model.dto.PaymentDTO;
 import model.dto.PurchaseDTO;
+import model.dto.PurchaseInfoDTO;
 import model.dto.WishListDTO;
 
 public class ItemDAO extends DataBaseInfo {
@@ -278,6 +280,65 @@ public class ItemDAO extends DataBaseInfo {
 		}finally {close();}
 		return dto;
 	}
+	
+	public List<PurchaseInfoDTO> purchaseItemSelect(String memberNum) {
+		List<PurchaseInfoDTO> list = new ArrayList<PurchaseInfoDTO>();
+		con = getConnection();
+		sql = " select g.goods_num, goods_main_store, goods_name "
+				+ "   ,pl.purchase_num, purchase_Status, member_Num "
+				+ "   ,confirmNumber "
+			+ " from goods g join purchase_list pl "
+			+ " on g.goods_num = pl.goods_num join purchase p"
+			+ " on pl.purchase_num = p.purchase_num left outer join payment pm "
+			+ " on p.purchase_num = pm.purchase_num "
+			+ " where member_num = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, memberNum);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				PurchaseInfoDTO dto = new PurchaseInfoDTO();
+				dto.setPurchaseNum(rs.getLong("purchase_num"));
+				dto.setConfirmNum(rs.getString("confirmNumber"));
+				dto.setPurchaseStatus(rs.getString("purchase_Status"));
+				dto.setGoodsImage(rs.getString("goods_main_store"));
+				dto.setGoodsName(rs.getString("goods_name"));
+				dto.setGoodsNum(rs.getString("goods_num"));
+				dto.setMemberNum(rs.getString("member_num"));
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}
+		
+		
+		return list;
+	}
+	public void paymentInsert(PaymentDTO dto) {
+		con = getConnection();
+		sql = " insert into payment(purchase_Num,confirmNumber,cardNum,TID"
+				+ "                ,totalPrice,resultMessage,payMethod,applDate"
+				+ "                ,applTime,purchaseName )"
+			+ " values(?,?,?,?,?,?,?,?,?,?)";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dto.getPurchaseNum());
+			pstmt.setString(2, dto.getConfirmNumber());
+			pstmt.setString(3, dto.getCardNum());
+			pstmt.setString(4, dto.getTid());
+			pstmt.setString(5, dto.getTotalPrice());
+			pstmt.setString(6, dto.getResultMessage());
+			pstmt.setString(7, dto.getPayMethod());
+			pstmt.setString(8, dto.getApplDate());
+			pstmt.setString(9, dto.getApplTime());
+			pstmt.setString(10, dto.getPurchaseName());
+			int i = pstmt.executeUpdate();
+			System.out.println(i + "개가 삽입되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {close();}
+	}
+	
 }
 
 
