@@ -9,6 +9,9 @@
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
 <script type="text/javascript">
 $(function(){
+	$("#buyItem").click(function(){
+		location.href= "buyItem.item?goodsNum=${dto.goodsNum}&cartQty="+$("#cartQty").val();
+	});
 	$("#cartBtn").click(function(){
 		if(${!empty auth}){
 			option = {
@@ -73,7 +76,7 @@ $(function(){
 						<c:if test="${dto.deliveryCost != 0}">${dto.deliveryCost}</c:if></td></tr>
 <tr>                <td>수량 : <input type="number" min="1" step="1" value="1" id="cartQty"/> </td></tr>
 <tr>                <td><button type="button" id="cartBtn">장바구니</button> | 
- 						바로구매 
+ 						<button type="button" id="buyItem">바로구매 </button> | 
 					<c:if test="${empty isTrue }">
 						<img src="images/hart1.jpg" width="20" id="wish"/>
 					</c:if>

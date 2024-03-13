@@ -285,16 +285,22 @@ public class ItemDAO extends DataBaseInfo {
 		List<PurchaseInfoDTO> list = new ArrayList<PurchaseInfoDTO>();
 		con = getConnection();
 		sql = " select g.goods_num, goods_main_store, goods_name "
-				+ "   ,pl.purchase_num, purchase_Status, member_Num "
-				+ "   ,confirmNumber "
+				+ "   ,pl.purchase_num, purchase_Status, member_Num, purchase_Price  "
+				+ "   ,confirmNumber, APPLDATE"
+				+ "	  ,DELIVERY_NUM , DELIVERY_STATE"
 			+ " from goods g join purchase_list pl "
 			+ " on g.goods_num = pl.goods_num join purchase p"
 			+ " on pl.purchase_num = p.purchase_num left outer join payment pm "
-			+ " on p.purchase_num = pm.purchase_num "
-			+ " where member_num = ? ";
+			+ " on p.purchase_num = pm.purchase_num left outer join delivery d"
+			+ " on p.purchase_num = d.purchase_num";
+		if(memberNum != null) {
+			sql += " where member_num = ? ";
+		}
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, memberNum);
+			if(memberNum != null) {
+				pstmt.setString(1, memberNum);
+			}
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				PurchaseInfoDTO dto = new PurchaseInfoDTO();
@@ -305,6 +311,10 @@ public class ItemDAO extends DataBaseInfo {
 				dto.setGoodsName(rs.getString("goods_name"));
 				dto.setGoodsNum(rs.getString("goods_num"));
 				dto.setMemberNum(rs.getString("member_num"));
+				dto.setApplDate(rs.getString("applDate"));
+				dto.setPurchasePrice(rs.getLong("purchase_Price"));
+				dto.setDeliveryNum(rs.getLong("DELIVERY_NUM"));
+				dto.setDeliveryState(rs.getString("DELIVERY_STATE"));
 				list.add(dto);
 			}
 		} catch (SQLException e) {

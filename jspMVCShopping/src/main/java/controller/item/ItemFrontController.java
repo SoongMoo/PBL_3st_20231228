@@ -91,9 +91,15 @@ public class ItemFrontController extends HttpServlet implements Servlet{
 		}else if(command.equals("/INIstdpay_pc_return.item")) {
 			INIstdpayPcReturn action = new INIstdpayPcReturn();
 			action.execute(request);
+			
 			RequestDispatcher dispatcher = 
 					request.getRequestDispatcher("item/buyfinished.jsp");
 			dispatcher.forward(request, response);
+		}else if(command.equals("/buyItem.item")) {
+			CartInsertService action = new CartInsertService();
+			action.execute(request); /// 장바구니에 넣고 구매페이지로 이동
+			response.sendRedirect("itemBuy.item?prodCk="
+									+request.getParameter("goodsNum"));
 		}
 	}
 	@Override

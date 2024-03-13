@@ -6,13 +6,19 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.inicis.std.util.HttpUtil;
 import com.inicis.std.util.ParseUtil;
 import com.inicis.std.util.SignatureUtil;
 
 import model.dao.ItemDAO;
+import model.dao.MemberDAO;
+import model.dao.UserDAO;
+import model.dto.AuthInfoDTO;
+import model.dto.MemberDTO;
 import model.dto.PaymentDTO;
+import model.dto.PurchaseDTO;
 
 public class INIstdpayPcReturn {
 	public void execute(HttpServletRequest request) {
@@ -120,6 +126,19 @@ public class INIstdpayPcReturn {
 					dto.setPurchaseName(resultMap.get("goodsName"));
 					ItemDAO dao = new ItemDAO();
 					dao.paymentInsert(dto);
+					//// 로그인 session 생성
+					PurchaseDTO pdto = dao.purchaseSelectOne(resultMap.get("MOID"));
+					MemberDAO  mDao = new MemberDAO();
+					MemberDTO memDto = mDao.memberSelectOne(pdto.getMemberNum());
+					UserDAO uDao = new UserDAO();
+					AuthInfoDTO auth = uDao.loginSelect(memDto.getMemberId());
+					HttpSession session = request.getSession();
+					session.setAttribute("auth", auth);
+					/////
+					request.setAttribute("userId", memDto.getMemberId());
+					request.setAttribute("price", resultMap.get("TotPrice"));
+					
+					
 				} catch (Exception ex) {
 
 					//####################################
