@@ -21,7 +21,5 @@ public class PurchaseInfoDTO {
 	
 	String deliveryState;
 	
-	
-	
-	
+	Integer reviewNum;
 }

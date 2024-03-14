@@ -288,11 +288,13 @@ public class ItemDAO extends DataBaseInfo {
 				+ "   ,pl.purchase_num, purchase_Status, member_Num, purchase_Price  "
 				+ "   ,confirmNumber, APPLDATE"
 				+ "	  ,DELIVERY_NUM , DELIVERY_STATE"
+				+ "   ,review_num "
 			+ " from goods g join purchase_list pl "
 			+ " on g.goods_num = pl.goods_num join purchase p"
 			+ " on pl.purchase_num = p.purchase_num left outer join payment pm "
 			+ " on p.purchase_num = pm.purchase_num left outer join delivery d"
-			+ " on p.purchase_num = d.purchase_num";
+			+ " on p.purchase_num = d.purchase_num left outer join reviews r"
+			+ " on pl.purchase_num = r.purchase_num and pl.goods_num = r.goods_num ";
 		if(memberNum != null) {
 			sql += " where member_num = ? ";
 		}
@@ -315,13 +317,12 @@ public class ItemDAO extends DataBaseInfo {
 				dto.setPurchasePrice(rs.getLong("purchase_Price"));
 				dto.setDeliveryNum(rs.getLong("DELIVERY_NUM"));
 				dto.setDeliveryState(rs.getString("DELIVERY_STATE"));
+				dto.setReviewNum(rs.getInt("review_num"));
 				list.add(dto);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {close();}
-		
-		
 		return list;
 	}
 	public void paymentInsert(PaymentDTO dto) {
@@ -348,7 +349,32 @@ public class ItemDAO extends DataBaseInfo {
 			e.printStackTrace();
 		} finally {close();}
 	}
-	
+	public void purchaseStatusUpdate(String purchaseNum) {
+		con = getConnection();
+		sql = " update purchase "
+			+ " set purchase_status = '구매확정' "
+			+ " where purchase_Num = ? " ;
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, purchaseNum);
+			int i = pstmt.executeUpdate();
+			System.out.println(i + "개가 수정되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {close();}
+	}
+	public void paymentDelete(String purchaseNum) {
+		con = getConnection();
+		sql = " delete from payment where purchase_Num = ? ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, purchaseNum);
+			int i = pstmt.executeUpdate();
+			System.out.println(i + "개가 삭제되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
 
 

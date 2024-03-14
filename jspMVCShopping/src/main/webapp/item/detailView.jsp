@@ -63,7 +63,59 @@ $(function(){
 			}
 		});
 	});
+	$("#descript").click(function(){
+		descript();
+	});
+	$("#review").click(function(){
+		//location.href="reviewList.review?goodsNum=${dto.goodsNum}"
+		$.ajax({
+			type:"post",
+			url: "reviewList.review",
+			data : {"goodsNum":"${dto.goodsNum}"},
+			dataType : "html",
+			success : function(result){
+				$("#content").html(result);
+			},
+			error : function(){
+				alert('에러가 나왔다 홀홀홀~');
+				return;
+			}
+		});		
+	});
+	descript();
 });
+function descript(){
+	//location.href="descript.item?goodsNum=${dto.goodsNum}";
+	$.ajax({
+		type:"post",
+		url:"descript.item",
+		data:{"goodsNum":"${dto.goodsNum}"},
+		dataType : "html",
+		success : function(result){
+			$("#content").html(result);
+		},
+		error : function(){
+			alert('에러가 나왔다 홀홀홀~');
+			return;
+		}		
+	});
+}
+function inquire(){
+	//location.href= "inquireList.inq?goodsNum=${dto.goodsNum}";
+	$.ajax({
+		type:"post",
+		url: "inquireList.inq",
+		data:{"goodsNum":"${dto.goodsNum}"},
+		dataType : "html",
+		success : function(result){
+			$("#content").html(result);
+		},
+		error : function(){
+			alert('에러가 나왔다 홀홀홀~');
+			return;
+		}
+	});
+}
 </script>
 </head>
 <body>
@@ -84,7 +136,12 @@ $(function(){
 						<img src="images/hart.jpg" width="20" id="wish"/>
 					</c:if>
 					찜</td></tr>
-<tr><td colspan="2">제품 상세 설명 | 리뷰 | 상품문의</td></tr>
+<tr><td colspan="2">
+		<span id="descript">제품 상세 설명</span> | 
+		<span id="review">리뷰</span> | 
+		<span id="inquire" onclick="inquire();">상품문의</span>
+	</td></tr>
+<tr><td colspan="2"><div id="content"></div></td></tr>
 </table>
 </body>
 </html>

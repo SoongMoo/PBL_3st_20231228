@@ -137,8 +137,6 @@ public class INIstdpayPcReturn {
 					/////
 					request.setAttribute("userId", memDto.getMemberId());
 					request.setAttribute("price", resultMap.get("TotPrice"));
-					
-					
 				} catch (Exception ex) {
 
 					//####################################

@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.catalina.connector.Response;
-
 import controller.goods.GoodsDetailService;
 import controller.goods.GoodsVisitCountService;
 
@@ -100,6 +98,20 @@ public class ItemFrontController extends HttpServlet implements Servlet{
 			action.execute(request); /// 장바구니에 넣고 구매페이지로 이동
 			response.sendRedirect("itemBuy.item?prodCk="
 									+request.getParameter("goodsNum"));
+		}else if(command.equals("/purchased.item")) {
+			PurchasedService action = new PurchasedService();
+			action.execute(request);
+			response.sendRedirect("purchaseList.item");
+		}else if(command.equals("/paymentDelete.item")) {
+			PaymentDeleteService action = new PaymentDeleteService();
+			action.execute(request);
+			response.sendRedirect("purchaseList.item");
+		}else if(command.equals("/descript.item")) {
+			GoodsDetailService action  = new GoodsDetailService();
+			action.execute(request);
+			RequestDispatcher dispatcher = 
+					request.getRequestDispatcher("item/descript.jsp");
+			dispatcher.forward(request, response);
 		}
 	}
 	@Override
