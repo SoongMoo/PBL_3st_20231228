@@ -336,11 +336,11 @@ add (REVIEW_NUM NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1)
 alter table goods_inquire   -- 1
 drop constraint PK_goods_inquire;
 
-ALTER TABLE goods_inquire   -- 2
-ADD constraint PK_goods_inquire PRIMARY KEY(MEMBER_NUM,GOODS_NUM);
-
-alter table goods_inquire   -- 3
+alter table goods_inquire   -- 2
 drop column INQUIRE_NUM;
 
-alter table goods_inquire  -- 4
+alter table goods_inquire  -- 3
 add (INQUIRE_NUM NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1));
+
+ALTER TABLE goods_inquire   -- 4
+ADD constraint PK_goods_inquire PRIMARY KEY(INQUIRE_NUM, MEMBER_NUM,GOODS_NUM);
