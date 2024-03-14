@@ -18,7 +18,7 @@ $(function(){
 </script>
 </head>
 <body>
-<table width="600" align="center" border="1">
+<table width="800" align="center" border="1">
 	<tr><td colspan="3" align="right">
 		<button type="button" id="inquire1" >문의 하기</button>
 	</td></tr>

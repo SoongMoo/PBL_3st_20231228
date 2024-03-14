@@ -263,7 +263,8 @@ public class ItemDAO extends DataBaseInfo {
 		System.out.println(purchaseNum);
 		PurchaseDTO dto = new PurchaseDTO();
 		con = getConnection();
-		sql = " select purchase_price,delivery_name,delivery_Phone, purchase_Name "
+		sql = " select purchase_price,delivery_name,delivery_Phone, purchase_Name"
+				+ "	  ,member_num "
 			+ " from purchase  "
 			+ " where purchase_num = ? ";
 		try {
@@ -275,6 +276,7 @@ public class ItemDAO extends DataBaseInfo {
 			dto.setPurchasePrice(rs.getLong("purchase_price"));
 			dto.setDeliveryPhone(rs.getString("delivery_Phone"));
 			dto.setPurchaseName(rs.getString("purchase_Name"));
+			dto.setMemberNum(rs.getString("member_num"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {close();}
