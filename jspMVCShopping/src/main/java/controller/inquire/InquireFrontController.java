@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.dao.InquireDAO;
+
 public class InquireFrontController extends HttpServlet 
 									implements Servlet{
 	protected void doProcess(HttpServletRequest request, 
@@ -18,7 +20,8 @@ public class InquireFrontController extends HttpServlet
 		String contextPath = request.getContextPath();
 		String command = requestURI.substring(contextPath.length());
 		if(command.equals("/inquireList.inq")) {
-			
+			InquireListService action = new InquireListService();
+			action.execute(request);
 			RequestDispatcher dispatcher = 
 					request.getRequestDispatcher("inquire/inquireList.jsp");
 			dispatcher.forward(request, response);
@@ -38,6 +41,44 @@ public class InquireFrontController extends HttpServlet
 					  + " </script>";
 			out.print(str);
 			out.close();
+		}else if(command.equals("/inquire.inq")) {
+			InquireListService action = new InquireListService();
+			action.execute(request);
+			RequestDispatcher dispatcher = 
+					request.getRequestDispatcher("inquire/inquireListEmp.jsp");
+			dispatcher.forward(request, response);
+		}else if(command.equals("/inquireAnswer.inq")) {
+			InquireDetailService action = new InquireDetailService();
+			action.execute(request);
+			RequestDispatcher dispatcher = 
+					request.getRequestDispatcher("inquire/inquireAnswer.jsp");
+			dispatcher.forward(request, response);
+		}else if(command.equals("/inquireRepleUpdate.inq")) {
+			InquireAnswerService action = new InquireAnswerService();
+			action.execute(request);
+			response.sendRedirect("inquire.inq");
+		}else if(command.equals("/inquireDelete.inq")) {
+			String inquireNum = request.getParameter("inquireNum");
+			InquireDAO dao = new InquireDAO();
+			dao.inquireDelete(inquireNum);
+		}else if(command.equals("/inquireUpdate.inq")) {
+			InquireDetailService action = new InquireDetailService();
+			action.execute(request);
+			RequestDispatcher dispatcher = 
+					request.getRequestDispatcher("inquire/inquireUpdate.jsp");
+			dispatcher.forward(request, response);
+		}else if(command.equals("/inquireModify.inq")) {
+			InquireUpdateService action = new InquireUpdateService();
+			action.execute(request);
+			
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			String str=  "<script language='javascript'>" 
+					  +  " opener.parent.inquire();"
+			          +  " window.self.close();"
+			          +  "</script>";
+			 out.print(str);
+			 out.close();
 		}
 	}
 	@Override
