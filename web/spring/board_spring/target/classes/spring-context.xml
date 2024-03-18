@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			"
+>
+	<bean class="board_spring.controller.BoardController" />
+	<bean id="boardListService"  class="board_spring.service.BoardListService"/>
+	<!-- BoardListService boardListService = new boardListService(); -->
+	<bean id="boardDetailService"  class="board_spring.service.BoardDetailService"/>
+	<!-- BoardDetailService boardDetailService = new BoardDetailService(); -->
+	<bean id="boardDeleteService"  class="board_spring.service.BoardDeleteService"/>
+	<bean id="boardWriteService"  class="board_spring.service.BoardWriteService"/>
+	<bean id="boardUpdateSrvice"  class="board_spring.service.BoardUpdateSrvice"/>
+</beans>
