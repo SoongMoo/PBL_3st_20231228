@@ -2,9 +2,16 @@ package board_spring_boot.command;
 
 // html에 input의 name과 같아야 한다.
 public class BoardCommand {
+	Integer boardNum;
 	String boardWriter;
 	String boardSubject;
 	String boardContent;
+	public Integer getBoardNum() {
+		return boardNum;
+	}
+	public void setBoardNum(Integer boardNum) {
+		this.boardNum = boardNum;
+	}
 	public String getBoardWriter() {
 		return boardWriter;
 	}

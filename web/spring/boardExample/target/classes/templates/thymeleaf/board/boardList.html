@@ -10,8 +10,8 @@
 <table border= 1 width="600px" align="center">
 	<tr><th>글번호</th><th>글쓴이</th><th>제목</th></tr>
 	<tr th:each=" dto :  ${dtos}">
-		<th>[[${dto.boardNum }]]</th>
-		<th>[[${dto.boardWriter }]]</th>
+		<th><a th:href="|boardDetail?num=${dto.boardNum }|">[[${dto.boardNum }]]</a></th>
+		<th><a th:href="@{boardDetail(num=${dto.boardNum })}">[[${dto.boardWriter }]]</a></th>
 		<th>[[${dto.boardContent }]]</th>
 	</tr>
 </table>

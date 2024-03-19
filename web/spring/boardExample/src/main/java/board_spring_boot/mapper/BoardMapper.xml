@@ -15,4 +15,23 @@
 		 , BOARD_SUBJECT boardSubject, BOARD_CONTENT boardContent
 	from board
 </select>
+<select id="boardSelectOne" resultType="board">
+	select BOARD_NUM boardNum, BOARD_WRITER boardWriter
+		 , BOARD_SUBJECT boardSubject, BOARD_CONTENT boardContent
+	from board
+	where BOARD_NUM = #{boardNum}
+</select>
+<update id="boardUpdate" parameterType="board">
+	update board
+	set BOARD_WRITER = #{boardWriter},
+		BOARD_SUBJECT = #{boardSubject},
+		BOARD_CONTENT = #{boardContent}
+	where BOARD_NUM = #{boardNum}
+</update>
+<delete id="boardDelete" parameterType="string" >
+	delete from board 
+	where BOARD_NUM = #{boardNum}
+</delete>
+
+
 </mapper>

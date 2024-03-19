@@ -81,6 +81,12 @@
 			<artifactId>glassfish-jstl</artifactId>
 			<version>11.0.12</version>
 		</dependency>
+		<!--  jsp를 사용하기 위해서 추가 : JSP lib -->
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
