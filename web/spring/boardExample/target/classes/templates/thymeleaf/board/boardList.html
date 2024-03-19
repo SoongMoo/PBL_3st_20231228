@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+게시판 리스트<br />
+<a href="boardWrite">게시글 쓰기</a><br />
+<table border= 1 width="600px" align="center">
+	<tr><th>글번호</th><th>글쓴이</th><th>제목</th></tr>
+	<tr th:each=" dto :  ${dtos}">
+		<th>[[${dto.boardNum }]]</th>
+		<th>[[${dto.boardWriter }]]</th>
+		<th>[[${dto.boardContent }]]</th>
+	</tr>
+</table>
+</body>
+</html>
