@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springBootMVCShopping.mapper.MemberMapper">
+<sql id="memberBaseColumns">
+		MEMBER_NUM memberNum,member_id memberId,member_pw memberPw
+		,member_name memberName,member_addr memberAddr
+		,member_addr_detail memberAddrDetail,member_post memberPost
+		,member_phone1 memberPhone1,member_phone2 memberPhone2
+		,member_regist memberRegist,member_birth memberBirth
+		,gender,member_email memberEmail
+		,member_email_conf memberEmailConf,MEMBER_POINT memberPoint
+</sql>
+<insert id="memberInsert" parameterType="member">
+	insert into members(MEMBER_NUM,member_id,member_pw,member_name,member_addr
+					   ,member_addr_detail,member_post,member_phone1,member_phone2
+					   ,member_regist,member_birth,gender,member_email
+					   ,member_email_conf,MEMBER_POINT)
+	values(#{memberNum},#{memberId},#{memberPw},#{memberName},#{memberAddr}
+		  ,#{memberAddrDetail},#{memberPost},#{memberPhone1},#{memberPhone2}
+		  ,sysdate,#{memberBirth},#{gender},#{memberEmail},null,0)
+</insert>
+<select id="memberSelectList" resultType="member">
+	select <include refid="memberBaseColumns" />
+	from members
+</select>
+<select id="memberSelectOne" parameterType="string" resultType="member"> 
+	select  <include refid="memberBaseColumns" />
+	from members
+	where MEMBER_NUM = #{memberNum}
+</select>
+<update id="memberUpdate" parameterType="member">
+	update members
+	<trim prefix="set" suffixOverrides="," >
+	 	member_Name = #{memberName},
+		member_ADDR = #{memberAddr},
+		<if test="memberAddrDetail != null">
+		member_Addr_Detail = #{memberAddrDetail},
+		</if>
+		<if test="memberAddrDetail == null">
+		member_Addr_Detail = null,
+		</if>
+		member_Post = #{memberPost},
+		gender = #{gender},
+		member_Phone1 = #{memberPhone1},
+		member_Email = #{memberEmail},
+		member_Birth = #{memberBirth},
+		<choose>
+			<when test="memberPhone2 != null">
+			member_Phone2 = #{memberPhone2}
+			</when>
+			<when test="memberPhone2 == null">
+			member_Phone2 = null
+			</when>
+		</choose>
+	</trim>
+	<where>
+		MEMBER_NUM = #{memberNum}
+	</where>
+</update>
+<delete id="memberDelete" parameterType="string">
+	delete from members
+	<trim prefix="where" prefixOverrides="AND|OR">
+		and member_num = #{memberNum}
+	</trim>
+</delete>
+</mapper>
+
+
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<table width="600" align="center">
+	<tr><td><a href="memberRegist">회원 등록</a></td></tr>
+</table>
+
+<table border=1 width="600" align="center">
+	<caption>회원리스트</caption>
+	<tr><td>번호</td><td>이름</td><td>아이디</td><td>등록일</td></tr>
+	<tr th:each=" dto : ${dtos}">
+		<td><a th:href="|memberDetail?memberNum=${dto.memberNum}|">[[${dto.memberNum}]]</a></td>
+		<td><a th:href="@{memberDetail(memberNum=${dto.memberNum})}">[[${dto.memberName}]]</a></td>
+		<td>[[${dto.memberId}]]</td>
+		<td>[[${#dates.format(dto.memberRegist, 'yyyy-MM-dd') }]]</td>
+	</tr>
+</table>
+</body>
+</html>
