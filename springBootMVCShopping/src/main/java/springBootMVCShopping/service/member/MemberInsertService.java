@@ -16,7 +16,7 @@ public class MemberInsertService {
 	MemberMapper memberMapper;
 	public void execute(MemberCommand memberCommand) {
 		MemberDTO dto = new MemberDTO();
-		dto.setGender(memberCommand.getMemberGender());
+		dto.setMemberGender(memberCommand.getMemberGender());
 		dto.setMemberAddr(memberCommand.getMemberAddr());
 		dto.setMemberAddrDetail(memberCommand.getMemberAddrDetail());
 		dto.setMemberBirth(memberCommand.getMemberBirth());

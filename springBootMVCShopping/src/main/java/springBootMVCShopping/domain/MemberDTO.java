@@ -21,7 +21,7 @@ public class MemberDTO {
 	   String memberPost;
 	   @DateTimeFormat(pattern = "yyyy-MM-dd")
 	   Date memberRegist;
-	   String gender;
+	   String memberGender;
 	   String memberPhone1;
 	   String memberPhone2;
 	   String memberEmail;

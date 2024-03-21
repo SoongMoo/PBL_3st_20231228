@@ -9,7 +9,7 @@
 		,member_addr_detail memberAddrDetail,member_post memberPost
 		,member_phone1 memberPhone1,member_phone2 memberPhone2
 		,member_regist memberRegist,member_birth memberBirth
-		,gender,member_email memberEmail
+		,gender memberGender,member_email memberEmail
 		,member_email_conf memberEmailConf,MEMBER_POINT memberPoint
 </sql>
 <insert id="memberInsert" parameterType="member">
@@ -19,7 +19,7 @@
 					   ,member_email_conf,MEMBER_POINT)
 	values(#{memberNum},#{memberId},#{memberPw},#{memberName},#{memberAddr}
 		  ,#{memberAddrDetail},#{memberPost},#{memberPhone1},#{memberPhone2}
-		  ,sysdate,#{memberBirth},#{gender},#{memberEmail},null,0)
+		  ,sysdate,#{memberBirth},#{memberGender},#{memberEmail},null,0)
 </insert>
 <select id="memberSelectList" resultType="member">
 	select <include refid="memberBaseColumns" />
@@ -42,7 +42,7 @@
 		member_Addr_Detail = null,
 		</if>
 		member_Post = #{memberPost},
-		gender = #{gender},
+		gender = #{memberGender},
 		member_Phone1 = #{memberPhone1},
 		member_Email = #{memberEmail},
 		member_Birth = #{memberBirth},

@@ -6,12 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import springBootMVCShopping.command.MemberCommand;
+import springBootMVCShopping.service.member.MemberAutoNumService;
 import springBootMVCShopping.service.member.MemberDeleteService;
 import springBootMVCShopping.service.member.MemberDetailService;
 import springBootMVCShopping.service.member.MemberInsertService;
@@ -31,13 +33,17 @@ public class MemberController {
 	MemberUpdateService memberUpdateService;
 	@Autowired
 	MemberDeleteService memberDeleteService;
+	@Autowired
+	MemberAutoNumService memberAutoNumService;
 	@GetMapping("memberList")
 	public String memList(Model model) {
 		memberListService.execute(model);
-		return "thymeleaf/member/memberList";
+		return "thymeleaf/member/memberList"; // html
+		//return "member/memberList"; // jsp
 	}
 	@RequestMapping(value="memberRegist", method = RequestMethod.GET)
-	public String form(MemberCommand memberCommand) {
+	public String form(MemberCommand memberCommand,Model model) {
+		memberAutoNumService.execute(model);
 		return "thymeleaf/member/memberForm";
 	}
 	@RequestMapping(value="memberRegist", method = RequestMethod.POST)
@@ -69,14 +75,18 @@ public class MemberController {
 	}
 	
 	@PostMapping("memberModify")
-	public String memberModify(MemberCommand memberCommand) {
+	public String memberModify(@Validated MemberCommand memberCommand,
+			BindingResult result) {
+		if(result.hasErrors()) {
+			return "thymeleaf/member/memberModify";		
+		}
 		memberUpdateService.execute(memberCommand);
 		return "redirect:memberDetail?memberNum="+memberCommand.getMemberNum();
 	}
-	@GetMapping("memberDelete")
-	public String memberDelete(@RequestParam("memberNum") String memberNum) {
+	@GetMapping("memberDelete/{memberNum}")
+	public String memberDelete(@PathVariable("memberNum") String memberNum) {
 		memberDeleteService.execute(memberNum);
-		return "redirect:memberList";
+		return "redirect:../memberList";
 	}
 	
 	
