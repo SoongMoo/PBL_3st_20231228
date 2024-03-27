@@ -6,4 +6,12 @@
 <select id="autoNumSelectOne" parameterType="string" resultType="string">
 	select concat(#{sep}, nvl(max(substr(${columnName},4)),100000) + 1) from ${tableName}
 </select>
+<delete id="numsDelete" >
+	delete from ${tableName}
+	where ${columnName} in 
+		<foreach collection="nums" item="num" close=")" index="index"	
+				open="(" separator=",">
+				#{num}
+		</foreach>	
+</delete>
 </mapper>

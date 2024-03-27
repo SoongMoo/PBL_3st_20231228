@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<!-- 파일을 전송하려면 enctype="multipart/form-data"로 지정해 주어야 합니다. -->
+<form action="goodsWrite" method="post" id = "frm" th:object="${goodsCommand}" >
+	<table border = "1" width ="600" align="center">
+		<tr><th width="100">상품번호</th>
+			<td><input type="text" name="goodsNum" th:value="${goodsCommand.goodsNum}" readonly="readonly"/>자동부여</td></tr>
+		<tr><th>상품명</th>
+			<td><input type="text" name="goodsName"  th:value="${goodsCommand.goodsName}" /><br />
+		<span style="color:red" th:if="${#fields.hasErrors('goodsName')}" th:errors="*{goodsName}"></span></td></tr>
+		<tr><th>상품가격</th>
+			<td><input type="number" name="goodsPrice" min="0" th:field="*{goodsPrice}" /><br />
+		<span style="color:red" th:if="${#fields.hasErrors('goodsPrice')}" th:errors="*{goodsPrice}"></span></td></tr>
+		<tr><th>배송비</th>
+			<td><input type="number" name="deliveryCost" min="0" max="5000" step="50" th:field="*{deliveryCost}"  /><br />
+		<span style="color:red" th:if="${#fields.hasErrors('deliveryCost')}" th:errors="*{deliveryCost}" ></td></tr>
+		<tr><th>상품설명</th>
+			<td><textarea rows="10" cols="50" name="goodsContent" >[[${goodsCommand.goodsContent}]]</textarea><br />
+		<span style="color:red" th:if="${#fields.hasErrors('goodsContent')}" th:errors="*{goodsContent}"></span></td></tr>
+		<tr><th colspan="2"><input type="submit" id="btn" value="상품 등록" /></th></tr>
+	</table>
+</form>
+</body>
+</html>

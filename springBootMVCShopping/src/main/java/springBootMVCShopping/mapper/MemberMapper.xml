@@ -19,11 +19,21 @@
 					   ,member_email_conf,MEMBER_POINT)
 	values(#{memberNum},#{memberId},#{memberPw},#{memberName},#{memberAddr}
 		  ,#{memberAddrDetail},#{memberPost},#{memberPhone1},#{memberPhone2}
-		  ,sysdate,#{memberBirth},#{memberGender},#{memberEmail},null,0)
+		  ,sysdate,#{memberBirth},#{memberGender},#{memberEmail},'Y',0)
 </insert>
-<select id="memberSelectList" resultType="member">
-	select <include refid="memberBaseColumns" />
-	from members
+<select id="memberSelectList" resultType="member" parameterType="startEndPageDTO">
+select * 
+from( select ROW_NUMBER() over (order by member_num ) as rn
+          , <include refid="memberBaseColumns" />
+    from members
+    <where>
+	    <if test="searchWord != null"> 
+	    	 MEMBER_NAME like '%' || #{searchWord} || '%'
+	      or member_id like '%' || #{searchWord} || '%'
+	      or member_num like '%' || #{searchWord} || '%'
+	    </if>
+    </where> ) 
+where  rn between #{startRow} and #{endRow}
 </select>
 <select id="memberSelectOne" parameterType="string" resultType="member"> 
 	select  <include refid="memberBaseColumns" />
@@ -65,6 +75,9 @@
 		and member_num = #{memberNum}
 	</trim>
 </delete>
+<select id="memberCount" resultType="integer">
+	select count(*) from members
+</select>
 </mapper>
 
 

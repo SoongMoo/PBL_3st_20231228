@@ -13,11 +13,9 @@ public class SpingBootConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) 
 			throws Exception {
-		
 		httpSecurity.formLogin().disable()
 					.csrf().disable();
 		return httpSecurity.build();
-		
 	}
 	//  암호화하기 위한 객체생성
 	@Bean 

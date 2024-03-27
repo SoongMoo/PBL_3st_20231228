@@ -6,8 +6,35 @@
 </head>
 <body>
 이제 쇼핑몰을 시작하겠습니다.<br />
+
+<th:block th:if="${session.auth != null}">
 <ul>
 	<li><a href="member/memberList">회원 목록</a></li>
+	<li><a href="employee/employeeList">직원 목록</a></li>
+	<li><a href="goods/goodsList">상품리스트</a></li>
+	
+	<li><a href="login/logout">로그아웃</a></li>
 </ul>
+</th:block>
+
+
+<th:block th:if="${session.auth == null}">
+<form action="/login/login" method="post" th:object="${loginCommand}">
+<table border="1" align="center">
+	<tr><td colspan="2">자동로그인 | 아이디저장</td></tr>
+	<tr><td><input type="text" name="userId" placeholder="아이디" th:value="${loginCommand.userId}"/><br />
+			<span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" ></span>
+		</td>
+		<td rowspan="2">
+			<input type="image" src="/static/images/오케바리.gif" width="60"/>
+		</td>
+	</tr>
+	<tr><td><input type="password" name="userPw" placeholder="비밀번호" /><br />
+			<span th:if="${#fields.hasErrors('userPw')}" th:errors="*{userPw}" ></span>
+		</td>                     </tr>
+	<tr><td  colspan="2">회원가입 | 아이디 / 비밀번호 찾기</td></tr>
+</table>
+</form>
+</th:block>
 </body>
 </html>

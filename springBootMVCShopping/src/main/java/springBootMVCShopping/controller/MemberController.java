@@ -19,6 +19,7 @@ import springBootMVCShopping.service.member.MemberDetailService;
 import springBootMVCShopping.service.member.MemberInsertService;
 import springBootMVCShopping.service.member.MemberListService;
 import springBootMVCShopping.service.member.MemberUpdateService;
+import springBootMVCShopping.service.member.MembersDeleteService;
 
 @Controller
 @RequestMapping("member") //공통주소 처리
@@ -35,9 +36,14 @@ public class MemberController {
 	MemberDeleteService memberDeleteService;
 	@Autowired
 	MemberAutoNumService memberAutoNumService;
+	@Autowired
+	MembersDeleteService membersDeleteService;
 	@GetMapping("memberList")
-	public String memList(Model model) {
-		memberListService.execute(model);
+	public String memList(
+			@RequestParam(value="page", required = false, defaultValue = "1" ) Integer page
+			,@RequestParam(value="searchWord" , required = false) String searchWord
+			,Model model) {
+		memberListService.execute(model, page, searchWord);
 		return "thymeleaf/member/memberList"; // html
 		//return "member/memberList"; // jsp
 	}
@@ -87,6 +93,12 @@ public class MemberController {
 	public String memberDelete(@PathVariable("memberNum") String memberNum) {
 		memberDeleteService.execute(memberNum);
 		return "redirect:../memberList";
+	}
+	@PostMapping("membersDelete")
+	public String membersDelete(
+			@RequestParam("nums") String memberNums []) {
+		membersDeleteService.execute(memberNums);
+		return "redirect:memberList";
 	}
 	
 	

@@ -9,4 +9,8 @@ public interface AutoNumMapper {
 			@Param("tableName") String tableName 
 			,@Param("columnName") String columnName
 			,@Param("sep") String sep);
+	public void numsDelete(
+			@Param("nums") String nums[], 
+			@Param("tableName") String tableName,
+			@Param("columnName") String columnName);
 }

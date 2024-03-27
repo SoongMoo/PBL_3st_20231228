@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Service;
 
 import lombok.Getter;
 import lombok.Setter;
