@@ -3,23 +3,25 @@
 	"-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="springBootMVCShopping.mapper.GoodsMapper">
-<select id="ipgoAndGoodsAutoNum" resultType="string">
-select
-concat(#{sep} , coalesce(max(substr(${columnName},${seq}))::integer,1000000) + 1)
-from ${tableName}
-</select>
-
+<sql id="goodsColumnsBase">
+	   goods_Num , goods_name , goods_price ,goods_content , delivery_cost , emp_num  
+	  ,goods_regist , goods_main_store ,goods_main_store_img 
+	  , goods_images ,goods_images_img 
+	  , visit_count ,update_Emp_Num , goods_Update_Date
+</sql>
 <insert id="goodsInsert" parameterType="goods">
 insert into goods ( <include refid="goodsColumnsBase" /> )
 values(#{goodsNum}, #{goodsName}, #{goodsPrice}, #{goodsContent},#{deliveryCost},
-		#{empNum}, sysdate, null, null ,null,null
+		#{empNum}, sysdate, #{goodsMainStore}, #{goodsMainStoreImg} 
+		<if test="goodsImages != null">
+			,#{goodsImages} , #{goodsImagesImg}
+		</if>
+		<if test="goodsImages == null">
+			,null,null
+		</if>	  	
 	  	,0,null,null)
 </insert>
-<sql id="goodsColumnsBase">
-	   goods_Num , goods_name , goods_price ,goods_content , delivery_cost , emp_num  
-	  ,goods_regist , goods_main_store ,goods_main_store_img , goods_images 
-	  ,goods_images_img , visit_count ,update_Emp_Num , goods_Update_Date
-</sql>
+
 <!-- dto에 직접 넣어 가지고 오는 것이 아니라 setter를 이용해서 가져오겠습니다. -->
 <resultMap type="goods" id="goodsResultMap">
 	<constructor>

@@ -55,6 +55,11 @@ public class GoodsController {
 		if(result.hasErrors()) {
 			return "thymeleaf/goods/goodsForm";
 		}
+		if(goodsCommand.getGoodsMainStore().getOriginalFilename().isEmpty()) {
+			result.rejectValue("goodsMainStore", "goodsCommand.goodsMainStore"
+					, "이미지를 선택해주세요.");
+			return "thymeleaf/goods/goodsForm";
+		}
 		goodsWriteService.execute(goodsCommand, session);
 		//오류가 없는 경우 goodsForm.html을 넘겨주고 정상이면 goodsRedirect.html을 넘겨준다.
 		//return "thymeleaf/goods/goodsRedirect";
