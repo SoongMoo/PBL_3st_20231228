@@ -21,3 +21,7 @@ public interface GoodsMapper {
 	public int visitCount(String goodsNum);
 	public List<GoodsDTO> wishGoodsList(String memberNum);
 }
+
+
+
+

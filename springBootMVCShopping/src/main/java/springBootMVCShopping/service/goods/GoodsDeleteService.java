@@ -14,8 +14,26 @@ public class GoodsDeleteService {
 	@Autowired
 	GoodsMapper goodsMapper;
 	public void execute(String goodsNum) {
-		//파일 삭제코드를 추가합니다. // 일단 bin에만 파일을 놓겠습니다.
-		GoodsDTO dto = goodsMapper.selectOne(goodsNum); // 먼저 삭제할 파일의 정보를 자져옵니다.
-		goodsMapper.goodsDelete(goodsNum);
+		//파일 삭제코드를 추가합니다. 
+		// 먼저 삭제할 파일의 정보를 자져옵니다.
+		GoodsDTO dto = goodsMapper.selectOne(goodsNum);
+		int i = goodsMapper.goodsDelete(goodsNum);
+		if(i > 0) {
+			//1. 디렉터리 경로
+			URL resource = getClass().getClassLoader().getResource("static/upload");
+			String fileDir = resource.getFile(); 
+			// 2. 파일 객체 생성
+			File file = new File(fileDir + "/" + dto.getGoodsMainStore());
+			// 3. 삭제
+			if(file.exists()) file.delete();
+			if(dto.getGoodsImages() != null) {
+				for(String fileName : dto.getGoodsImages().split("/")) {
+					// 2. 파일 객체 생성
+					file = new File(fileDir + "/" + fileName);
+					// 3. 파일 삭제
+					if(file.exists())file.delete();
+				}
+			}
+		}
 	}
 }

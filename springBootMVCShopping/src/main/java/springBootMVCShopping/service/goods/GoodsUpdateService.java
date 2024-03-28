@@ -2,6 +2,7 @@ package springBootMVCShopping.service.goods;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,7 +48,8 @@ public class GoodsUpdateService {
 		
 		//1. 디렉터리 정보
 		URL resource = getClass().getClassLoader().getResource("/static/upload");
-		String fileDir = resource.getFile();
+		String fileDir = 
+				"C:\\dev\\src6\\PBL_3st_20231228\\springBootMVCShopping\\target\\classes\\static\\upload";//resource.getFile();
 		System.out.println(fileDir);
 		if(!goodsCommand.getGoodsMainStore().getOriginalFilename().isEmpty()) {
 			// 2. 파일객체를 불러오기
@@ -75,16 +77,85 @@ public class GoodsUpdateService {
 			if(list != null) {
 				for(FileDTO fd : list) {
 					if(fd.getStoreFile().equals(goodsDTO.getGoodsMainStore())) {
-						//session에 삭제 정보가 있는데  file을 가져오지 않음
+						//session에 삭제 정보가 있는데  file을 가져오지 않으면메모장
 						result.rejectValue("goodsMainStore", "error");
 						model.addAttribute("error", "대문이미지를 선택해주세요.");
+						model.addAttribute("goodsCommand", goodsDTO);
 						session.removeAttribute("fileList");
+						return;
 					}
 				}
 			}
 		}
-		goodsMapper.goodsUpdate(dto);
-		
+		if(!goodsCommand.getGoodsImages()[0].getOriginalFilename().isEmpty()) {
+			String originalTotal = "";
+			String storeTotal = "";
+			//1. 디렉터리 정보
+			//2. 파일정보를 불러오기
+			for(MultipartFile mf : goodsCommand.getGoodsImages()) {
+				//  3. 파일이름 가져오기 : a.a.a.a.hwp
+				String originalFile = mf.getOriginalFilename();
+				// 4. 확장자 : .hwp
+				String extension = originalFile.substring(originalFile.lastIndexOf("."));
+				// 5. 새로운 파일명 만들기 : y897rfwefgvw
+				String storeName = UUID.randomUUID().toString().replace("-", "");
+				//6. 새로운 파일명과 확장자 붙이기 : y897rfwefgvw.hwp
+				String storeFileName = storeName + extension;
+				// 7. 파일객체 만들기
+				File file = new File(fileDir + "/" + storeFileName);
+				// 8. 파일 저장
+				try {
+					mf.transferTo(file);
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+				originalTotal += originalFile + "/";
+				storeTotal += storeFileName + "/";
+			}
+			dto.setGoodsImages(storeTotal);
+			dto.setGoodsImagesImg(originalTotal);
+		}
+		// session에 있는 정보를 디비로부터 제거
+		String dbOrg [] =  goodsDTO.getGoodsImagesImg().split("/") ; 
+		String dbStore [] = goodsDTO.getGoodsImages().split("/");
+		List<String> goodsImages = new ArrayList<String>();
+		List<String> goodsOrgImages = new ArrayList<String>();
+		if(dbStore != null) {
+			for(String img : dbStore) {
+				goodsImages.add(img);
+			}
+			for(String img : dbOrg) {
+				goodsOrgImages.add(img);
+			}
+		}
+		System.out.println(goodsImages.size());
+		System.out.println(goodsOrgImages.size());
+		if(list != null) {
+			for(FileDTO fdto : list) {
+				for(String img : goodsImages) {
+					if(fdto.getStoreFile().equals(img)) {
+						goodsImages.remove(fdto.getStoreFile());
+						goodsOrgImages.remove(fdto.getOrgFile());
+						break;
+					}
+				}
+			}
+		}
+		for(String img : goodsImages) {
+			dto.setGoodsImages(dto.getGoodsImages() + "/" + img);
+		}
+		for(String img : goodsOrgImages) {
+			dto.setGoodsImagesImg(dto.getGoodsImagesImg() + "/" + img);			
+		}
+		int i = goodsMapper.goodsUpdate(dto);
+		if(i > 0) {
+			if(list != null) {
+				for(FileDTO fd : list) {
+					 File file = new File(fileDir + "/" + fd.getStoreFile());
+					 if(file.exists()) file.delete();
+				}
+			}
+		}
 	}
 }
 
