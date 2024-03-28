@@ -78,7 +78,8 @@ public class GoodsController {
 	GoodsDetailService goodsDetailService;
 	@GetMapping("goodsDetail")
 	public String goodsDetail(@RequestParam("goodsNum") String goodsNum
-			,Model model) {
+			,Model model,HttpSession session) {
+		session.removeAttribute("fileList");
 		goodsDetailService.execute(goodsNum, model);
 		return "thymeleaf/goods/goodsInfo";
 	}

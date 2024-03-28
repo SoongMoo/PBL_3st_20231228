@@ -87,9 +87,10 @@ public class GoodsUpdateService {
 				}
 			}
 		}
+		String originalTotal = "";
+		String storeTotal = "";
 		if(!goodsCommand.getGoodsImages()[0].getOriginalFilename().isEmpty()) {
-			String originalTotal = "";
-			String storeTotal = "";
+			
 			//1. 디렉터리 정보
 			//2. 파일정보를 불러오기
 			for(MultipartFile mf : goodsCommand.getGoodsImages()) {
@@ -112,8 +113,6 @@ public class GoodsUpdateService {
 				originalTotal += originalFile + "/";
 				storeTotal += storeFileName + "/";
 			}
-			dto.setGoodsImages(storeTotal);
-			dto.setGoodsImagesImg(originalTotal);
 		}
 		// session에 있는 정보를 디비로부터 제거
 		String dbOrg [] =  goodsDTO.getGoodsImagesImg().split("/") ; 
@@ -142,11 +141,13 @@ public class GoodsUpdateService {
 			}
 		}
 		for(String img : goodsImages) {
-			dto.setGoodsImages(dto.getGoodsImages() + "/" + img);
+			storeTotal += img + "/";
 		}
 		for(String img : goodsOrgImages) {
-			dto.setGoodsImagesImg(dto.getGoodsImagesImg() + "/" + img);			
+			originalTotal += img + "/";
 		}
+		dto.setGoodsImages(storeTotal);
+		dto.setGoodsImagesImg(originalTotal);			
 		int i = goodsMapper.goodsUpdate(dto);
 		if(i > 0) {
 			if(list != null) {
