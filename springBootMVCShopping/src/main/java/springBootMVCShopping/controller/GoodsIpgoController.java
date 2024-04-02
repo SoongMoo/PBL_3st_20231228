@@ -58,9 +58,9 @@ public class GoodsIpgoController {
 	@Autowired
 	GoodsIpgoDeleteService goodsIpgoDeleteService;
 	
-	@RequestMapping("goodsIpgoDelete")
-	public String goodsIpgoDelete(String ipgoNumNgoodsNum []) {
-		goodsIpgoDeleteService.execute(ipgoNumNgoodsNum);
+	@RequestMapping("goodsIpgoDelete")  // get/post
+	public String goodsIpgoDelete(String nums []) {
+		goodsIpgoDeleteService.execute(nums);
 		return "redirect:goodsIpgoList";
 	}
 	

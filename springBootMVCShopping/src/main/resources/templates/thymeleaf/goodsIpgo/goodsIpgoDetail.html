@@ -12,14 +12,27 @@ $(function(){
 			data:{"ipgoNum": "[[${ipgoNum}]]", "goodsNum": "[[${goodsNum}]]"},
 			success : function(dto){
 				console.log(dto);
+				var ipgoDate = new Date(dto.goodsIpgoDTO.ipgoDate);
+				var ipgoYear = ipgoDate.getFullYear();
+				var ipgoMonth = ("0" + (ipgoDate.getMonth() + 1)).slice(-2);
+				var ipgoDay = "0" + ipgoDate.getDate().slice(-2);
+				
+				var madeDate = new Date(dto.goodsIpgoDTO.madeDate);
+				var madeYear = madeDate.getFullYear();;
+				var madeMonth= ("0" + (madeDate.getMonth() + 1)).slice(-2);
+				var madeDay = "0" + madeDate.getDate().slice(-2);
+				var madeHours = madeDate.getHours();
+				var madeMinutes = madeDate.getMinutes();				
+				
 				var item="";
 				item += "입고번호 : " + dto.goodsIpgoDTO.ipgoNum + "<br />";
 				item += "입고번호 : " + dto.goodsIpgoDTO.ipgoNum + "<br />";
 				item += "상품번호 : " + dto.goodsIpgoDTO.goodsNum + "<br />";
 				item += "상품이름 : " + dto.goodsName + "<br />";
-				item += "입고일 : " + dto.goodsIpgoDTO.ipgoDate + "<br />";
+				item += "입고일 : " +  ipgoYear + '-' + ipgoMonth + '-' + ipgoDay  + "<br />";
 				item += "입고 수량 : "+ dto.goodsIpgoDTO.ipgoQty + "<br />";
-				item += "제조일 : " + dto.goodsIpgoDTO.madeDate + "<br />";
+				item += "제조일 : " + madeYear + "-" + madeMonth + "-" + madeDay + " " 
+								  + madeHours + ":" + madeMinutes + "<br />";
 				item += "가격 : " + dto.goodsIpgoDTO.ipgoPrice + "<br />";
 				item += '<button type=\'button\' ';
 				item += "		onclick= \"ipgoUpdate('" + dto.goodsIpgoDTO.ipgoNum +"'";
@@ -41,7 +54,7 @@ function ipgoUpdate(ipgoNum, goodsNum){
 	location.href="goodsIpgoUpdate?ipgoNum="+ipgoNum+"&goodsNum="+goodsNum;
 }
 function ipgoDelete(ipgoNum, goodsNum){ /// nums=242141-sfsfwsfs
-	location.href="goodsIpgoDelete?ipgoNumNgoodsNum="+ipgoNum+"-"+goodsNum;
+	location.href="goodsIpgoDelete?nums="+ipgoNum+"-"+goodsNum;
 }
 </script>
 </head>
