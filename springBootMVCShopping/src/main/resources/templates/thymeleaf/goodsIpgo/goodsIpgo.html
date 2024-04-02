@@ -2,26 +2,79 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Insert title here</title><!-- 입고 할 상품을 먼저 검색 하도록 한다. popup창을 이용해 보자-->
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<!-- ajaxSubmit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#btn").click(function(){
+		window.open("goodsList?item=ipgo","상품검색"
+				,"width=620, height=500, left=30, top=50");
+	});
+	
+	$("#regist").click(function(){
+		$("#frm").ajaxSubmit({
+			type: "POST",
+			url: "ipgoRegist",
+			beforeSubmit : function(){
+				if($("#goodsIpgoNum").val() == ""){
+					alert("입고번호를 입력해주세요.");
+					$("#goodsIpgoNum").focus();
+					return false;
+				}
+				if($("#goodsNum").val() == ""){
+					alert("상품번호를 입력해주세요.");
+					$("#goodsNum").focus();
+					return false;					
+				}
+				if($("#ipgoDate").val() == ""){
+					alert("입고일를 입력해주세요.");
+					$("#ipgoDate").focus();
+					return false;
+				}	
+				if($("#madeDate").val() == ""){
+					alert("제조일를 입력해주세요.");
+					$("#madeDate").focus();
+					return false;
+				}
+				if($("#ipgoPrice").val() == 0){
+					alert("금액를 입력해주세요.");
+					$("#ipgoPrice").focus();
+					return false;
+				}
+			},
+			success : function(result){
+				if(result=="200") location.href="goodsIpgoList";
+				//else $("#result").html(result);
+			},
+			error : function(){
+				alert("서버오류");
+			}
+		});
+	});
+});
+</script>
 </head>
 <body>
-<a href="<c:url value='/' />">홈</a>
+<div id="result">
 <ul>
-	<li><a href="goodsWrite.goods">상품 추가</a></li>
-	<li><a href="goodsIpgo.ipgo">상품 입고</a></li>
-	<li><a href="goodsIpgoList.ipgo">상품 입고 현황</a></li>
-	<li><a href="goodsList.goods">상품목록</a></li>
+	<li><a href="goodsForm">상품 추가</a></li>
+	<li><a href="goodsIpgo">상품 입고</a></li>
+	<li><a href="goodsIpgoList">상품 입고 현황</a></li>
 </ul>
- 상품입고 <br />
- <form action="ipgoRegist" method="get ">
- 입고번호 :  <input type="text" name= "goodsIpgoNum" /><br />
- 상품번호 :  <input type="text" name= "goodsNum" id="goodsNum"/><br />
- 상품명 :  <input type="text"  id="goodsName"/><br />
- 입고일 : <input type="date" name= "ipgoDate" /><br />
- 입고 수량 : <input type="number" name= "ipgoQty" /><br />
- 제조일 : <input type="date" name= "madeDate" /><br />
- 가격 :  <input type="number" name= "ipgoPrice" /><br />
- <input type="submit" value="입고 등록" />
- </form>
+<form action="ipgoRegist" method="post" id="frm">
+입고번호 : <input type="text" name= "goodsIpgoNum" id="goodsIpgoNum"/>자동부여<br />
+상품번호 : <input type="text" name= "goodsNum" id="goodsNum" />
+		 <button type="button" id="btn" >상품 검색</button> <br />
+상품명 : <input type="text" name= "goodsName" id="goodsName" /><br />
+입고일 : <input type="date" name= "ipgoDate" id="ipgoDate" /><br />
+입고 수량 : <input type="number" name= "ipgoQty" id="ipgoQty" value="1" min="1" /><br />
+제조일 : <input type="date" name= "madeDate" id="madeDate" /><br />
+가격 : <input type="number" name= "ipgoPrice" id="ipgoPrice" value="0" min="0" max="100000" /><br />
+<!-- <input type="submit" value="입고 등록" /> -->
+<button type="button" id="regist">입고 등록</button>
+</form>
+</div>
 </body>
 </html>

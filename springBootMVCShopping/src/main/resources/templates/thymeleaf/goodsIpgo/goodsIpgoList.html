@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<ul>
+	<li><a href="goodsForm">상품 추가</a></li>
+	<li><a href="goodsIpgo">상품 입고</a></li>
+	<li><a href="goodsIpgoList">상품 입고 현황</a></li>
+</ul>
+입고리스트<br />
+<table width=600 border=1>
+	<tr><th>번호</th><th>입고 번호</th><th>상품 번호</th><th>수량</th><th>입고일</th><th>가격</th></tr>
+	
+	<tr th:each="dto , idx : ${list}">
+		<th>[[${idx.count}]]</th>
+		<th><a th:href="|goodsIpgoDetail?ipgoNum=${dto.ipgoNum}&goodsNum=${dto.goodsNum}|">[[${dto.ipgoNum}]]</a></th>
+		<th><a th:href="@{goodsIpgoDetail(ipgoNum=${dto.ipgoNum},goodsNum=${dto.goodsNum})}">[[${dto.goodsNum}]]</a></th>
+		<th>[[${dto.ipgoQty}]]</th>
+		<th>[[${dto.ipgoDate}]]</th>
+		<th>[[${dto.ipgoPrice}]]</th></tr></table>
+</body>
+</html>

@@ -2,13 +2,14 @@ package springBootMVCShopping.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import springBootMVCShopping.domain.EmployeeDTO;
 import springBootMVCShopping.domain.StartEndPageDTO;
 	
-@Repository(value="springBootMVCShopping.mapper.EmployeeMapper")
+@Mapper
 public interface EmployeeMapper {
 	public String autoNum();
 	public Integer employeeInsert(EmployeeDTO dto);

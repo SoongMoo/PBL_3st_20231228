@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+		$.ajax({
+			type:"post",
+			url:"goodsIpgoDetail",
+			data:{"ipgoNum": "[[${ipgoNum}]]", "goodsNum": "[[${goodsNum}]]"},
+			success : function(dto){
+				console.log(dto);
+				var item="";
+				item += "입고번호 : " + dto.goodsIpgoDTO.ipgoNum + "<br />";
+				item += "입고번호 : " + dto.goodsIpgoDTO.ipgoNum + "<br />";
+				item += "상품번호 : " + dto.goodsIpgoDTO.goodsNum + "<br />";
+				item += "상품이름 : " + dto.goodsName + "<br />";
+				item += "입고일 : " + dto.goodsIpgoDTO.ipgoDate + "<br />";
+				item += "입고 수량 : "+ dto.goodsIpgoDTO.ipgoQty + "<br />";
+				item += "제조일 : " + dto.goodsIpgoDTO.madeDate + "<br />";
+				item += "가격 : " + dto.goodsIpgoDTO.ipgoPrice + "<br />";
+				item += '<button type=\'button\' ';
+				item += "		onclick= \"ipgoUpdate('" + dto.goodsIpgoDTO.ipgoNum +"'";
+				item += "   				        ,'" + dto.goodsIpgoDTO.goodsNum + "');\" >";
+				item += "입고 수정</button>" ;
+				item += "<button type='button' ";
+				item += "			onclick=\"ipgoDelete('" + dto.goodsIpgoDTO.ipgoNum + "'";
+				item += "								,'" + dto.goodsIpgoDTO.goodsNum + "');\">";
+				item += "입고 삭제</button>";
+				$("#detail").html(item);
+			},
+			error:function(){
+				alert("서버오류");
+			}
+		});
+});
+
+function ipgoUpdate(ipgoNum, goodsNum){
+	location.href="goodsIpgoUpdate?ipgoNum="+ipgoNum+"&goodsNum="+goodsNum;
+}
+function ipgoDelete(ipgoNum, goodsNum){ /// nums=242141-sfsfwsfs
+	location.href="goodsIpgoDelete?ipgoNumNgoodsNum="+ipgoNum+"-"+goodsNum;
+}
+</script>
+</head>
+<body>
+<ul>
+	<li><a href="goodsForm">상품 추가</a></li>
+	<li><a href="goodsIpgo">상품 입고</a></li>
+	<li><a href="goodsIpgoList">상품 입고 현황</a></li>
+</ul>
+<div id="detail">
+
+</div>
+</body>
+</html>

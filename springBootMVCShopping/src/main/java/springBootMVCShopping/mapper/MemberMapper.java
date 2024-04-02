@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import springBootMVCShopping.domain.MemberDTO;
 import springBootMVCShopping.domain.StartEndPageDTO;
 
-@Repository(value="springBootMVCShopping.mapper.MemberMapper")
+@Mapper
 public interface MemberMapper {
 	public void memberInsert(MemberDTO dto);
 	public List<MemberDTO> memberSelectList(StartEndPageDTO sepDTO);

@@ -34,7 +34,9 @@ public class GoodsController {
 	public String  goodsList(
 			@RequestParam(value="searchWord" , required = false) String searchWord,
 			@RequestParam(value = "page" , required = false , defaultValue = "1") int page,
+			@RequestParam(value="item", required = false) String item, /// ipgo
 			Model model) {
+		model.addAttribute("item", item);
 		goodsListService.execute(searchWord, model, page);
 		return "thymeleaf/goods/goodsList";
 	}

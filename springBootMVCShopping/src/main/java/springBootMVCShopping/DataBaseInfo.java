@@ -14,6 +14,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
 public class DataBaseInfo {
+	/*
 	@Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -23,6 +24,7 @@ public class DataBaseInfo {
         dataSource.setPassword("1234");
         return dataSource;
     }
+    */
 	@Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource,
             ApplicationContext applicationContext)
