@@ -15,12 +15,12 @@ $(function(){
 				var ipgoDate = new Date(dto.goodsIpgoDTO.ipgoDate);
 				var ipgoYear = ipgoDate.getFullYear();
 				var ipgoMonth = ("0" + (ipgoDate.getMonth() + 1)).slice(-2);
-				var ipgoDay = "0" + ipgoDate.getDate().slice(-2);
+				var ipgoDay = ("0" + ipgoDate.getDate()).slice(-2);
 				
 				var madeDate = new Date(dto.goodsIpgoDTO.madeDate);
 				var madeYear = madeDate.getFullYear();;
 				var madeMonth= ("0" + (madeDate.getMonth() + 1)).slice(-2);
-				var madeDay = "0" + madeDate.getDate().slice(-2);
+				var madeDay = ("0" + madeDate.getDate()).slice(-2);
 				var madeHours = madeDate.getHours();
 				var madeMinutes = madeDate.getMinutes();				
 				
