@@ -10,6 +10,7 @@ import springBootMVCShopping.command.MemberCommand;
 import springBootMVCShopping.domain.MemberDTO;
 import springBootMVCShopping.mapper.MemberMapper;
 import springBootMVCShopping.service.EmailSendService;
+import springBootMVCShopping.service.SMSMassageService;
 
 @Service
 public class MemberWriteService {
@@ -19,6 +20,8 @@ public class MemberWriteService {
 	MemberMapper memberMapper;
 	@Autowired
 	EmailSendService emailSendService;
+	@Autowired
+	SMSMassageService sMSMassageService;
 	public void execute(MemberCommand memberCommand,Model model) {
 		String memberPw = memberCommand.getMemberPw();		
 		MemberDTO memberDTO = new MemberDTO();
@@ -54,10 +57,10 @@ public class MemberWriteService {
 			String toEmail = memberDTO.getMemberEmail();
 			emailSendService.mailsend(html, subject, fromEmail, toEmail);
 		}
-		
-		
-		
-		
-		
+		String content =  "안녕하세요 한경쇼핑몰 관리자입니다.";
+			   content += memberDTO.getMemberName() + "님 가입을 환영합니다.";
+			   content += "이메일에서 회원가입인증이 필요합니다.";
+		sMSMassageService.smsSend("010-7146-1970", memberDTO.getMemberPhone1(), content);	   
+		////
 	}
 }
