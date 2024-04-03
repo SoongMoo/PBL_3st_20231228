@@ -40,6 +40,7 @@ public class FindPwService {
 		}
 		findMapper.pwUpdate(dto);
 		model.addAttribute("auth", auth);
+		model.addAttribute("newPw", newPw);
 	}
 }
 
