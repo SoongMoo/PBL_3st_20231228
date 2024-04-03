@@ -19,8 +19,7 @@ public class MemberWriteService {
 	MemberMapper memberMapper;
 	
 	public void execute(MemberCommand memberCommand,Model model) {
-		String memberPw = memberCommand.getMemberPw();
-	
+		String memberPw = memberCommand.getMemberPw();		
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setMemberAddr(memberCommand.getMemberAddr());
 		memberDTO.setMemberAddrDetail(memberCommand.getMemberAddrDetail());
