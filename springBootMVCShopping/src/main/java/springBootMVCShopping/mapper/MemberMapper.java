@@ -18,4 +18,5 @@ public interface MemberMapper {
 	public void memberDelete(String memberNum);
 	public Integer memberCount();
 	public int memberJoinInsert(MemberDTO dto);
+	public int userCkeckUpdate(String chk);
 }

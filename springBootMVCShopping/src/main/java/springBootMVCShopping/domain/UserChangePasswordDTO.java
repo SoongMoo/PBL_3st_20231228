@@ -14,4 +14,5 @@ public class UserChangePasswordDTO {
 	String tableName;
 	String pwColumName;
 	String userIdColumName;
+	String phoneColumn;
 }

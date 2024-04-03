@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import springBootMVCShopping.command.GoodsIpgoCommand;
 import springBootMVCShopping.service.EmailCheckService;
 import springBootMVCShopping.service.FileDelService;
-import springBootMVCShopping.service.goodsIpgo.GoodsIpgoService;
+import springBootMVCShopping.service.UserEmailCheckService;
 
 @RestController // spring boot
 public class CheckRestController {
@@ -36,6 +35,16 @@ public class CheckRestController {
 			@RequestParam("storeFile") String storeFile,
 			HttpSession session) {
 		return fileDelService.execute(orgFile, storeFile, session);
+	}
+	@Autowired
+	UserEmailCheckService userEmailCheckService;
+	@RequestMapping("userConfirm")
+	public String userConfirm(String chk) {
+		int i = userEmailCheckService.execute(chk); 
+		if(i > 0) {
+			return "인증되었습니다.";
+		}
+		return "이미 인증되었습니다. ";		
 	}
 }
 

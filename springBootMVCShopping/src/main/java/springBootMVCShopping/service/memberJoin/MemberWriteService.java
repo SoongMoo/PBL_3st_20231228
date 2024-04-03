@@ -1,7 +1,6 @@
 package springBootMVCShopping.service.memberJoin;
 
-import java.util.Date;
-
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,6 +9,7 @@ import org.springframework.ui.Model;
 import springBootMVCShopping.command.MemberCommand;
 import springBootMVCShopping.domain.MemberDTO;
 import springBootMVCShopping.mapper.MemberMapper;
+import springBootMVCShopping.service.EmailSendService;
 
 @Service
 public class MemberWriteService {
@@ -17,10 +17,12 @@ public class MemberWriteService {
 	PasswordEncoder passwordEncoder;
 	@Autowired
 	MemberMapper memberMapper;
-	
+	@Autowired
+	EmailSendService emailSendService;
 	public void execute(MemberCommand memberCommand,Model model) {
 		String memberPw = memberCommand.getMemberPw();		
 		MemberDTO memberDTO = new MemberDTO();
+		/*
 		memberDTO.setMemberAddr(memberCommand.getMemberAddr());
 		memberDTO.setMemberAddrDetail(memberCommand.getMemberAddrDetail());
 		memberDTO.setMemberEmail(memberCommand.getMemberEmail());
@@ -30,8 +32,10 @@ public class MemberWriteService {
 		memberDTO.setMemberPhone1(memberCommand.getMemberPhone1());
 		memberDTO.setMemberPhone2(memberCommand.getMemberPhone2());
 		memberDTO.setMemberPost(memberCommand.getMemberPost());
-		memberDTO.setMemberPw(passwordEncoder.encode(memberPw));
 		memberDTO.setMemberBirth(memberCommand.getMemberBirth());
+		*/
+		BeanUtils.copyProperties(memberCommand, memberDTO);
+		memberDTO.setMemberPw(passwordEncoder.encode(memberPw));
 		
 		int i = memberMapper.memberJoinInsert(memberDTO); ///회원가입
 		model.addAttribute("userName", memberDTO.getMemberName());
@@ -46,7 +50,9 @@ public class MemberWriteService {
 				   	    + "'>여기</a>를 클릭하세요."; 		  
 				   html+= "</body></html>";
 			String subject = "환영 인사입니다.";
+			String fromEmail = "soongmoostudent@gmail.com";
 			String toEmail = memberDTO.getMemberEmail();
+			emailSendService.mailsend(html, subject, fromEmail, toEmail);
 		}
 		
 		

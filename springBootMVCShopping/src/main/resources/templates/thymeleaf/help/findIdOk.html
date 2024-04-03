@@ -6,8 +6,8 @@
 </head>
 <body>
 <div th:if="${userId != null}">
-당신의 아이디는 [[${#strings.substring(userId,0,4)}]]
-<th:block th:each=" i : ${#numbers.sequence(1, #strings.length(userId) - 4 )}">
+당신의 아이디는 [[${#strings.substring(userId,0,3)}]]
+<th:block th:each=" i : ${#numbers.sequence(1, #strings.length(userId) -3 )}">
 .
 </th:block>
 입니다

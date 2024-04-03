@@ -90,6 +90,11 @@ insert into members(MEMBER_NUM,member_id,member_pw,member_name,member_addr
 			,#{memberAddr} ,#{memberAddrDetail},#{memberPost},#{memberPhone1},#{memberPhone2}
 		  ,sysdate,#{memberBirth},#{memberGender},#{memberEmail},null,0)
 </insert>
+<update id="userCkeckUpdate" parameterType="string">
+	update members
+	set member_email_conf = 'Y'
+	where member_email = #{chk} and member_email_conf is null
+</update>
 </mapper>
 
 

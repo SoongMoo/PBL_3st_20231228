@@ -6,12 +6,12 @@
 <select id="findId" parameterType="string" resultType="string">
 select member_id
 from members
-where member_email = #{arg1} 
-and (member_phone1 = #{arg0} or member_phone2 = #{arg0})
+where member_email = #{_userEmail} 
+and (member_phone1 = #{_userPhone} or member_phone2 = #{_userPhone})
 union
 select emp_id
 from employees
-where emp_phone = #{arg0} and emp_email =#{arg1}
+where emp_phone = #{_userPhone} and emp_email =#{_userEmail}
 </select>
 <select id="userEmail" resultType="authInfo">
 <!-- 직원이나 회원중 모두 찾는다. -->
@@ -26,7 +26,8 @@ where emp_phone = #{_userPhone} and emp_id = #{_userId}
 <update id="pwUpdate" parameterType="userChangePassword">
 update ${tableName}
 set ${pwColumName}  = #{userPw}
-where ${userIdColumName}  = #{userId}
+where ${userIdColumName}  = #{userId} 
+and ${phoneColumn} = #{userPhone}
 </update>
 </mapper>
 
