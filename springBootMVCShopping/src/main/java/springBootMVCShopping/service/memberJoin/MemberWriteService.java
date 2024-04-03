@@ -33,8 +33,25 @@ public class MemberWriteService {
 		memberDTO.setMemberPw(passwordEncoder.encode(memberPw));
 		memberDTO.setMemberBirth(memberCommand.getMemberBirth());
 		
-		memberMapper.memberJoinInsert(memberDTO);
+		int i = memberMapper.memberJoinInsert(memberDTO); ///회원가입
 		model.addAttribute("userName", memberDTO.getMemberName());
 		model.addAttribute("userEmail", memberDTO.getMemberEmail());
+		
+		if(i > 0) {
+			String html = "<html><body>";
+				   html+= "이숭무님의 회원 가입을 축하합니다. <br />";
+				   html+= "가입을 완료하시려면 ";
+				   html+= "<a href='http://localhost:8080/userConfirm?chk="
+						+ memberDTO.getMemberEmail()
+				   	    + "'>여기</a>를 클릭하세요."; 		  
+				   html+= "</body></html>";
+			String subject = "환영 인사입니다.";
+			String toEmail = memberDTO.getMemberEmail();
+		}
+		
+		
+		
+		
+		
 	}
 }

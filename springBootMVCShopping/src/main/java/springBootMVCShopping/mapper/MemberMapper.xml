@@ -88,7 +88,7 @@ insert into members(MEMBER_NUM,member_id,member_pw,member_name,member_addr
 					   ,member_email_conf,MEMBER_POINT)
 	values((<include refid="memberAutoNum" />),#{memberId},#{memberPw},#{memberName}
 			,#{memberAddr} ,#{memberAddrDetail},#{memberPost},#{memberPhone1},#{memberPhone2}
-		  ,sysdate,#{memberBirth},#{memberGender},#{memberEmail},'Y',0)
+		  ,sysdate,#{memberBirth},#{memberGender},#{memberEmail},null,0)
 </insert>
 </mapper>
 
