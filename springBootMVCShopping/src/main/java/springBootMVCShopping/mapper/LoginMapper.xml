@@ -17,7 +17,7 @@
 	select member_id userId, member_pw userPw, member_name userName
 	     , 'mem' grade, member_email userEmail, member_email_conf userEmailCheck
 	from members
-	where member_id = #{userId} and member_email_conf is not null
+	where member_id = #{userId}
 	union 
 	select emp_id, emp_pw, emp_name, 'emp' , emp_email, 'Y'
 	from employees

@@ -24,7 +24,7 @@ public class UserLoginService {
 		AuthInfoDTO auth = loginMapper.loginSelect(userId);
 		if(auth != null) {
 			if(passwordEncoder.matches(userPw, auth.getUserPw())) {
-				if(!auth.getUserEmailCheck().equals("Y")) {
+				if(auth.getUserEmailCheck() == null) {
 					result.rejectValue("userId", "loginCommand.userId","이메일 확인을 하지않았습니다.");
 				}else {
 					System.out.println("비밀번호가 일치");
