@@ -46,7 +46,7 @@ public class MemberWriteService {
 		
 		if(i > 0) {
 			String html = "<html><body>";
-				   html+= "이숭무님의 회원 가입을 축하합니다. <br />";
+				   html+= memberDTO.getMemberName() + "님의 회원 가입을 축하합니다. <br />";
 				   html+= "가입을 완료하시려면 ";
 				   html+= "<a href='http://localhost:8080/userConfirm?chk="
 						+ memberDTO.getMemberEmail()

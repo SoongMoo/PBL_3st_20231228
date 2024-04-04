@@ -13,7 +13,7 @@ import springBootMVCShopping.domain.StartEndPageDTO;
 public interface MemberMapper {
 	public void memberInsert(MemberDTO dto);
 	public List<MemberDTO> memberSelectList(StartEndPageDTO sepDTO);
-	public MemberDTO memberSelectOne(String memberNum);
+	public MemberDTO memberSelectOne(String memberNumOrId);
 	public void memberUpdate(MemberDTO dto);
 	public void memberDelete(String memberNum);
 	public Integer memberCount();

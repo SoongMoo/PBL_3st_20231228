@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$.ajax({
+		type:"post",
+		url : "memberMyPage",
+		success : function(result){
+			console.log(result)
+			var enterDate = new Date(result.memberCommand.memberRegist);
+			var enterYear =  enterDate.getFullYear();
+			var enterMonth =  ("0" + (enterDate.getMonth() + 1)).slice(-2);
+			var enterDay =  ("0" + enterDate.getDate()).slice(-2);
+			
+			var birthDate = new Date(result.memberCommand.memberBirth);
+			var birthYear =  birthDate.getFullYear();
+			var birthMonth =  ("0" + (birthDate.getMonth() + 1)).slice(-2);
+			var birthDay =  ("0" + birthDate.getDate()).slice(-2);
+			
+			var item="";
+			item += "이숭무님의 회원정보입니다.<br />";
+			item += "이름 : "+ result.memberCommand.memberName + "<br />";
+			item += "아이디 : "+ result.memberCommand.memberId + "<br />";
+			item += "주소 : "+ result.memberCommand.memberAddr + "<br />";
+			item += "우편번호 : "+ result.memberCommand.memberPost + "<br />";
+			item += "연락처1 : "+ result.memberCommand.memberPhone1 + "<br />";
+			item += "연락처2 : "+ result.memberCommand.memberPhone2 + "<br />";
+			if(result.memberCommand.memberGender == 'M')item += "성별 : <span>남자</span><br />";
+			else item += "성별 : <span>여자</span><br />";
+			item += "등록일 : "+ enterYear +"-" + enterMonth + "-" + enterDay + "<br />";
+			item += "생년월일 : "+ birthYear +"-" + birthMonth + "-" + birthDay + "<br />";
+			item += "이메일 : "+ result.memberCommand.memberEmail + "<br />";
+			$("#content").html(item);
+		},
+		error:function(){
+			alert("서버오류");
+		}
+	});
+});
+</script>
+</head>
+<body>
+<div id="content">
+</div>
+</body>
+</html>

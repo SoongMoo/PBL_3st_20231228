@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
 </head>
 <body>
 
@@ -10,11 +11,16 @@
 
 <th:block th:if="${session.auth != null}">
 <ul>
-	<li><a href="member/memberList">회원 목록</a></li>
-	<li><a href="employee/employeeList">직원 목록</a></li>
-	<li><a href="goods/goodsList">상품리스트</a></li>
-	
 	<li><a href="login/logout">로그아웃</a></li>
+	<th:block th:if="${session.auth.grade == 'emp'}">
+		<li><a href="member/memberList">회원 목록</a></li>
+		<li><a href="employee/employeeList">직원 목록</a></li>
+		<li><a href="goods/goodsList">상품리스트</a></li>
+		<li><a href="myPage/employeeMyPage">내정보 보기</a></li>
+	</th:block>
+	<th:block th:if="${session.auth.grade == 'mem'}">
+		<li><a href="myPage/memberMyPage">내정보 보기</a></li>
+	</th:block>
 </ul>
 </th:block>
 
@@ -40,5 +46,15 @@
 </table>
 </form>
 </th:block>
+<div id="content"><div class="item">추가된 아이템</div></div>
+<button id="load-more">더보기</button>
+<script type="text/javascript">
+function loadMoreItems() {
+    // 새로운 아이템을 생성하여 #content에 추가합니다.
+    var newItem = '<div class="item">추가된 아이템</div>';
+    $('#content').append(newItem);
+}
+$('#load-more').click(loadMoreItems);
+</script>
 </body>
 </html>

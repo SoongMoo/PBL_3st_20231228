@@ -38,7 +38,7 @@ where  rn between #{startRow} and #{endRow}
 <select id="memberSelectOne" parameterType="string" resultType="member"> 
 	select  <include refid="memberBaseColumns" />
 	from members
-	where MEMBER_NUM = #{memberNum}
+	where MEMBER_NUM = #{memberNumOrId} or member_id = #{memberNumOrId}
 </select>
 <update id="memberUpdate" parameterType="member">
 	update members
@@ -83,12 +83,25 @@ where  rn between #{startRow} and #{endRow}
 </sql>
 <insert id="memberJoinInsert" parameterType="member">
 insert into members(MEMBER_NUM,member_id,member_pw,member_name,member_addr
-					   ,member_addr_detail,member_post,member_phone1,member_phone2
+					   <if test="memberAddrDetail != null">
+					   ,member_addr_detail
+					   </if>
+					   ,member_post,member_phone1
+					   <if test="memberPhone2 != null">
+					   ,member_phone2
+					   </if>
 					   ,member_regist,member_birth,gender,member_email
 					   ,member_email_conf,MEMBER_POINT)
 	values((<include refid="memberAutoNum" />),#{memberId},#{memberPw},#{memberName}
-			,#{memberAddr} ,#{memberAddrDetail},#{memberPost},#{memberPhone1},#{memberPhone2}
-		  ,sysdate,#{memberBirth},#{memberGender},#{memberEmail},null,0)
+			,#{memberAddr} 
+			<if test="memberAddrDetail != null">
+			,#{memberAddrDetail}
+			</if>
+			,#{memberPost},#{memberPhone1}
+			<if test="memberPhone2 != null">
+			,#{memberPhone2}
+		  	</if>
+		    ,sysdate,#{memberBirth},#{memberGender},#{memberEmail},null,0)
 </insert>
 <update id="userCkeckUpdate" parameterType="string">
 	update members
