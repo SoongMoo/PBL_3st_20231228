@@ -39,14 +39,17 @@ public class MyPageController {
 		return mav;
 	}
 	@GetMapping("memberUpdate")
-	public String memberUpdate(HttpSession session, Model model) {
-		memberAccountService.execute(session, model);
-		return "thymeleaf/myPage/myModify";
+	public @ResponseBody Map<String, Object> memberUpdate(HttpSession session
+			,Model model) {
+		Map<String, Object> map = memberAccountService.execute(session, model);
+		return map;
+		//return "thymeleaf/myPage/myModify";
 	}
-	@PostMapping("userRegist")
+	@RequestMapping("userRegist")
 	@ResponseBody
 	public Map<String, Object> userRegist(MemberCommand memberCommand, 
 			HttpSession session) {
+		System.out.println("userRegist");
 		Map<String, Object> map = memberInfoUpdateService.execute(memberCommand, session);
 		return map;
 	}
