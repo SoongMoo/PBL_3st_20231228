@@ -22,6 +22,11 @@ $(function(){
 </script>
 </head>
 <body>
+<ul>
+	<li><a href="memberMyPage">내정보 보기</a></li>
+	<li><a href="userPwModify">비밀번호변경</a></li>
+	<li><a href="userDrop">회원탈퇴</a></li>
+</ul>
 <form action="memberDropOk" method="post"  name="frm" id="frm">
 비밀번호 : <input type="password" id="memberPw" name="memberPw" />
 <div style="color:red" id="errPw">[[${errPw }]]</div>

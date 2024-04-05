@@ -29,6 +29,7 @@ $(function(){
 });
 
 function resultOk(result, status, xhr, $form ){
+	console.log(status);
 	if(status == 'success'){
 		if(result){
 			location.href="memberMyPage";
@@ -69,6 +70,11 @@ function passwordChecked(){
 </script>
 </head>
 <body>
+<ul>
+	<li><a href="memberMyPage">내정보 보기</a></li>
+	<li><a href="userPwModify">비밀번호변경</a></li>
+	<li><a href="userDrop">회원탈퇴</a></li>
+</ul>
 <form id="frm"> 
 현재비밀번호 : <input type="password" name="oldPw" id="oldPw" /><span id="pwErr"></span><br />
 새 비밀번호 : <input type="password" name="newPw"  /><span id="newPwErr"></span><br />
