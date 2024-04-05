@@ -5,6 +5,7 @@
 <title>Insert title here</title>
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+<script type="text/javascript" src="/static/js/memberForm.js"></script>
 <script type="text/javascript">
 $(function(){
 	$.ajax({
@@ -53,33 +54,23 @@ function memberModify(){
 			var birthMonth =  ("0" + (birthDate.getMonth() + 1)).slice(-2);
 			var birthDay =  ("0" + birthDate.getDate()).slice(-2);
 			
-			let item = "";
-			    item += "내정보 수정<br />";
-			    item += "<form action='userRegist' method='post' id='frm'>";
-			    item += "회원아이디 : <input type='text' name='memberId' value='"+ map.memberCommand.memberId+"' readonly='readonly' /><span id='idCheck'></span><br />";
-			    item += "회원비밀번호 : <input type='text' name='memberPw' id='memberPw'/><br />";
-			    item += "회원이름 : <input type='text' name='memberName' id='memberName' value='"+ map.memberCommand.memberName + "'/><br />";
-			    item += "회원주소 : <input type='text' name='memberAddr' id='memberAddr' value='"+ map.memberCommand.memberAddr +"'/><br />";
-			    item += "회원상세주소 : <input type='text' name='memberAddrDetail' value='"+ map.memberCommand.memberAddrDetail+"'/><br />";
-			    item += "우편번호 :  <input type='text' name='memberPost'   value='"+ map.memberCommand.memberPost+"'/><br />";
-			    if(map.memberCommand.memberGender == 'M'){
-			    	item += "성별 : <input type='radio' name='memberGender' value='M' checked/>남자";
-			    	item += "성별 : <input type='radio' name='memberGender' value='F'/>여자 ";
-			    }
-			    else if(map.memberCommand.memberGender == 'F'){
-			    	item += "성별 : <input type='radio' name='memberGender' value='M' />남자";
-			    	item += "성별 : <input type='radio' name='memberGender' value='F' checked/>여자 ";
-			    }
-			    item += "  <br />";
-			    item += "연락처1 : <input type='text' name='memberPhone1' id='memberPhone1' value='"+ map.memberCommand.memberPhone1+"'/><br />"; 
-			    item += "연락처2 : <input type='text' name='memberPhone2' value='"+ map.memberCommand.memberPhone2+"'/><br />";
-			    item += "이메일 : <input type='text' name='memberEmail' id='userEmail' value='"+ map.memberCommand.memberEmail+"'/><span id='emailCheck'></span><br />";
-			    item += "생년월일 : <input type='date' name='memberBirth' value='" + birthYear +"-" + birthMonth + "-" + birthDay + "'/><br />";
-			    item += "<button type='submit'>회원정보 수정 완료</button>";
-			    item += "</form>";
-			    item += "<script type='text/javascript' src='/static/js/memberForm.js' >";
-			    item += "<//script>";
-			$("#content").html(item);
+			$("#content").css("display","none");
+			$("#updateForm").css("display","block");
+			
+			$("#userId").val(map.memberCommand.memberId);
+			$("#memberName").val(map.memberCommand.memberName);
+			$("#memberAddr").val(map.memberCommand.memberAddr);
+			$("#memberAddrDetail").val(map.memberCommand.memberAddrDetail);
+			$("#memberPost").val(map.memberCommand.memberPost);
+			$("#memberPhone1").val(map.memberCommand.memberPhone1);
+			$("#memberPhone2").val(map.memberCommand.memberPhone2);
+			$("#userEmail").val(map.memberCommand.memberEmail);
+			$("#memberBirth").val(birthYear + "-" + birthMonth + "-" + birthDay);
+			if(map.memberCommand.memberGender == 'M'){
+				$('input[name="memberGender"][value="M"]').prop('checked', true);
+			}else{
+				$('input[name="memberGender"][value="F"]').prop('checked', true);
+			}
 		},
 		error:function(){
 			alert("서버오류");
@@ -92,10 +83,28 @@ function memberModify(){
 <ul>
 	<li><a href="memberMyPage">내정보 보기</a></li>
 	<li><a href="javascript:memberModify()">내정보 수정</a></li>
-	<li>비밀번호변경</li>
-	<li>회원탈퇴</li>
+	<li><a href="userPwModify">비밀번호변경</a></li>
+	<li><a href="userDrop">회원탈퇴</a></li>
 </ul>
-<div id="content"></div>
+<div id="content" ></div>
+<div id="updateForm" style="display: none">
+내정보 수정<br />
+<form action="userRegist" method="post" id="frm">
+회원아이디 : <input type="text" name="memberId" id="userId" readonly="readonly" /></span><br />
+회원비밀번호 : <input type="password" name="memberPw" id="memberPw"/><br />
+회원이름 : <input type="text" name="memberName" id="memberName" /><br />
+회원주소 : <input type="text" name="memberAddr" id="memberAddr" /><br />
+회원상세주소 : <input type="text" name="memberAddrDetail" id="memberAddrDetail"/><br />
+우편번호 :  <input type="text" name="memberPost"  id="memberPost" /><br />
+성별 : <input type="radio" name="memberGender" value="M"/>남자
+	  <input type="radio" name="memberGender" value="F"/>여자 <br />
+연락처1 : <input type="text" name="memberPhone1" id="memberPhone1" /><br /> 
+연락처2 : <input type="text" name="memberPhone2" id="memberPhone2"/><br />
+이메일 : <input type="text" name="memberEmail" id="userEmail" /><span id="emailCheck"></span><br />
+생년월일 : <input type="date" name="memberBirth" id="memberBirth"/><br />
+<button type="submit">회원정보 수정 완료</button>
+</form>
+</div>
 </body>
 </html>
 

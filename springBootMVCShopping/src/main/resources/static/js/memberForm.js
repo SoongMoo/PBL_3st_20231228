@@ -21,7 +21,7 @@ $(function(){
 			}
 		 },
 		 success:function(result){
-			 if(result.SUCCESS == "200") location.href="memberMyPage";
+			 if(result.SUCCESS == "200") location.reload();
 			 else if(result.SUCCESS == "999") {
 				 $("#memberPw").val("");
 				 $("#memberPw").focus();

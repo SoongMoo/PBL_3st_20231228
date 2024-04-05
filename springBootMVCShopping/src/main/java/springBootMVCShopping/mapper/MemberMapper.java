@@ -19,4 +19,6 @@ public interface MemberMapper {
 	public Integer memberCount();
 	public int memberJoinInsert(MemberDTO dto);
 	public int userCkeckUpdate(String chk);
+	public void memberPwUpdate(@Param("memberPw") String memberPw, 
+							   @Param("memberId") String memberId);
 }

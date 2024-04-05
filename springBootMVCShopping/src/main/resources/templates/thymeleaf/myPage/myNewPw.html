@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	<!-- JSON  -->
+	$("#frm").submit(function(event){
+		// 기본 폼 제출 방지
+		event.preventDefault();
+		var formData={
+			"oldPw" : $("#oldPw").val(),
+			"newPw" : $("input[name='newPw']").val()
+		}
+		$.ajax({
+			type:'post',
+			url:'myPwUpdate',
+			contentType: 'application/json',
+			data : JSON.stringify(formData),
+			beforeSend : passwordChecked,
+			success : resultOk,
+            error:function(xhr, status, error){
+            	console.error(xhr.responseText);
+            }
+		});
+	});
+});
+
+function resultOk(result, status, xhr, $form ){
+	if(status == 'success'){
+		if(result == true){
+			location.href="memberMyPage";
+		}else{
+			$($form).css("background","red");
+			$("#pwErr").text("현재 비밀번호가 틀렸습니다.");
+			$("#oldPw").val("");
+			$("#newPwCon").val("");
+			$("input[name='newPw']").val("");
+			$("#oldPw").focus();
+		}
+	}
+}
+
+function passwordChecked(){
+	if($("#oldPw").val() == ""){
+		$("#pwErr").text("현재 비밀번호를 입력해 주세요.");
+		$("#pwErr").css("color","red");
+		$("#oldPw").focus();
+		return false;
+	}
+	if($("input[name='newPw']").val() == ""){
+		$("#newPwErr").text("비밀번호확인이 틀립니다.");
+		$("#newPwErr").css("color","red");
+		$("input[name='newPw']").focus();
+		return false;
+	}else{
+		if($("input[name='newPw']").val() != $("#newPwCon").val()){
+			$("#pwConErr").text("비밀번호확인이 틀립니다.");
+			$("#pwConErr").css("color","red");
+			$("#newPw").focus();
+			$("#newPwCon").val("");
+			$("input[name='newPw']").val("");
+			return false;
+		}
+	}
+}
+</script>
+</head>
+<body>
+<form id="frm"> 
+현재비밀번호 : <input type="password" name="oldPw" id="oldPw" /><span id="pwErr"></span><br />
+새 비밀번호 : <input type="password" name="newPw"  /><span id="newPwErr"></span><br />
+새 비밀번호 확인 : <input type="password" name="newPwCon" id="newPwCon" />
+												   <span id="pwConErr"></span><br />
+<input type="submit"  value="비밀번호 변경"/>
+</form>
+</body>
+</html>
