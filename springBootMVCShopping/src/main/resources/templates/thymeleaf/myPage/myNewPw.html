@@ -30,7 +30,7 @@ $(function(){
 
 function resultOk(result, status, xhr, $form ){
 	if(status == 'success'){
-		if(result == true){
+		if(result){
 			location.href="memberMyPage";
 		}else{
 			$($form).css("background","red");

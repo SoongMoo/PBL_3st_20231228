@@ -77,7 +77,7 @@ where  rn between #{startRow} and #{endRow}
 <delete id="memberDelete" parameterType="string">
 	delete from members
 	<trim prefix="where" prefixOverrides="AND|OR">
-		and member_num = #{memberNum}
+		member_num = #{memberNum} or member_id = #{memberNum} 
 	</trim>
 </delete>
 <select id="memberCount" resultType="integer">

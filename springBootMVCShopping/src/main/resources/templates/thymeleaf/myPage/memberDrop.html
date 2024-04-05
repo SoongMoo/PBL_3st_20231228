@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#frm").submit(function(){
+		if($("#memberPw").val() == ""){
+			$("#errPw").text("비밀번호를 입력해주세요.");
+			$("#memberPw").focus();
+			return false;
+		}else{
+			conf = confirm("정말 사실 리얼 진짜 탈퇴하시겠습니까?");
+			if(!conf){
+				return false;
+			}
+		}
+	});
+});
+</script>
+</head>
+<body>
+<form action="memberDropOk" method="post"  name="frm" id="frm">
+비밀번호 : <input type="password" id="memberPw" name="memberPw" />
+<div style="color:red" id="errPw">[[${errPw }]]</div>
+<input type="submit" value="회원탈퇴" />
+</form>
+</body>
+</html>

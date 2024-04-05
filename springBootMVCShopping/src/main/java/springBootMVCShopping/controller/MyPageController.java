@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import springBootMVCShopping.command.MemberCommand;
 import springBootMVCShopping.command.UserPwCommand;
 import springBootMVCShopping.service.myPage.MemberAccountService;
+import springBootMVCShopping.service.myPage.MemberDropService;
 import springBootMVCShopping.service.myPage.MemberInfoService;
 import springBootMVCShopping.service.myPage.MemberInfoUpdateService;
 import springBootMVCShopping.service.myPage.MemberPwModifyService;
@@ -83,6 +84,23 @@ public class MyPageController {
 	public boolean myPwUpdate(@RequestBody UserPwCommand userPwCommand
 			,HttpSession session) {
 		return userPasswordConfirmService.execute(userPwCommand, session);
+	}
+	@GetMapping("userDrop")
+	public String userDrop() {
+		return "thymeleaf/myPage/memberDrop";
+	}
+	
+	@Autowired
+	MemberDropService memberDropService;
+	@PostMapping("memberDropOk")
+	public String postMethodName(@RequestParam String memberPw,HttpSession session,Model model) {
+		int i = memberDropService.execute(memberPw, session);
+		if(i == 1) {
+			return "redirect:/login/logout";
+		}else {
+			model.addAttribute("errPw", "비밀번호가 틀렸습니다.");
+			return "thymeleaf/myPage/memberDrop";
+		}
 	}
 	
 	

@@ -15,7 +15,7 @@ public interface MemberMapper {
 	public List<MemberDTO> memberSelectList(StartEndPageDTO sepDTO);
 	public MemberDTO memberSelectOne(String memberNumOrId);
 	public void memberUpdate(MemberDTO dto);
-	public void memberDelete(String memberNum);
+	public int memberDelete(String memberNum);
 	public Integer memberCount();
 	public int memberJoinInsert(MemberDTO dto);
 	public int userCkeckUpdate(String chk);
