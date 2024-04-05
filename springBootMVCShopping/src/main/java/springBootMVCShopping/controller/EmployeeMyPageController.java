@@ -1,10 +1,16 @@
 package springBootMVCShopping.controller;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPublicKey;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,12 +66,22 @@ public class EmployeeMyPageController {
 		return "thymeleaf/worker/myPwCon";
 	}
 	@PostMapping("employeePwModify")
-	public String employeePwModify(String empPw, Model model, HttpSession session) {
+	public String employeePwModify(String empPw, Model model, HttpSession session) 
+			throws NoSuchAlgorithmException{
+		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(2048);
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        byte[] publicKeyBytes = publicKey.getEncoded();
+        String base64PublicKey = new String(Base64.encode(publicKeyBytes));
+        model.addAttribute("publicKey", base64PublicKey);
 		return "thymeleaf/worker/myNewPw";
 	}
 	@RequestMapping("empPwUpdate")
 	public ResponseEntity<String> empPwUpdate(@RequestBody UserPwCommand userPwCommand,
 			HttpSession session) {
+		System.out.println(userPwCommand.getOldPw());
+		System.out.println(userPwCommand.getNewPw());
 		String i = employeePassConfirmService.execute(userPwCommand, session);
 		if(i == "1") {
 			return ResponseEntity.ok("Password updated successfully");

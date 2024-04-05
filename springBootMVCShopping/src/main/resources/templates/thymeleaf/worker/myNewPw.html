@@ -12,7 +12,7 @@ function generateJWT() {
         newPw: $("#newPw").val()
     };
     // 시크릿 키
-    var secretKey = 'Qwer!234';
+    var secretKey = "[[${publicKey}]]";
     // JWT 생성
     var token = btoa(JSON.stringify(payload) + '.' + secretKey);
     return token;
