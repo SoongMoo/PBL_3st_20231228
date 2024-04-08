@@ -96,11 +96,9 @@ where goods_num = #{goodsNum}
 delete from goods
 where goods_num = #{goodsNum}
 </delete>
-<resultMap type="goodsDetailStock" id="goodsStockResultMap">
-	<result column="stock" jdbcType="BIGINT" property="stock"/> <!-- 재고 -->
-	<!-- 객체내의 객체는 association으로 정의-->	
-	<association property="goodsDTO" javaType="goods" resultMap="goodsResultMap"/>
-</resultMap>
+
+
+
 <select id="goodsDetailStock" parameterType="string" resultMap="goodsStockResultMap">
 <!-- 이제 상품 정보와 같이 가져온다. -->
 select 	g.goods_Num , goods_name , goods_price ,goods_content , delivery_cost , emp_num  
@@ -122,17 +120,30 @@ from goods g left outer join ( <!-- 상품정보는 있지만 입고가 없어�
 on g.goods_num = s.goods_num
 where g.goods_num = #{goodsNum} <!-- 좀 복잡해보이죠.. ^^ 이제 이 값을 html로 보내지요.. 앗 여기서 잠깐 -->
 </select>
+
 <update id="visitCount" parameterType="string">
 	update goods
 	set visit_count = visit_count + 1
 	where goods_num = #{goodsNum}
 </update>
-<!-- 서브쿼리를 이용해서 상품정보를 가지고 옵니다. -->
-<select id="wishGoodsList" parameterType="string" resultMap="goodsResultMap">
-select <include refid="goodsColumnsBase" />
-from goods
-where goods_num in (select goods_num from wish where member_num = #{memberNum})
+<select id="goodsStockSelectOne" parameterType="string" 
+	resultMap="goodsStockResultMap">
+select * 
+from goods g left outer join (select i.goods_num , ipgo - nvl(release,0) stock
+                from (select goods_num, sum(IPGO_QTY) ipgo
+                      from goodsipgo
+                      group by goods_num) i left outer join 
+                      						   (select goods_num, sum(PURCHASE_QTY) release
+                                                from purchase_list
+                                                group by goods_num) r
+                on   i.goods_num = r.goods_num) s 
+on g.goods_num = s.goods_num
+where g.goods_num = #{goodsNum}
 </select>
+<resultMap type="goodsStock" id="goodsStockResultMap">
+	<result column="stock" jdbcType="BIGINT" property="stock" />
+	<association property="goodsDTO" javaType="goods" resultMap="goodsResultMap" />
+</resultMap>
 </mapper>
 
 

@@ -51,12 +51,14 @@
 	</colgroup>
 	<tr>
 		<th:block th:each="dto, idx : ${list}">
-			<td><img th:src="|/static/upload/${dto.goodsMainStore}|" width="300" height="300"/><br />
+			<td><a th:href="|corner/detailView/${dto.goodsNum}|">
+				<img th:src="|/static/upload/${dto.goodsMainStore}|" width="300" height="300"/><br />
 				[[${dto.goodsName}]]<br />
 				[[${#numbers.formatCurrency(dto.goodsPrice)}]]원<br />
 				<!-- 배송비가 0이면 무료배송으로 출력한다. -->
 				<span th:if="${dto.deliveryCost == 0}" th:text="무료배송"></span>
 				<span th:if="${dto.deliveryCost != 0}">[[${dto.deliveryCost}]]원</span>
+				</a>
 			</td>
 		<th:block th:if="${idx.count % 3 == 0}" th:utext="'</tr><tr>'" />
 		</th:block>
@@ -89,17 +91,18 @@ function loadMoreItems(){
 				item += '</colgroup>';
 				item += '<tr>';
 				$.each(model.list, function(idx, dto){ 
-				item += '<td><img src="/static/upload/'+ dto.goodsMainStore +'" width="300" height="300"/><br />';
-				item += dto.goodsName + '<br />';
-				item += formatter.format(dto.goodsPrice) +'원<br />';
-				
-				if( dto.deliveryCost == 0 ) item += '무료배송 <br />'; 
-				else item += formatter.format(dto.deliveryCost) +'원';
-				
-				item += '</td>';
-				
-				if((idx + 1) % 3 == 0) item += "</tr><tr>";
-				
+					item += '<td>';
+					item += '<a href="corner/detailView/'+ dto.goodsNum +'">'; // ../
+					item += '<img src="/static/upload/'+ dto.goodsMainStore 
+						 +'" width="300" height="300"/><br />';
+					item += dto.goodsName + '<br />';
+					item += formatter.format(dto.goodsPrice) +'원<br />';
+					
+					if( dto.deliveryCost == 0 ) item += '무료배송 <br />'; 
+					else item += formatter.format(dto.deliveryCost) +'원';
+					item += '</a>';
+					item += '</td>';
+					if((idx + 1) % 3 == 0) item += "</tr><tr>";
 				});
 				item += '</tr>';
 				item += '</table>';

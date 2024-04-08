@@ -29,7 +29,7 @@ public class DataBaseInfo {
 		org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
 		configuration.setMapUnderscoreToCamelCase(true);
 		sessionFactory.setConfiguration(configuration);
-		sessionFactory.setMapperLocations(applicationContext.getResources("classpath:mappers/**/*Mapper.xml"));
+		//sessionFactory.setMapperLocations(applicationContext.getResources("classpath:mappers/**/*Mapper.xml"));
 		return sessionFactory.getObject();
 	}
 
