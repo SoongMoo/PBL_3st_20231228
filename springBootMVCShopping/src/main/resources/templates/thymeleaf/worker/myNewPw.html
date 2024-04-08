@@ -4,25 +4,31 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-1.8.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jwt-simple/1.0.3/jwt-simple.min.js"></script>
 <script>
-
 function generateJWT() {
     var payload = {
         oldPw: $("#oldPw").val(),
         newPw: $("#newPw").val()
     };
+
     // 시크릿 키
-    var secretKey = "[[${publicKey}]]";
+    var secretKey = "[[${publicKey.modulus}]]";
+
     // JWT 생성
     var token = btoa(JSON.stringify(payload) + '.' + secretKey);
+
     return token;
 }
+
 function sendDataWithJWT() {
     var payload = {
         oldPw: $("#oldPw").val(),
         newPw: $("#newPw").val()
     };
+
     var token = generateJWT();
+
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'empPwUpdate', true);
     xhr.setRequestHeader('Content-Type', 'application/json');

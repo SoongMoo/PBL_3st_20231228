@@ -25,8 +25,8 @@
 		<th><a th:href="|goodsIpgoDetail?ipgoNum=${dto.ipgoNum}&goodsNum=${dto.goodsNum}|">[[${dto.ipgoNum}]]</a></th>
 		<th><a th:href="@{goodsIpgoDetail(ipgoNum=${dto.ipgoNum},goodsNum=${dto.goodsNum})}">[[${dto.goodsNum}]]</a></th>
 		<th>[[${dto.ipgoQty}]]</th>
-		<th>[[${dto.ipgoDate}]]</th>
-		<th>[[${dto.ipgoPrice}]]</th>
+		<th>[[${#dates.format(dto.ipgoDate, 'yyyy-MM-dd')}]]</th>
+		<th>[[${#numbers.formatCurrency(dto.ipgoPrice)}]]원</th>
 		<th>
 			<input type="checkbox" name="nums" th:value="${dto.ipgoNum + '-' + dto.goodsNum}" />
 		</th>

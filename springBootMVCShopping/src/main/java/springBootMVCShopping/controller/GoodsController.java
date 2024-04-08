@@ -72,7 +72,7 @@ public class GoodsController {
 	ProductsDeleteService productsDeleteService;
 	@PostMapping("productsDelete")
 	public String productsDelete(//체크박스에 의해 전달 된 값을 배열로 받습니다.
-			@RequestParam(value = "memDels") String memDels[]) {
+			@RequestParam(value = "nums") String memDels[]) {
 		productsDeleteService.execute(memDels);
 		return "redirect:goodsList";
 	}
