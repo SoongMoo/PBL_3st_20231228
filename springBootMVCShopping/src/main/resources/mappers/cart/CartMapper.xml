@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springBootMVCShopping.mapper.CartMapper">
+<sql id="goodsColumnsBase">
+	   g.goods_Num , goods_name , goods_price ,goods_content , delivery_cost , emp_num  
+	  ,goods_regist , goods_main_store ,goods_main_store_img 
+	  , goods_images ,goods_images_img 
+	  , visit_count ,update_Emp_Num , goods_Update_Date
+</sql>
+<resultMap type="goods" id="goodsResultMap">
+	<constructor>
+		<idArg  column="goods_Num" javaType="string" jdbcType="VARCHAR"/>
+		<arg column="goods_Name" javaType="string" jdbcType="VARCHAR" />
+		<arg column="goods_Price" javaType="integer" jdbcType="BIGINT" />
+		<arg column="delivery_Cost" javaType="integer" jdbcType="BIGINT" />
+		<arg column="goods_Content" javaType="string" jdbcType="VARCHAR" />
+		<arg column="emp_Num" javaType="string" jdbcType="VARCHAR" />
+		<arg column="visit_Count" javaType="integer" jdbcType="BIGINT" />
+		<arg column="goods_Regist" javaType="java.util.Date" jdbcType="DATE" />
+		<arg column="update_Emp_Num" javaType="string" jdbcType="VARCHAR" />
+		<arg column="goods_Update_Date" javaType="java.util.Date" jdbcType="DATE" />
+		<arg column="goods_main_store" javaType="string" jdbcType="VARCHAR" />
+		<arg column="goods_main_store_img" javaType="string" jdbcType="VARCHAR" />
+		<arg column="goods_images" javaType="string" jdbcType="VARCHAR" />
+		<arg column="goods_images_img" javaType="string" jdbcType="VARCHAR" />
+	</constructor>
+</resultMap>
+<resultMap type="cart" id="cartResultMap">
+	<id column="member_Num" jdbcType="VARCHAR" property="memberNum"/>
+	<id column="goods_Num" jdbcType="VARCHAR" property="goodsNum"/>
+	<result column="cart_Qty" jdbcType="BIGINT" property="cartQty"/>
+	<result column="cart_Date" jdbcType="DATE" property="cartDate"/>
+</resultMap> 
+
+<resultMap type="cartGoods" id="cartGoodsRedsultMap">
+	<result column="totalPrice" jdbcType="BIGINT" property="totalPrice" />
+	<association  property="goodsDTO" javaType="goods" resultMap="goodsResultMap"/>
+	<association  property="cartDTO" javaType="cart" resultMap="cartResultMap"/>
+</resultMap>
+
+<select id="cartSelectList" parameterType="string" resultMap="cartGoodsRedsultMap">
+	select <include refid="goodsColumnsBase" />, member_num, cart_qty, cart_date
+		 , cart_qty * goods_price totalPrice
+	from goods g join cart c
+	on g.goods_num = c.goods_num
+	where  member_num = #{memberNum}
+</select>
+
+
+
+<update id="cartInsert" parameterType="java.util.Map">
+merge into cart c
+using (select goods_Num from goods where goods_num = #{cartCommand.goodsNum}) g
+on (c.goods_num = g.goods_num and c.member_num = #{memberNum})
+WHEN MATCHED THEN
+	update set cart_qty = cart_qty + #{cartCommand.qty}
+WHEN not MATCHED THEN
+	insert (MEMBER_NUM, GOODS_NUM, CART_DATE, CART_QTY)
+	values (#{memberNum} , g.goods_Num , sysdate,#{cartCommand.qty} )	
+</update>
+</mapper>

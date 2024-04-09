@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#wish").click(function(){
+		/*
+		$.ajax({
+			type:"post",
+			url : "/item/goodsWishAdd",
+			dataType:"text",
+			data: {"goodsNum":"[[${goodsStockCommand.goodsDTO.goodsNum}]]"},
+			success : function(result){ // 1:추가 , 0:삭제 , 900:관리자로그인
+				if(result == "1"){
+					$("#wish").attr("src","/static/images/hart.jpg");
+				}else if(result == "0"){
+					$("#wish").attr("src","/static/images/hart1.jpg");
+				}else if(result == "900"){
+					alert("관리자는 사용할 수 없는 페이지입니다.");
+				}
+			},
+			error:function(){
+				alert("로그아웃되었습니다.");
+				window.open("/login/item.login","login"
+						,"width=315, height=200,top = 100, left=100")
+			}
+		});
+		*/
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST","/item/goodsWishAdd?goodsNum=[[${goodsStockCommand.goodsDTO.goodsNum}]]",true);
+		xhr.onload = function(){
+			if (xhr.status == 200) {
+				var result = xhr.responseText;
+				if(result == "1"){
+					$("#wish").attr("src","/static/images/hart.jpg");
+				}else if(result == "0"){
+					$("#wish").attr("src","/static/images/hart1.jpg");
+				}else if(result == "900"){
+					alert("관리자는 사용할 수 없는 페이지입니다.");
+				}
+			}else{
+				alert("로그아웃되었습니다.");
+				window.open("/login/item.login","login"
+						,"width=315, height=200,top = 100, left=100");
+			}
+		}
+		xhr.send();
+	});
+	//$("#cartBtn").click(function(){
+	document.getElementById("cartBtn").addEventListener("click", function(){
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "/item/cartAdd", true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.onload = function(){
+				if (xhr.status === 200) {
+					if(xhr.responseText == "200"){
+						if(confirm("계속 쇼핑하려면 '취소'를 클릭하세요."))
+								location.href="/item/cartList";
+					}else if(xhr.responseText == "900"){
+						alert("관리자는 사용할 수 없는 페이지입니다.");
+					}else if(xhr.responseText == "000"){
+						alert("로그 아웃되었습니다. 다시로그인 해주세요.");
+						window.open("/login/item.login","login"
+								,"width=315, height=200,top = 100, left=100"); 
+					}
+				}else{
+					alert("로그 아웃되었습니다. 다시로그인 해주세요.");
+					window.open("/login/item.login","login"
+							,"width=315, height=200,top = 100, left=100"); 
+				}
+			}
+			var formData = JSON.stringify({
+				goodsNum: "[[${goodsStockCommand.goodsDTO.goodsNum}]]",
+				qty : $("#cartQty").val()
+			})
+			xhr.send(formData);
+		});
+});
+
+</script>
+</head>
+<body>
+[[${goodsStockCommand.goodsDTO.goodsNum}]]
+<table width="800" align="center">
+<caption>[[${goodsStockCommand.goodsDTO.goodsName }]] 상품정보입니다.</caption>
+<tr><td rowspan="6"><img th:src="|/static/upload/${goodsStockCommand.goodsDTO.goodsMainStore }|" height="200" /></td>
+					<td>[[${goodsStockCommand.goodsDTO.goodsName }]]</td></tr>
+<tr>                <td>가격 : [[${#numbers.formatCurrency(goodsStockCommand.goodsDTO.goodsPrice)}]]원</td></tr>
+<tr>                <td>배송비 : <span th:if="${goodsStockCommand.goodsDTO.deliveryCost == 0}">무료배송</span>
+						<span th:if="${goodsStockCommand.goodsDTO.deliveryCost != 0}">
+						[[${#numbers.formatCurrency(goodsStockCommand.goodsDTO.deliveryCost)}]]원
+						</span>
+					</td>
+</tr>
+<tr>				<td>남은 수량 : 
+							<th:block th:if="${goodsStockCommand.stock != 0 and goodsStockCommand.stock != null}">
+									[[${#numbers.formatInteger(goodsStockCommand.stock,1,'COMMA')}]]개
+							</th:block>
+							<th:block th:if="${goodsStockCommand.stock == 0 or goodsStockCommand.stock == null}">
+									품절
+							</th:block>				
+					</td></tr>
+<tr>                <td>수량 : <input type="number" min="1" step="1" value="1" id="cartQty"/> </td></tr>
+<tr><td>
+					<th:block th:if="${goodsStockCommand.stock != 0 and goodsStockCommand.stock != null}">
+					<!-- 주소의 앞을 item으로 할 것 -->
+						<button type="button" id="cartBtn">장바구니</button> | 
+ 						<button type="button" id="buyItem">바로구매 </button> |
+ 					</th:block> 
+ 					<th:block th:if="${goodsStockCommand.stock == 0 or goodsStockCommand.stock == null}">
+ 						입고될 때까지 잠시만 기다려 주세요 |
+ 					</th:block>
+ 					<img th:if="${wish == 1}" src="/static/images/hart.jpg" id="wish" width="20" />
+ 					<img th:if="${wish != 1}" src="/static/images/hart1.jpg" id="wish" width="20" />찜
+ 					</td></tr>
+<tr><td colspan="2">
+		<span id="descript">제품 상세 설명</span> | 
+		<span id="review">리뷰</span> | 
+		<span id="inquire" onclick="inquire();">상품문의</span>
+	</td></tr>
+<tr><td colspan="2"><div id="content"></div></td></tr>
+</table>
+</body>
+</html>

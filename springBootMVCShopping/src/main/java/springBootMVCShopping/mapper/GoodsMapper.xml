@@ -144,6 +144,10 @@ where g.goods_num = #{goodsNum}
 	<result column="stock" jdbcType="BIGINT" property="stock" />
 	<association property="goodsDTO" javaType="goods" resultMap="goodsResultMap" />
 </resultMap>
+<select id=""></select>
+
+
+
 </mapper>
 
 

@@ -89,14 +89,14 @@ set   EMP_NAME = #{empName}
 where EMP_NUM = #{empNum}
 </update>
 <delete id="employeeDelete" parameterType="string">
+<![CDATA[
 	delete from employees where EMP_NUM = #{empNum}
+]]>
 </delete>
 <select id="getEmpNum" parameterType="string" resultType="string">
 select emp_num from employees
 where emp_id = #{empId}
 </select>
-
-
 </mapper>
 
 	
