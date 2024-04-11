@@ -70,11 +70,8 @@
 <table align = "center" width="900" >
 	<tr><th><button id="load-more">더보기</button></th></tr>
 </table>
+<script type="text/javascript" src="/static/js/money.js"></script>
 <script>
-const formatter = new Intl.NumberFormat('ko-KR',{
-	style : 'currency',
-	currency : 'KRW'
-});
 var page = 1;
 $("#load-more").click(loadMoreItems);
 function loadMoreItems(){

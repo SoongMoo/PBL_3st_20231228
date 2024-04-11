@@ -14,11 +14,13 @@ $(function(){
 		}else{
 			$("input:checkbox[name='nums']").prop("checked",false);
 		}
+		goodsChk();
 	});
 	$("input:checkbox[name='nums']").click(function(){
 		var tot = $("input:checkbox[name='nums']").length;
 	    var chc = $("input:checkbox[name='nums']:checked").length;
 		if(tot == chc) $("#checkBoxs").prop("checked", true);
 		else $("#checkBoxs").prop("checked", false);
+		goodsChk();
 	});
 });

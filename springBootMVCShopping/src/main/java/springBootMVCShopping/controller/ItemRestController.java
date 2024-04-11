@@ -27,7 +27,6 @@ public class ItemRestController {
 	public String cartAdd(@RequestBody CartCommand cartCommand
 			, HttpSession session) {
 		System.out.println(cartCommand.getGoodsNum());
-		
 		return cartInsertService.execute(cartCommand, session);
 	}
 }

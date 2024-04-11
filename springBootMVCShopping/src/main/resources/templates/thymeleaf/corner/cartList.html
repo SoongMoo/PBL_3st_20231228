@@ -5,6 +5,67 @@
 <title>Insert title here</title>
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
 <script type="text/javascript" src="/static/js/checkbox.js"></script>
+<script type="text/javascript" src="/static/js/money.js"></script>
+<script type="text/javascript">
+function cartAdd(goodsNum, goodsPrice){
+	var xhr = new XMLHttpRequest();
+	xhr.onload = function(){
+		if (xhr.status === 200){
+			var result = xhr.responseText.trim();
+			var price = $("#t_"+goodsNum).text().substring(1).replace(",", "");
+			if(result == 200){
+				$("#"+goodsNum).text(parseInt($("#"+goodsNum).text()) + 1);
+				price = Number(price) + parseInt(goodsPrice);
+				$("#t_"+goodsNum).text(formatter.format(price));
+			}
+			goodsChk();
+		}else{
+			alert("로그 아웃되었습니다. 다시로그인 해주세요.");
+			window.open("/login/item.login","login"
+					,"width=315, height=200,top = 100, left=100"); 
+		}
+	}
+	var formData = JSON.stringify({
+		goodsNum : goodsNum,
+		qty : 1
+	});
+	xhr.open("POST","/item/cartAdd",true);
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.send(formData);
+}
+function goodsChk(){
+	var chkLeng  = $('input:[name="nums"]')
+	var cnt = 0; // 상품 수
+	var totalQty = 0; // 총 상품의 갯수
+	var totalPrice = 0; // 총 상품 금액
+	for(var i = 0; i < chkLeng.length ; i++){
+		if(chkLeng[i].checked){
+			cnt ++;
+			totalQty += Number($(".cartQty:eq("+i+")").text());
+			var price = $(".totalPrice:eq("+i+")").text().substring(1).replace(",","");
+			totalPrice += Number(price);		
+		}
+	}
+	$("#prodCnt").text(cnt);
+	$("#totQty").text(totalQty);
+	$("#totalPrice").text(formatter.format(totalPrice));
+}
+function checkQty(goodsNum){
+	if($("#"+goodsNum).text() > 1){
+		var xhr = new XMLHttpRequest();
+		xhr.onload = function(){
+			if(xhr.status==200){
+				var result = xhr.responseText.trim(); // ObjectMapper
+				var data = JSON.parse(result);
+			}
+		}
+		xhr.open("GET","cartQtyDown?goodsNum="+goodsNum, true);
+		xhr.send();
+	}else{
+		alert("최소 수량은 1이어야 합니다.");
+	}	
+}
+</script>
 </head>
 <body>
 <form action="/item/goodsBuy" method="post" >
@@ -18,14 +79,16 @@
 		<td><input type="checkbox" name="nums" checked="checked" th:value="${dto.goodsDTO.goodsNum}" />
 		<td><img th:src="|/static/upload/${dto.goodsDTO.goodsMainStore}|"  width="30"/></td>
 		<td>[[${dto.goodsDTO.goodsName}]]</td>
-		<td> - [[${#numbers.formatInteger(dto.cartDTO.cartQty, 1, 'COMMA')}]] + </td>
-		<td>[[${#numbers.formatCurrency(dto.totalPrice)}]]원</td>
+		<td><a th:href="|javascript:checkQty('${dto.goodsDTO.goodsNum}');|"> - </a>
+			<spna th:id="${dto.goodsDTO.goodsNum}" class="cartQty">[[${#numbers.formatInteger(dto.cartDTO.cartQty, 1, 'COMMA')}]]</spna>
+			<a th:href="|javascript:cartAdd('${dto.goodsDTO.goodsNum}','${dto.goodsDTO.goodsPrice}');|"> + </a></td>
+		<td><span th:id="${'t_'+dto.goodsDTO.goodsNum}" class="totalPrice">[[${#numbers.formatCurrency(dto.totalPrice)}]]</span>원</td>
 		<td><input type="button"  value="삭제" /> </td>	
 	</tr>		
 
 	<tr><td colspan="6" align="right">
 			상품수 : <span id="prodCnt">[[${list.size()}]]</span>개<br />
-			총수량 : <span id="totQty"></span>[[${#numbers.formatInteger(totQty,1,'COMMA')}]]개<br />
+			총수량 : <span id="totQty">[[${#numbers.formatInteger(totQty,1,'COMMA')}]]</span>개<br />
 			전체 합계 : <span id="totalPrice">[[${#numbers.formatCurrency(totPri)}]]</span>원
 		</td>
 	</tr>
