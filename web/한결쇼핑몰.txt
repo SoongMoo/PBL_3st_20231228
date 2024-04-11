@@ -344,3 +344,8 @@ add (INQUIRE_NUM NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1
 
 ALTER TABLE goods_inquire   -- 4
 ADD constraint PK_goods_inquire PRIMARY KEY(INQUIRE_NUM, MEMBER_NUM,GOODS_NUM);
+
+
+＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃
+alter table cart
+add cart_num NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1);
