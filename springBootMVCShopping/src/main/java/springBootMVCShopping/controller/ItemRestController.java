@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springBootMVCShopping.command.CartCommand;
 import springBootMVCShopping.service.item.CartInsertService;
+import springBootMVCShopping.service.item.GoodsCartDelsService;
 import springBootMVCShopping.service.item.GoodsWishService;
 
 @RestController
@@ -19,6 +20,9 @@ public class ItemRestController {
 	GoodsWishService goodsWishService;
 	@Autowired
 	CartInsertService cartInsertService;
+	@Autowired
+	GoodsCartDelsService goodsCartDelsService;
+	
 	@PostMapping("goodsWishAdd")
 	public String wishAdd(String goodsNum,HttpSession session) {
 		return goodsWishService.execute(goodsNum, session);
@@ -28,5 +32,9 @@ public class ItemRestController {
 			, HttpSession session) {
 		System.out.println(cartCommand.getGoodsNum());
 		return cartInsertService.execute(cartCommand, session);
+	}
+	@PostMapping(value = "cartDels") 
+	public String cartdel(@RequestBody String goodsNums[], HttpSession session) {
+		return goodsCartDelsService.execute(goodsNums, session);
 	}
 }
