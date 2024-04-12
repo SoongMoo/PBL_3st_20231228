@@ -33,10 +33,60 @@ and c.goods_num in
 	#{goodsNum}
 </foreach>
 </insert>
-
-
-
-
-
-
+<select id="purchaseSelect" parameterType="string" resultType="purchase">
+select  <include refid="purchaseBaseColumns" />
+from purchase
+where purchase_num = #{purchaseNum}
+</select>
+<resultMap type="orderList" id="orderListResultMap">
+	<association property="purchaseDTO" javaType="purchase">
+		<constructor>
+			<idArg column="purchase_Num" javaType="string" />
+			<arg column="purchase_Date" javaType="java.util.Date"/>
+			<arg column="purchase_Price" javaType="integer"/>
+			<arg column="delivery_Addr" javaType="string"/>
+			<arg column="delivery_Addr_Detail" javaType="string"/>
+			<arg column="delivery_Post" javaType="string"/>
+			<arg column="delivery_Phone" javaType="string"/>
+			<arg column="message" javaType="string"/>
+			<arg column="purchase_Status" javaType="string"/>
+			<arg column="member_num" javaType="string"/>
+			<arg column="delivery_name" javaType="string"/>
+			<arg column="purchase_Name" javaType="string"/>
+		</constructor>
+	</association>
+	<collection property="purchseListGoodsDTOs" ofType="purchaseListGoods" > <!-- list : n -->
+		<association property="purchaseList" javaType="purchaseList">
+			<result column="purchase_qty" jdbcType="BIGINT" property="purchaseQty"/>
+			<result column="total_price" jdbcType="BIGINT" property="totalPrice"/>
+		</association>
+		<association property="goods" javaType="goods"><!-- resultMap이 없으므로 작성해야합니다. -->
+			<id column="goods_Num" jdbcType="VARCHAR" property="goodsNum"/>
+			<result column="goods_name" jdbcType="VARCHAR" property="goodsName"/>
+			<result column="goods_price" jdbcType="BIGINT" property="goodsPrice"/>
+			<result column="goods_content" jdbcType="VARCHAR" property="goodsContent"/>
+			<result column="delivery_cost" jdbcType="BIGINT" property="deliveryCost"/>
+			<result column="emp_num" jdbcType="VARCHAR" property="empNum"/>
+			<result column="goods_regist" jdbcType="DATE" property="goodsRegist"/>
+			<result column="goods_main_store" jdbcType="VARCHAR" property="goodsMainStore"/>
+			<result column="goods_main_store_img" jdbcType="VARCHAR" property="goodsMainStoreImg"/>
+			<result column="goods_images" jdbcType="VARCHAR" property="goodsImages"/>
+			<result column="goods_images_img" jdbcType="VARCHAR" property="goodsImagesImg"/>
+			<result column="visit_count" jdbcType="BIGINT" property="visitCount"/>
+			<result column="update_Emp_Num" jdbcType="VARCHAR" property="updateEmpNum"/>
+			<result column="goods_Update_Date" jdbcType="DATE" property="goodsUpdateDate"/>
+		</association>
+	</collection>
+</resultMap>
+<select id="orderList" parameterType="string" resultMap="orderListResultMap">
+select   p.PURCHASE_NUM, PURCHASE_DATE, PURCHASE_PRICE, DELIVERY_ADDR, DELIVERY_ADDR_DETAIL
+	   , DELIVERY_POST, DELIVERY_PHONE, MESSAGE, PURCHASE_STATUS, MEMBER_NUM, DELIVERY_NAME
+       , PURCHASE_NAME
+       , purchase_qty, total_price
+       , g.goods_Num, goods_Name, goods_main_store, delivery_Cost, goods_Price, goods_Content
+from   purchase p join   purchase_list pl
+on p.PURCHASE_NUM = pl.PURCHASE_NUM  join goods g
+on pl.goods_num = g.goods_num
+where member_num = #{memberNum}
+</select>
 </mapper>

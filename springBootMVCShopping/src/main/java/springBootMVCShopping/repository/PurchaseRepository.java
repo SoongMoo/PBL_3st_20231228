@@ -1,9 +1,12 @@
 package springBootMVCShopping.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import springBootMVCShopping.domain.OrderListDTO;
 import springBootMVCShopping.domain.PurchaseDTO;
 import springBootMVCShopping.domain.PurchaseListDTO;
 
@@ -25,9 +28,12 @@ public class PurchaseRepository {
 		statement = namespace + ".purchaseListInsert";
 		return sqlSession.insert(statement,dto);
 	}
-	
-	
-	
-	
-	
+	public PurchaseDTO purchaseSelect(String purchaseNum) {
+		statement = namespace + ".purchaseSelect";
+		return sqlSession.selectOne(statement,purchaseNum);
+	}
+	public List<OrderListDTO> orderList(String memberNum){
+		statement = namespace + ".orderList";
+		return sqlSession.selectList(statement, memberNum);
+	}
 }
