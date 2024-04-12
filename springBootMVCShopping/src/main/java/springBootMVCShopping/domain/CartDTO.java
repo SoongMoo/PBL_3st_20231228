@@ -14,4 +14,6 @@ public class CartDTO {
 	String goodsNum;
 	Integer cartQty;
 	Date cartDate;
+	
+	String [] goodsNums;
 }
