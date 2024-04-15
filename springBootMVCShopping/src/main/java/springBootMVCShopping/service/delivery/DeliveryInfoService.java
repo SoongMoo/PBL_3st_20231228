@@ -13,6 +13,9 @@ public class DeliveryInfoService {
 	DeliveryRepository deliveryRepository;
 	public void execute(String purchaseNum,Model model) {
 		DeliveryDTO dto = deliveryRepository.deliverySelectOne(purchaseNum);
-		model.addAttribute("dto", dto);
+		if(dto != null ) {
+			String deliveryNum = dto.getDeliveryNum();
+			model.addAttribute("deliveryNum", deliveryNum);
+		}
 	}
 }
