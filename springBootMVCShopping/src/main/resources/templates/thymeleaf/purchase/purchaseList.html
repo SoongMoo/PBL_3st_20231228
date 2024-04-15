@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<table width="800" align="center">
+   <tr><td>주문일(결제번호)</td> 
+      <td>상품명/주문번호</td> 
+      <td>주문상태</td> 
+   </tr>
+   
+   <tr th:each=" orderListDTO : ${list}">
+   	  <td>[[${#dates.format(orderListDTO.purchaseDTO.purchaseDate,'yyyy-MM-dd')}]](
+			<span th:if="${orderListDTO.paymentDTO.appldate == null}">결제대기중</span>
+			<span th:if="${orderListDTO.paymentDTO.appldate != null}">
+				<span th:if="${orderListDTO.paymentDTO.confirmnumber == null}">현금결제</span>
+				<span th:if="${orderListDTO.paymentDTO.confirmnumber != null}">
+				[[${orderListDTO.paymentDTO.confirmnumber}]]</span>
+			</span>
+		)</td> 
+      <td><span th:each="dto : ${orderListDTO.purchseListGoodsDTOs}" >
+      		[[${dto.goods.goodsName}]]
+      	  </span>
+      	  /[[${orderListDTO.purchaseDTO.purchaseNum}]]</td> 
+      <td>주문상세보기 | 
+      	<span th:if="${orderListDTO.purchaseDTO.purchaseStatus == '입금대기중'}">
+      		결제대기중
+      	</span>
+      	<span th:if="${orderListDTO.purchaseDTO.purchaseStatus != '입금대기중'}">
+      		 <span th:if="${orderListDTO.deliveryDTO.deliveryState == null}">
+      			<a th:href="|purchaseStatus?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">
+      			[[${orderListDTO.purchaseDTO.purchaseStatus}]]</a>
+      	 	 | <a th:href="@{/delivery/deliveryRegist(purchaseNum=${orderListDTO.purchaseDTO.purchaseNum})}">배송등록</a>
+      	 	 </span>
+      	 	 <span th:if="${orderListDTO.deliveryDTO.deliveryState != null}">
+      	 		 <th:block th:if="${orderListDTO.deliveryDTO.deliveryState == '배송중'}">
+      	 		  <a th:href="|/delivery/deliveryUpdate?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">배송중</a>
+      	 	 	 <a th:href="@{/delivery/deliveryRegist(purchaseNum=${orderListDTO.purchaseDTO.purchaseNum})}">배송수정</a>
+      	 	 	 </th:block>
+      	 	 	<span th:if="${orderListDTO.deliveryDTO.deliveryState == '배송완료'}">배송완료</span>
+      	 	 </span>
+      	</span>
+      	
+      </td> 
+   </tr>
+</table>
+</body>
+</html>

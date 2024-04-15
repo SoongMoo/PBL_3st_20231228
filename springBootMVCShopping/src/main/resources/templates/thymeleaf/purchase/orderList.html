@@ -33,7 +33,7 @@
 			<a th:href="|paymentOk?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">결제하기</a>
 			</th:block>
 			<th:block th:if="${orderListDTO.purchaseDTO.purchaseStatus =='결제완료'}">
-				결제완료
+				<a th:href="|paymentDel?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">주문취소</a>
 			</th:block>
 		</td>
 	</tr>

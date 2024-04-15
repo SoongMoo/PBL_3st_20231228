@@ -16,6 +16,7 @@ import springBootMVCShopping.service.purchase.GoodsBuyService;
 import springBootMVCShopping.service.purchase.GoodsOrderService;
 import springBootMVCShopping.service.purchase.IniPayReturnService;
 import springBootMVCShopping.service.purchase.OrderProcessListService;
+import springBootMVCShopping.service.purchase.PaymentDeleteService;
 
 @Controller
 @RequestMapping("purchase")
@@ -30,6 +31,8 @@ public class PurchaseController {
 	OrderProcessListService orderProcessListService;
 	@Autowired
 	IniPayReturnService iniPayReturnService;
+	@Autowired
+	PaymentDeleteService paymentDeleteService;
 	
 	@PostMapping(value = "goodsBuy")
 	public String goodsBuy(String[] nums ,HttpSession session,Model model) {
@@ -62,7 +65,11 @@ public class PurchaseController {
 		iniPayReturnService.execute(request);
 		return "thymeleaf/purchase/buyfinished";
 	}
-	
+	@RequestMapping("paymentDel")
+	public String paymentDel(String purchaseNum) {
+		paymentDeleteService.execute(purchaseNum);
+		return "redirect:orderList";
+	}
 	
 	
 	

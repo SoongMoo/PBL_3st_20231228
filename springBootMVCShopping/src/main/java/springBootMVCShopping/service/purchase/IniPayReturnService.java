@@ -15,6 +15,7 @@ import com.inicis.std.util.ParseUtil;
 import com.inicis.std.util.SignatureUtil;
 
 import springBootMVCShopping.domain.PaymentDTO;
+import springBootMVCShopping.domain.PurchaseDTO;
 import springBootMVCShopping.repository.PurchaseRepository;
 
 @Service
@@ -122,7 +123,10 @@ public class IniPayReturnService {
 					dto.setTotalprice(resultMap.get("TotPrice"));
 					int i = purchaseRepository.paymentInsert(dto);
 					if(i >= 1) {
-						purchaseRepository.purchaseStatusUpdate(dto.getPurchaseNum());
+						PurchaseDTO dpto = new PurchaseDTO();
+						dpto.setPurchaseStatus("결제완료");
+						dpto.setPurchaseNum(dto.getPurchaseNum());
+						purchaseRepository.purchaseStatusUpdate(dpto);
 					}
 				  // 수신결과를 파싱후 resultCode가 "0000"이면 승인성공 이외 실패
 
