@@ -1,5 +1,6 @@
 package springBootMVCShopping.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import springBootMVCShopping.command.PurchaseCommand;
 import springBootMVCShopping.service.IniPayReqService;
 import springBootMVCShopping.service.purchase.GoodsBuyService;
 import springBootMVCShopping.service.purchase.GoodsOrderService;
+import springBootMVCShopping.service.purchase.IniPayReturnService;
 import springBootMVCShopping.service.purchase.OrderProcessListService;
 
 @Controller
@@ -26,6 +28,8 @@ public class PurchaseController {
 	IniPayReqService iniPayReqService;
 	@Autowired
 	OrderProcessListService orderProcessListService;
+	@Autowired
+	IniPayReturnService iniPayReturnService;
 	
 	@PostMapping(value = "goodsBuy")
 	public String goodsBuy(String[] nums ,HttpSession session,Model model) {
@@ -36,6 +40,15 @@ public class PurchaseController {
 	public String goodsOrder(PurchaseCommand purchaseCommand,HttpSession session
 			, Model model) throws Exception {
 		String purchaseNum = goodsOrderService.execute(purchaseCommand, session);
+		/*
+		iniPayReqService.execute(purchaseNum, model, session);
+		return "thymeleaf/purchase/payment";
+		*/
+		return "redirect:paymentOk?purchaseNum="+purchaseNum;
+	}
+	@GetMapping("paymentOk")
+	public String paymentOk(String purchaseNum, Model model
+			,HttpSession session) throws Exception{
 		iniPayReqService.execute(purchaseNum, model, session);
 		return "thymeleaf/purchase/payment";
 	}
@@ -44,7 +57,11 @@ public class PurchaseController {
 		orderProcessListService.execute(session, model);
 		return "thymeleaf/purchase/orderList";
 	}
-	
+	@RequestMapping("INIstdpay_pc_return")
+	public String payReturn(HttpServletRequest request) {
+		iniPayReturnService.execute(request);
+		return "thymeleaf/purchase/buyfinished";
+	}
 	
 	
 	

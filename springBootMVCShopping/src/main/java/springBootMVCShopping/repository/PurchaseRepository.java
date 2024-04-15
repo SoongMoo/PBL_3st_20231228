@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import springBootMVCShopping.domain.OrderListDTO;
+import springBootMVCShopping.domain.PaymentDTO;
 import springBootMVCShopping.domain.PurchaseDTO;
 import springBootMVCShopping.domain.PurchaseListDTO;
 
@@ -35,5 +36,13 @@ public class PurchaseRepository {
 	public List<OrderListDTO> orderList(String memberNum){
 		statement = namespace + ".orderList";
 		return sqlSession.selectList(statement, memberNum);
+	}
+	public int paymentInsert(PaymentDTO dto) {
+		statement = namespace + ".paymentInsert";
+		return sqlSession.insert(statement,dto);
+	}
+	public int purchaseStatusUpdate(String purchaseNum) {
+		statement = namespace + ".paymentInsert";
+		return sqlSession.update(statement,purchaseNum);
 	}
 }
