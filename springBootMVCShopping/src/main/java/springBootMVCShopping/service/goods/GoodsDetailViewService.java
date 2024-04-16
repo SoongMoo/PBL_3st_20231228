@@ -24,7 +24,7 @@ public class GoodsDetailViewService {
 	WishMapper wishMapper;
 	@Autowired
 	MemberMapper memberMapper;
-	public void execute(String goodsNum, Model model, HttpSession session) {
+	public GoodsStockDTO execute(String goodsNum, Model model, HttpSession session) {
 		goodsMapper.visitCount(goodsNum);
 		GoodsStockDTO  dto = goodsMapper.goodsStockSelectOne(goodsNum);
 		model.addAttribute("goodsStockCommand", dto);
@@ -42,5 +42,6 @@ public class GoodsDetailViewService {
 				model.addAttribute("wish", 0);
 			}
 		}
+		return dto;
 	}
 }
