@@ -3,17 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#btn").click(function(){
+		opener.location.reload();
+		window.self.close();
+	});
+});
+</script>
 </head>
 <body>
-<form action="deliveryRegist" method="post">
-<table width="600" align="center">
-	<caption>배송정보 등록</caption>
-	<tr><td>주문번호</td>
-		<td><input type="text"  name="purchaseNum" th:value="${purchaseNum}" readonly="readonly" /></td></tr>
-	<tr><td>송장번호</td>
-		<td><input type="text"  name="deliveryNum" th:value="${deliveryNum}" required="required"/></td></tr>
-	<tr><td colspan="2"><input type="submit" value="송장번호등록" /></td></tr>
+<table width="800" align = "center">
+	<tr><td><h1>상세보기</h1></td></tr>
+</table>
+<hr />
+구매상품 정보<br />
+<table width="800" align = "center">
+<th:block th:each=" orderListDTO : ${list}">
+<th:block th:each=" dto : ${orderListDTO.purchseListGoodsDTOs}">
+	<tr >	<td><img th:src="|/static/upload/${dto.goods.goodsMainStore}|" width="30"/></td>
+			<td>제품가격 : [[${#numbers.formatCurrency(dto.goods.goodsPrice)}]]원 | 
+				주문수량 : [[${#numbers.formatInteger(dto.purchaseList.purchaseQty,1,'COMMA')}]]개 | 
+				배송비 :
+				<span th:if="${dto.goods.deliveryCost == 0}">무료배송</span>
+				<span th:if="${dto.goods.deliveryCost != 0}">
+					[[${#numbers.formatCurrency(dto.goods.deliveryCost)}]]원</span>
+			</td>
+	</tr>
+	<tr>
+			<td colspan="2"><b>상품설명</b><br />
+			<span th:utext="${#strings.replace(dto.goods.goodsContent,newLineChar,'&lt;br /&gt;')}"></span>
+			</td>
+	</tr>
+</th:block>
+</th:block>
+	<tr>
+		<td width=400>
+			<h2>주문내용</h2>
+			 주문번호 : [[${list[0].purchaseDTO.purchaseNum}]]<br />
+			 주문날짜 : [[${#dates.format(list[0].purchaseDTO.purchaseDate,'yyyy년MM월dd일')}]]<br />
+			 주문금액 : [[${#numbers.formatCurrency(list[0].purchaseDTO.purchasePrice)}]]원<br />
+			 배송지 : [[${list[0].purchaseDTO.deliveryAddr + ' ' + list[0].purchaseDTO.deliveryAddrDetail}]]<br />
+			 연락처 : [[${list[0].purchaseDTO.deliveryPhone}]]<br />
+			 받는사람 : [[${list[0].purchaseDTO.deliveryName}]]<br />
+			 주문메세지 : [[${list[0].purchaseDTO.message}]]<br />
+		</td>
+		<td width=400 th:if="${list[0].paymentDTO.totalprice != null}">
+			<h2>결제내용</h2>
+			 결제번호 : [[${list[0].paymentDTO.confirmnumber}]]<br />
+			 결제방법 : [[${list[0].paymentDTO.paymethod}]]<br />
+			 결제금액 : [[${list[0].paymentDTO.totalprice}]] <br />
+			 결제 일 : [[${#temporals.format(#temporals.createDateTime(list[0].paymentDTO.appldate + list[0].paymentDTO.appltime, 'yyyyMMddHHmmss'),'yyyy-MM-dd HH:mm:ss')}]]<br />
+			 카드번호 : [[${list[0].paymentDTO.cardnum}]]<br />
+
+		</td>
+		<td width=400 th:if="${list[0].paymentDTO.totalprice == null}">
+			<h2>결제내용</h2>
+			결제 정보가 없습니다.<br /><br /><br /><br /><br /><br /><br />
+		</td>
+	</tr>
+</table>
+<hr /> 
+<form action="/delivery/deliveryRegist" method="post" th:if="${list[0].deliveryDTO.deliveryNum != null}">
+<input type="hidden" name="purchaseNum" th:value="${purchaseNum}"/>
+<table width="800" align = "center">
+	<tr><td colspan="2">배송정보</td></tr>
+	<tr><td>택배사</td><td>[[${list[0].deliveryDTO.deliveryCompany}]]</td></tr>
+	<tr><td>송장번호</td><td>[[${list[0].deliveryDTO.deliveryNum}]]</td></tr>
+	<!-- 구매 확정이 되면 삭제 할 수 없게 합니다. -->
+	<tr th:if="${list[0].deliveryDTO.deliveryState != '배송완료'}"><td colspan="2"><input type="submit" value="배송정보삭제" /></td></tr>
+	</th:block>
 </table>
 </form>
+<hr th:if="${list[0].deliveryDTO.deliveryNum != null}" />
+<!-- 배송정보가 없으면 뜨도록 합니다. 결제 완료가 되면 뜨도록합니.-->
+<form action="/delivery/deliveryRegist" method="post" th:if="${list[0].deliveryDTO.deliveryNum == null}">
+	<input type="hidden" name="purchaseNum" th:value="${purchaseNum}"/>
+	<table width="800" align = "center">
+		<tr><td colspan="2">배송정보입력</td></tr>
+		<tr><td>배송회사</td>
+			<td><select name="deliveryCompany">
+					<option>한진택배</option>
+					<option>대한통운택배</option>
+					<option>우체국택배</option>
+				</select></td>
+		</tr>
+			<tr><td>송장번호</td>
+			<td><input type="text" name="deliveryNum" required="required"/></td></tr>
+		<tr><td colspan="2">
+			<input type="submit" value="배송정보등록"/>
+			</td></tr>
+	</table>
+</form>
+<button type="button" id="btn">닫기</button>
 </body>
 </html>

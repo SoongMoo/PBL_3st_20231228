@@ -1,6 +1,7 @@
 package springBootMVCShopping.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,9 @@ public class PurchaseRepository {
 		statement = namespace + ".purchaseSelect";
 		return sqlSession.selectOne(statement,purchaseNum);
 	}
-	public List<OrderListDTO> orderList(String memberNum){
+	public List<OrderListDTO> orderList(Map<String , String> map){
 		statement = namespace + ".orderList";
-		return sqlSession.selectList(statement, memberNum);
+		return sqlSession.selectList(statement, map);
 	}
 	public int paymentInsert(PaymentDTO dto) {
 		statement = namespace + ".paymentInsert";

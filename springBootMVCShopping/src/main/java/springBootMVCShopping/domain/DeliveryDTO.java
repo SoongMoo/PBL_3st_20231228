@@ -13,4 +13,5 @@ public class DeliveryDTO {
 	String deliveryNum;
 	Date deliveryDate;
 	String deliveryState;
+	String deliveryCompany;
 }

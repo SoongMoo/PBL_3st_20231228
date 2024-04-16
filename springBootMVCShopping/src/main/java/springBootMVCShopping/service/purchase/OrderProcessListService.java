@@ -1,6 +1,8 @@
 package springBootMVCShopping.service.purchase;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,7 +25,10 @@ public class OrderProcessListService {
 	public void execute(HttpSession session, Model model) {
 		AuthInfoDTO auth = (AuthInfoDTO)session.getAttribute("auth");
 		MemberDTO memDto = memberMapper.memberSelectOne(auth.getUserId());
-		List<OrderListDTO> list = purchaseRepository.orderList(memDto.getMemberNum()); 
+		Map<String , String> map = new HashMap<String, String>();
+		map.put("mamberNum", memDto.getMemberNum());
+		map.put("purchaseNum", null);
+		List<OrderListDTO> list = purchaseRepository.orderList(map); 
 		model.addAttribute("list", list);
 	}
 }

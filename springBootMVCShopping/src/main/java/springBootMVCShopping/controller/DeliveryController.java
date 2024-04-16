@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import springBootMVCShopping.service.delivery.DeliveryInfoService;
 import springBootMVCShopping.service.delivery.DeliveryInsertService;
@@ -23,12 +25,15 @@ public class DeliveryController {
 	public String deliveryState(@ModelAttribute("purchaseNum") String purchaseNum
 			,Model model) {
 		deliveryInfoService.execute(purchaseNum, model);
+		model.addAttribute("newLineChar", "\n");
 		return "thymeleaf/delivery/deliveryRegist"; 
 	}
 	@PostMapping("deliveryRegist")
-	public String deliveryRegist(String purchaseNum, String deliveryNum) {
-		deliveryInsertService.execute(purchaseNum, deliveryNum);
-		return "redirect:/purchase/purchaseList";
+	public String deliveryRegist(String purchaseNum
+			,@RequestParam(value="deliveryNum" , required = false , defaultValue = "") String deliveryNum
+		    ,@RequestParam(value="deliveryCompany" , required = false , defaultValue = "") String deliveryCompany) {
+		deliveryInsertService.execute(purchaseNum, deliveryNum, deliveryCompany);
+		return "redirect:deliveryRegist?purchaseNum="+purchaseNum;
 	}
 	@Autowired
 	DeliveryUpdateService deliveryUpdateService;

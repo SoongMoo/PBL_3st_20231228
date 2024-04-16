@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+function detail(purchaseNum){
+	window.open("/delivery/deliveryRegist?purchaseNum="+purchaseNum
+			,"","width=800,height=800,top=100,left=100");
+}
+</script>
 </head>
 <body>
 <table width="800" align="center">
@@ -24,7 +30,7 @@
       		[[${dto.goods.goodsName}]]
       	  </span>
       	  /[[${orderListDTO.purchaseDTO.purchaseNum}]]</td> 
-      <td>주문상세보기 | 
+      <td><a th:href="|javascript:detail('${orderListDTO.purchaseDTO.purchaseNum}');|" >주문상세보기</a> | 
       	<span th:if="${orderListDTO.purchaseDTO.purchaseStatus == '입금대기중'}">
       		결제대기중
       	</span>
@@ -32,12 +38,10 @@
       		 <span th:if="${orderListDTO.deliveryDTO.deliveryState == null}">
       			<a th:href="|purchaseStatus?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">
       			[[${orderListDTO.purchaseDTO.purchaseStatus}]]</a>
-      	 	 | <a th:href="@{/delivery/deliveryRegist(purchaseNum=${orderListDTO.purchaseDTO.purchaseNum})}">배송등록</a>
       	 	 </span>
       	 	 <span th:if="${orderListDTO.deliveryDTO.deliveryState != null}">
       	 		 <th:block th:if="${orderListDTO.deliveryDTO.deliveryState == '배송중'}">
       	 		  <a th:href="|/delivery/deliveryUpdate?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">배송중</a>
-      	 	 	 <a th:href="@{/delivery/deliveryRegist(purchaseNum=${orderListDTO.purchaseDTO.purchaseNum})}">배송수정</a>
       	 	 	 </th:block>
       	 	 	<span th:if="${orderListDTO.deliveryDTO.deliveryState == '배송완료'}">배송완료</span>
       	 	 </span>

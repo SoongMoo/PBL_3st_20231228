@@ -8,10 +8,11 @@ merge into delivery d
 using (select purchase_num from purchase where purchase_num = #{purchaseNum}) p
 on (d.purchase_num = p.purchase_num)
 WHEN MATCHED THEN
-update set DELIVERY_NUM = #{deliveryNum}
+update set DELIVERY_NUM = null
+delete where purchase_num = #{purchaseNum}
 WHEN not MATCHED THEN
-insert (PURCHASE_NUM, DELIVERY_NUM, DELIVERY_DATE, DELIVERY_STATE)
-values (#{purchaseNum},#{deliveryNum},sysdate,'배송중')
+insert (PURCHASE_NUM, DELIVERY_NUM, DELIVERY_DATE, DELIVERY_STATE, delivery_Company)
+values (#{purchaseNum},#{deliveryNum},sysdate,'배송중' , #{deliveryCompany})
 </update>
 <select id="deliverySelectOne" parameterType="string" resultType="delivery">
 select *
