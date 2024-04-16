@@ -50,4 +50,8 @@ public class PurchaseRepository {
 		statement = namespace + ".paymentDelete";
 		return sqlSession.delete(statement,purchaseNum);
 	}
+	public int purchaseOk(String purchaseNum) {
+		statement = namespace + ".purchaseOk";
+		return sqlSession.update(statement,purchaseNum);
+	}
 }

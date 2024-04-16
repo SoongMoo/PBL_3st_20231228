@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import springBootMVCShopping.command.PurchaseCommand;
+import springBootMVCShopping.repository.PurchaseRepository;
 import springBootMVCShopping.service.IniPayReqService;
 import springBootMVCShopping.service.purchase.GoodsBuyService;
 import springBootMVCShopping.service.purchase.GoodsOrderService;
@@ -70,7 +71,13 @@ public class PurchaseController {
 		paymentDeleteService.execute(purchaseNum);
 		return "redirect:orderList";
 	}
-	
+	@Autowired
+	PurchaseRepository purchaseRepository;
+	@RequestMapping("purchaseOk")
+	public String purchaseOk(String purchaseNum) {
+		purchaseRepository.purchaseOk(purchaseNum);
+		return "redirect:orderList";
+	}
 	
 	
 	

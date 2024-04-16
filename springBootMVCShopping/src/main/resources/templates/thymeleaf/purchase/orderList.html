@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+function btnReview( goodsNum, purchaseNum){
+	location.href='/review/goodsReview?goodsNum='+goodsNum+"&purchaseNum="+purchaseNum;
+}
+</script>
 </head>
 <body>
 <table width="800" align="center" >
@@ -29,11 +35,35 @@
 			</th:block>
 		</td>
 		<td>
-			<th:block th:if="${orderListDTO.purchaseDTO.purchaseStatus =='입금대기중'}">
-			<a th:href="|paymentOk?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">결제하기</a>
+			<th:block th:if="${orderListDTO.deliveryDTO.deliveryNum == null}">
+				<span th:if="${orderListDTO.purchaseDTO.purchaseStatus =='입금대기중'}">
+					<a th:href="|paymentOk?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">결제하기</a>
+				</span>
+				<span th:if="${orderListDTO.purchaseDTO.purchaseStatus =='결제완료'}">
+					<a th:href="|paymentDel?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">주문취소</a>
+				</span>
+				<span th:if="${orderListDTO.purchaseDTO.purchaseStatus =='상품준비중'}">
+						상품준비중
+				</span>
 			</th:block>
-			<th:block th:if="${orderListDTO.purchaseDTO.purchaseStatus =='결제완료'}">
-				<a th:href="|paymentDel?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">주문취소</a>
+			<th:block th:if="${orderListDTO.deliveryDTO.deliveryNum != null}">
+				[[${orderListDTO.deliveryDTO.deliveryState}]]
+				<span th:if="${orderListDTO.deliveryDTO.deliveryState == '배송완료'}">
+					<a th:if="${orderListDTO.purchaseDTO.purchaseStatus != '구매확정'}"
+					 th:href="@{purchaseOk(purchaseNum=${orderListDTO.purchaseDTO.purchaseNum})}">구매확정</a>
+					<span th:if="${orderListDTO.purchaseDTO.purchaseStatus == '구매확정'}">
+						<th:block th:each= "dto : ${orderListDTO.purchseListGoodsDTOs}">
+							<th:block  th:if="${dto.review.reviewNum == null}">
+								<button type="button" th:attr="onclick=|btnReview('${dto.goods.goodsNum}'
+									,'${orderListDTO.purchaseDTO.purchaseNum}')|">후기등록</button>
+							</th:block>
+							<th:block  th:if="${dto.review.reviewNum != null}">
+								<button type="button"  th:attr="onclick=|btnReview('${dto.goods.goodsNum}'
+									,'${orderListDTO.purchaseDTO.purchaseNum}')|" >후기수정</button>
+							</th:block>
+						</th:block>
+					</span>
+				</span>
 			</th:block>
 		</td>
 	</tr>

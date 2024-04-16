@@ -9,4 +9,5 @@ import lombok.Data;
 public class PurchaseListGoodsDTO {
 	PurchaseListDTO purchaseList; // 1
 	GoodsDTO goods;   // 1
+	ReviewDTO review;
 }
