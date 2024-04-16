@@ -349,3 +349,8 @@ ADD constraint PK_goods_inquire PRIMARY KEY(INQUIRE_NUM, MEMBER_NUM,GOODS_NUM);
 ＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃
 alter table cart
 add cart_num NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1);
+
+alter table delivery
+add (delivery_Company varchar2(50));
+
+
