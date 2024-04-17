@@ -30,11 +30,11 @@ public class CornerController {
 		return "thymeleaf/corner/detailView";
 	}
 	@RequestMapping("/goodsDescript")
-	public void goodsDescript(@RequestBody Map<String, Object> map
+	public void goodsDescript(@RequestBody Map<String, String> map
 			,HttpServletResponse response,Model model, HttpSession session) {
 		System.out.println(map.get("goodsNum"));
 		GoodsStockDTO dto = goodsDetailViewService.execute(
-				map.get("goodsNum").toString(),model, session );
+				map.get("goodsNum"),model,session);
 		ObjectMapper mapper = new ObjectMapper();
 		response.setCharacterEncoding("utf-8");
 		try {

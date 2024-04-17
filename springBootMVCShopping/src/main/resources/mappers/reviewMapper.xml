@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reviewMapperSql">
+<insert id="reviewWrite" parameterType="review">
+merge into reviews r
+using (select * from purchase_list where  GOODS_NUM = #{goodsNum} 
+		    					   and purchase_num = #{purchaseNum} ) pl
+on ( r.GOODS_NUM = pl.GOODS_NUM and r.purchase_num = pl.purchase_num)
+When MATCHED THEN
+update set REVIEW_CONTENT = #{reviewContent},
+           score = 5
+When not MATCHED THEN
+insert ( GOODS_NUM, purchase_num, REVIEW_DATE, REVIEW_CONTENT, member_id, score)
+values( #{goodsNum}, #{purchaseNum}, sysdate,  #{reviewContent}, #{memberId}, 5)
+</insert>
+<select id="reviewSelectOne" parameterType="review" resultType="string"> 
+select review_content from reviews
+where goods_num = #{goodsNum}  and purchase_num = #{purchaseNum}
+</select>
+<select id="goodsReviewList" parameterType="string" resultType="review"> 
+	select PURCHASE_NUM, REVIEW_DATE, REVIEW_CONTENT, MEMBER_ID
+	from reviews 
+	where GOODS_NUM = #{goodsNum}
+</select>
+</mapper>

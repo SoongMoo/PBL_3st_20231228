@@ -83,6 +83,24 @@ $(function(){
 	$("#descript").click(function(){
 		goodsDescript();
 	});
+	$("#review").click(function(){
+		//location.href="/review/reviewList?goodsNum=[[${goodsStockCommand.goodsDTO.goodsNum}]]";
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "/review/reviewList", true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		var formData = JSON.stringify({
+			goodsNum: "[[${goodsStockCommand.goodsDTO.goodsNum}]]"
+		});
+		xhr.onload = function(){
+			if (xhr.status === 200) {
+				var result = xhr.responseText;
+				$("#content").html(result);
+			}else{
+				alert("서버오류!!!!");
+			}
+		}
+		xhr.send(formData);
+	});
 });
 function goodsDescript(){
 	var xhr = new XMLHttpRequest();
@@ -98,9 +116,11 @@ function goodsDescript(){
 			 	item += "<tr><td>";
 			 	item += "<span>"+data.goodsDTO.goodsContent+"</span> ";
 			 	item += "<br />";
-			 	var imageParts = data.goodsDTO.goodsImages.split("/");
-			 	for (var i = 0; i < imageParts.length - 1; i++) {
-			 		item += "<img src='/static/upload/" +imageParts[i] + "' /><br />";
+			 	if(data.goodsDTO.goodsImages != null){
+			 		var imageParts = data.goodsDTO.goodsImages.split("/");
+				 	for (var i = 0; i < imageParts.length - 1; i++) {
+				 		item += "<img src='/static/upload/" +imageParts[i] + "' /><br />";
+				 	}
 			 	}
 			 	item += "</td></tr>";
 			 	item += "</table>";
