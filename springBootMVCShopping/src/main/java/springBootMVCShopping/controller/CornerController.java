@@ -1,5 +1,6 @@
 package springBootMVCShopping.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import springBootMVCShopping.domain.GoodsStockDTO;
+import springBootMVCShopping.domain.InquireDTO;
+import springBootMVCShopping.repository.InquireRepository;
 import springBootMVCShopping.service.goods.GoodsDetailViewService;
 
 @Controller
@@ -42,5 +45,16 @@ public class CornerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
+	}
+	@Autowired
+	InquireRepository inquireRepository;
+	@RequestMapping("inquireList")
+	public String inquireList(@RequestBody Map<String , String> map
+			,Integer inquireNum, Model model) {
+		List<InquireDTO> list = inquireRepository.inquireList(map.get("goodsNum"),inquireNum);
+		model.addAttribute("list", list);
+		model.addAttribute("goodsNum", map.get("goodsNum"));
+		model.addAttribute("newLineChar", "\n");
+		return "thymeleaf/inquire/inquireList";
 	}
 }

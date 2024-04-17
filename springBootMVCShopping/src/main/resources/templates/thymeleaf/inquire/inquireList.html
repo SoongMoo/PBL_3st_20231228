@@ -6,75 +6,67 @@
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
 <script type="text/javascript">
 $(function(){
-	
-});
-function inquireWrite(inquireNum, goodsNum){
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST","/inquire/inquireWrite", true);
-	xhr.setRequestHeader("Content-Type", "application/json");
-	var formData = JSON.stringify({
-		goodsNum:goodsNum,
-		inquireNum : inquireNum
+	$("#btn").click(function(){
+		window.open("/inquire/inquireWrite?goodsNum=[[${goodsNum}]]"
+				,"","width=700, height=650, top = 100, left=100");
 	});
-	xhr.onload = function(){
-		if (xhr.status === 200) {
-			var result = xhr.responseText;
-			var data = JSON.parse(result);
-			var item = '';
-				item += '<form action="inquireWrite" method="post" >';
-				item += '<input type="hidden" name="goodsNum" >';
-				item += '<table width="800" align="center">';
-				item += '<colgroup>';
-				item += '<col style="width:20%">';
-				item += '<col >';
-				item += '</colgroup>';
-				item += '<thead>';
-				item += '<tr><th colspan="2"><h1 class="fl"> 판매자에게 문의하기</h1></th></tr>';
-				item += '</thead>';
-				item += '<tfoot>';
-				item += '<tr><th colspan="2">';
-				item += '<input type="submit" value="문의등록"/>';
-				item += '</th></tr>';
-				item += '</tfoot>';
-				item += '<tbody>';
-				item += '<tr>';
-				item += '<th>문의 유형</th>';
-				item += '<th>';
-				item += '<select name="inquireKind">';
-				item += '        <option>상품(성능/사이즈)</option>';
-				item += '        <option>배송</option>';
-				item += '        <option>교환</option>';
-				item += '        <option>반품/취소/환불</option>';
-				item += '        <option>기타</option>';
-				item += '     </select>';
-				item += '  </th>';
-				item += '</tr>';
-				item += '<tr><th>제목</th>';
-				item += ' <td><input type="text" name="inquireSubject" /><br />';
-				item += '</td></tr>';
-				item += '<tr><th>내용</th>';
-				item += '  <td><textarea rows="10" cols="50" name="inquireContent"></textarea><br />';
-				item += '</td>';
-				item += '</tbody>';
-				item += '</table>';
-				item += '</form>';
-				$("#inquireWrite").html(item);
-		}else{
-			alert("서버오류");
+});
+function inquireUpdate(inquireNum){
+	window.open("/inquire/inquireUpdate?inquireNum="+inquireNum,
+			"","width=700, height=650, top = 100, left=100");
+}
+function inquireDelete(inquireNum){
+	$.ajax({
+		type:'post',
+		url:'/inquire/inquireDelete',
+		data: {'inquireNum':inquireNum},
+		success:function(){
+			inquire();
 		}
+	});
+}
+function contentOpen(id){
+	if($("."+id).css("display") == "none"){ // 답글이 안보인 다면 
+		$("."+id).css("display", "");  // 답글을 보이게 하고 
+		$("#"+id).text("답변닫기"); // 버큰은 닫기로 변경
+	}else{  // 답글이 보이면 안보이게 하고
+		$("."+id).css("display", "none"); 
+		$("#"+id).text("답변열기");  // 버큰은 열기로 변경
 	}
-	xhr.send(formData);
 }
 </script>
 </head>
 <body>
-<div id="inquireWrite"></div>
+<div id="inquireForm"></div>
 <table width="600" align="center" border="1">
 	<tr><td colspan="4" align="right">
-		<button type="button" id="btn" onclick="inquireWrite('','[[${goodsNum}]]')">문의하기</button></td></tr>
-	<tr><td>번호</td><td>검토 | 답변완료</td><td>회원아이디</td><td>등록일</td></tr>
-	<tr><td>종류</td><td colspan="3">제목</td></tr>
-	<tr><td colspan="4"></td></tr>
+		<button type="button" id="btn" >문의하기</button></td></tr>
+<th:block th:each=" dto , idx : ${list}">
+	<tr><td width="30">[[${idx.count}]]</td>
+		<td><span th:if="${dto.inquireAnswer == null}" >검토</span> 
+			<span th:if="${dto.inquireAnswer != null}" >답변완료</span></td>
+		<td>[[${dto.memberId}]]</td>
+		<td>[[${#dates.format(dto.inquireDate,'yyyy-MM-dd')}]]</td></tr>
+	<tr><td colspan="4">[[${dto.inquireKind}]] <br /> [[${dto.inquireSubject}]]</td></tr>
+	<tr><td colspan="4">[[${dto.inquireContent}]]<br />
+		 <th:block th:if="${session.auth != null}">
+		 	<th:block th:if="${session.auth.userId == dto.memberId}">
+			<button type="button" th:attr="onclick=|inquireUpdate('${dto.inquireNum}');|">문의수정</button>
+			<button type="button" th:attr="onclick=|inquireDelete('${dto.inquireNum}');|">문의삭제</button>
+		 	</th:block>
+		 </th:block>
+		 <button type="button" th:id="inq_+${dto.inquireNum}"
+						th:attr="onclick=|contentOpen('inq_${dto.inquireNum}');|"
+						>답변열기</button>
+		</td>
+	</tr>
+	<tr  th:if="${dto.inquireAnswer != null}" style="display:none;" 
+									th:class="inq_+${dto.inquireNum}"> <!-- 답변내용이 안보인다. -->
+	<!-- 답변이 있어야 보이게 합니다. -->
+		<td  colspan="6">답변일 : [[${#dates.format(dto.inquireAnswerDate,'yyyy-MM-dd')}]]<br />
+		<span th:utext="${#strings.replace(dto.inquireAnswer,newLineChar,'&lt;br /&gt;')}"></span></td>
+	</tr>
+</th:block>
 </table>
 </body>
 </html>

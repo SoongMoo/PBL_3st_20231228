@@ -134,8 +134,25 @@ function goodsDescript(){
 }
 
 function inquire(){
+	/*
 	location.href=
 		"/inquire/inquireList?goodsNum=[[${goodsStockCommand.goodsDTO.goodsNum}]]";
+	*/
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "/corner/inquireList", true);
+	xhr.setRequestHeader("Content-Type", "application/json");
+	var formData = JSON.stringify({
+		goodsNum: "[[${goodsStockCommand.goodsDTO.goodsNum}]]"
+	});
+	xhr.send(formData);
+	xhr.onload = function(){
+		if (xhr.status === 200) {
+			var result = xhr.responseText;
+			$("#content").html(result);
+		}else{
+			alert("서버오류");
+		}
+	}
 }
 </script>
 </head>

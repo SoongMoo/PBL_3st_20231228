@@ -20,4 +20,28 @@ on i.member_num = m.member_num
 	</if>
 </trim>
 </select>
+<insert id="inquireInsert" parameterType="inquire">
+insert into goods_inquire(MEMBER_NUM, GOODS_NUM,INQUIRE_SUBJECT,INQUIRE_KIND
+					, INQUIRE_CONTENT, INQUIRE_DATE )
+values(#{memberNum},#{goodsNum},#{inquireSubject},#{inquireKind}
+					,#{inquireContent},sysdate)
+</insert>
+<delete id="inquireDelete" parameterType="integer">
+	delete from goods_inquire
+	where  INQUIRE_NUM = #{inquireNum}
+</delete>
+<update id="inquireUpdate" parameterType="inquire">
+update goods_inquire
+set INQUIRE_SUBJECT = #{inquireSubject}
+   ,INQUIRE_CONTENT = #{inquireContent}
+   ,INQUIRE_KIND = #{inquireKind}
+where  INQUIRE_NUM = #{inquireNum}
+</update>
+<update id="inquireAnswerUpdate" parameterType="inquire">
+update goods_inquire
+set   EMP_NUM = #{empNum} <!-- 답변한 직원 -->
+	, INQUIRE_ANSWER = #{inquireAnswer} <!-- 답변내용 -->
+	, inquire_answer_date = sysdate <!-- 답변시간 -->
+where INQUIRE_NUM = #{inquireNum} 
+</update>
 </mapper>
