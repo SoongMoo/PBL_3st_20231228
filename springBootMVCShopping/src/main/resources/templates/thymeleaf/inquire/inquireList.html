@@ -7,8 +7,13 @@
 <script type="text/javascript">
 $(function(){
 	$("#btn").click(function(){
-		window.open("/inquire/inquireWrite?goodsNum=[[${goodsNum}]]"
+		if([[${session.auth == null}]]){
+			window.open("/login/item.login","login"
+					,"width=315, height=200,top = 100, left=100");
+		}else{
+			window.open("/inquire/inquireWrite?goodsNum=[[${goodsNum}]]"
 				,"","width=700, height=650, top = 100, left=100");
+		}
 	});
 });
 function inquireUpdate(inquireNum){

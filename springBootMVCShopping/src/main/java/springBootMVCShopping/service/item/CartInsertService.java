@@ -32,6 +32,7 @@ public class CartInsertService {
 		if(dto == null) {
 			return "900";
 		}else {
+			System.out.println("cartCommand.getGoodsNum() : " + cartCommand.getGoodsNum());
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("memberNum", dto.getMemberNum());
 			map.put("cartCommand", cartCommand);

@@ -35,7 +35,7 @@ public class PurchaseController {
 	@Autowired
 	PaymentDeleteService paymentDeleteService;
 	
-	@PostMapping(value = "goodsBuy")
+	@RequestMapping(value = "goodsBuy")
 	public String goodsBuy(String[] nums ,HttpSession session,Model model) {
 		goodsBuyService.execute(nums, session, model);
 		return "thymeleaf/purchase/goodsOrder";

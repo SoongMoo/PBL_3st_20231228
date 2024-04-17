@@ -7,7 +7,10 @@
 <script type="text/javascript">
 $(function(){
 	goodsDescript();
-	
+	$("#buyItem").click(function(){
+		location.href
+			="/item/buyItem?goodsNum=[[${goodsStockCommand.goodsDTO.goodsNum}]]&qty="+$("#cartQty").val();
+	});
 	$("#wish").click(function(){
 		/*
 		$.ajax({
