@@ -132,10 +132,14 @@ function goodsDescript(){
 	})
 	xhr.send(formData);
 }
+
+function inquire(){
+	location.href=
+		"/inquire/inquireList?goodsNum=[[${goodsStockCommand.goodsDTO.goodsNum}]]";
+}
 </script>
 </head>
 <body>
-[[${goodsStockCommand.goodsDTO.goodsNum}]]
 <table width="800" align="center">
 <caption>[[${goodsStockCommand.goodsDTO.goodsName }]] 상품정보입니다.</caption>
 <tr><td rowspan="6"><img th:src="|/static/upload/${goodsStockCommand.goodsDTO.goodsMainStore }|" height="200" /></td>

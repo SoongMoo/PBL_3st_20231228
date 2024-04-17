@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inquireMapperSql">
+<select id="inquireList" parameterType="inquire" resultType="inquire">
+select inquire_num inquireNum, i.goods_num goodsNum, i.member_num memberNum
+	 , inquire_subject inquireSubject, inquire_content inquireContent, inquire_kind inquireKind
+	 , inquire_date inquireDate, inquire_answer inquireAnswer, inquire_answer_date inquireAnswerDate
+	 , i.emp_num empNum, member_id memberId, goods_name goodsName
+from goods_inquire i join goods g 
+on i.goods_num = g.goods_num join members m
+on i.member_num = m.member_num
+<trim prefix="where" prefixOverrides="AND | OR">
+	<if test="goodsNum != null"> <!-- 그래서 조건을 주었습니다. -->
+		i.goods_num = #{goodsNum}
+	</if> 
+	<if test="inquireNum != null"> <!-- 추가합니다. -->
+		 and i.inquire_Num = #{inquireNum}
+	</if>
+</trim>
+</select>
+</mapper>
