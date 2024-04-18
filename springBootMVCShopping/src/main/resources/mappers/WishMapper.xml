@@ -3,6 +3,12 @@
 	"-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="springBootMVCShopping.mapper.WishMapper">
+<sql id="goodsColumnsBase">
+	   goods_Num , goods_name , goods_price ,goods_content , delivery_cost , emp_num  
+	  ,goods_regist , goods_main_store ,goods_main_store_img , goods_images 
+	  ,goods_images_img , visit_count ,update_Emp_Num , goods_Update_Date
+</sql>
+
 <update id="wishAddDelete" >
 	merge into wish w
 	using (select goods_num from goods where goods_num = #{goodsNum}) g
@@ -17,4 +23,22 @@
 <select id="wishCountSelectOne" parameterType="java.util.Map" resultType="integer">
 	select count(*) from wish where member_num = #{memberNum} and goods_num =#{goodsNum}
 </select>
+
+<select id="wishSelectList" parameterType="string" resultType="goods">
+select <include refid="goodsColumnsBase" />
+from goods
+where goods_num in (select goods_num from wish where member_num = #{memberNum})
+</select>
+<delete id="wishDeletes" >
+	delete from wish 
+	where member_num = #{memberNum} 
+	and goods_num in 
+	<foreach collection="goodsNums" item="goodsNum" close=")" open="(" index="index" separator=",">
+		#{goodsNum}	
+	</foreach>
+</delete>
+<delete id="wishDelete">
+	DELETE FROM wish
+	where goods_num = #{goodsNum} and member_num = #{memberNum}
+</delete>
 </mapper>

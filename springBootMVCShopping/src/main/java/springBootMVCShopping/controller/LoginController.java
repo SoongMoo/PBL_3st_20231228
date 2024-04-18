@@ -4,6 +4,7 @@ package springBootMVCShopping.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -46,8 +47,8 @@ public class LoginController {
 	@PostMapping("login")
 	public String login(@Validated LoginCommand loginCommand, BindingResult result
 			,@RequestParam(value="page", required = false , defaultValue = "1") Integer page 
-			, Model model, HttpSession session) {
-		userLoginService.execute(loginCommand, session, result);
+			, Model model, HttpSession session, HttpServletResponse response) {
+		userLoginService.execute(loginCommand, session, result, response);
 		if(result.hasErrors()) {
 			mainGoodsListService.execute(page, model);
 			return "thymeleaf/index";
@@ -56,7 +57,12 @@ public class LoginController {
 		return "redirect:/";
 	}
 	@RequestMapping(value="logout", method = RequestMethod.GET)
-	public String logout(HttpSession session) {
+	public String logout(HttpSession session, HttpServletResponse response) {
+		Cookie cookie = new Cookie("autoLogin", "");
+		cookie.setPath("/");
+		cookie.setMaxAge(0);
+		response.addCookie(cookie);
+		
 		session.invalidate();
 		return "redirect:/";
 	}
@@ -67,7 +73,7 @@ public class LoginController {
 	@PostMapping("item.login")
 	public void item(LoginCommand loginCommand,BindingResult result
 			,HttpSession session, HttpServletResponse response) {
-		userLoginService.execute(loginCommand, session, result);
+		userLoginService.execute(loginCommand, session, result, response);
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = null;
 		try {

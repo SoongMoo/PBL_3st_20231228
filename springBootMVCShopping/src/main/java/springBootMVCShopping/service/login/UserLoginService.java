@@ -1,5 +1,7 @@
 package springBootMVCShopping.service.login;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ public class UserLoginService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	public void execute(LoginCommand loginCommand, HttpSession session
-			, BindingResult result) {
+			, BindingResult result, HttpServletResponse response) {
 		String userId = loginCommand.getUserId();
 		String userPw = loginCommand.getUserPw();
 		AuthInfoDTO auth = loginMapper.loginSelect(userId);
@@ -29,6 +31,23 @@ public class UserLoginService {
 				}else {
 					System.out.println("비밀번호가 일치");
 					session.setAttribute("auth", auth);
+					if(loginCommand.isIdStore()) {
+						Cookie cookie = new Cookie("idStore", loginCommand.getUserId());
+						cookie.setPath("/");
+						cookie.setMaxAge(60*60*24*30);
+						response.addCookie(cookie);
+					}else {
+						Cookie cookie = new Cookie("idStore", "");
+						cookie.setPath("/");
+						cookie.setMaxAge(0);
+						response.addCookie(cookie);
+					}
+					if(loginCommand.isAutoLogin()) {
+						Cookie cookie = new Cookie("autoLogin", loginCommand.getUserId());
+						cookie.setPath("/");
+						cookie.setMaxAge(60*60*24*30);
+						response.addCookie(cookie);
+					}
 				}
 			}else {
 				System.out.println("비밀번호가 일치하지 않을 때");
