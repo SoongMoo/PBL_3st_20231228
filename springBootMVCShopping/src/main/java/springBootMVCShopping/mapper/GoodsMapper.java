@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import springBootMVCShopping.domain.GoodsDTO;
 import springBootMVCShopping.domain.GoodsStockDTO;
 import springBootMVCShopping.domain.StartEndPageDTO;
 
-@Mapper
+@Repository("springBootMVCShopping.mapper.GoodsMapper")
 public interface GoodsMapper {
 	public int goodsInsert(GoodsDTO dto);
 	public List<GoodsDTO> allSelect(StartEndPageDTO sepDTO);
