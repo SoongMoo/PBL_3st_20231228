@@ -13,7 +13,7 @@ import springBootMVCShopping.service.FileDelService;
 import springBootMVCShopping.service.UserEmailCheckService;
 
 @RestController // spring boot
-public class CheckRestController implements CheckRestControllerAdapter {
+public class CheckRestController implements CheckRestControllerImpl {
 	@Autowired
 	EmailCheckService emailCheckService;
 	@Autowired
