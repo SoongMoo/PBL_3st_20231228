@@ -13,12 +13,14 @@ import springBootMVCShopping.service.FileDelService;
 import springBootMVCShopping.service.UserEmailCheckService;
 
 @RestController // spring boot
-public class CheckRestController {
+public class CheckRestController implements CheckRestControllerAdapter {
 	@Autowired
 	EmailCheckService emailCheckService;
 	@Autowired
 	FileDelService fileDelService;
+	
 	@PostMapping("/checkRest/userEmailCheck")
+	@Override
 	public String userEmailCheck(
 			@RequestParam(value="userEmail") String userEmail
 			) {
@@ -29,7 +31,9 @@ public class CheckRestController {
 			return "1";
 		}
 	}
+	
 	@PostMapping("/goods/fileDel")
+	@Override
 	public int fileDel(
 			@RequestParam("orgFile") String orgFile,
 			@RequestParam("storeFile") String storeFile,
@@ -38,7 +42,9 @@ public class CheckRestController {
 	}
 	@Autowired
 	UserEmailCheckService userEmailCheckService;
+	
 	@RequestMapping("userConfirm")
+	@Override
 	public String userConfirm(String chk) {
 		int i = userEmailCheckService.execute(chk); 
 		if(i > 0) {

@@ -22,4 +22,8 @@ public class DeliveryInfoService {
 		List<OrderListDTO> list =  purchaseRepository.orderList(map);
 		model.addAttribute("list", list);
 	}
+	
+	
+	
+	
 }
