@@ -12,7 +12,7 @@
 <update id="wishAddDelete" >
 	merge into wish w
 	using (select goods_num from goods where goods_num = #{goodsNum}) g
-	on (w.goods_num = g.goods_num)
+	on (w.goods_num = g.goods_num and member_num = #{memberNum})
 	When MATCHED THEN
 		update set WISH_DATE = sysdate
 		delete where member_num = #{memberNum} and goods_num =#{goodsNum}
