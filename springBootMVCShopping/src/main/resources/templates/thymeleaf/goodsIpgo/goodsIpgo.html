@@ -16,7 +16,6 @@ $(function(){
 	$("#regist").click(function(){
 		$("#frm").ajaxSubmit({
 			type: "POST",
-			url: "ipgoRegist",
 			beforeSubmit : function(){
 				if($("#goodsIpgoNum").val() == ""){
 					alert("입고번호를 입력해주세요.");
