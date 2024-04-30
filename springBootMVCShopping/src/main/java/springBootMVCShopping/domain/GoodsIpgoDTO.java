@@ -1,5 +1,6 @@
 package springBootMVCShopping.domain;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
@@ -17,7 +18,7 @@ public class GoodsIpgoDTO { // 디비에 있는 table의 컬럼명과 같아야 
 	String goodsNum;
 	Integer ipgoQty;
 	Date ipgoDate;
-	Date madeDate;
+	Timestamp madeDate;
 	Integer ipgoPrice;
 	String empNum;
 }

@@ -14,6 +14,6 @@ public class GoodsIpgoCommand {
 	Integer ipgoPrice;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	Date ipgoDate;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	Date madeDate;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	LocalDateTime madeDate;
 }

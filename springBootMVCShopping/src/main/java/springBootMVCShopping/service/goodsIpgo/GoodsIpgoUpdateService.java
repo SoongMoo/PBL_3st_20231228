@@ -20,7 +20,7 @@ public class GoodsIpgoUpdateService {
 		dto.setIpgoNum(goodsIpgoCommand.getGoodsIpgoNum());
 		dto.setIpgoPrice(goodsIpgoCommand.getIpgoPrice());
 		dto.setIpgoQty(goodsIpgoCommand.getIpgoQty());
-		dto.setMadeDate(goodsIpgoCommand.getMadeDate());
+		dto.setMadeDate(Timestamp.valueOf(goodsIpgoCommand.getMadeDate()));
 		goodsIpgoMapper.goodsIpgoUpdate(dto);
 	}
 }

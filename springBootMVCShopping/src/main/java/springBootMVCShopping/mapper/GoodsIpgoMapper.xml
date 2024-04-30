@@ -27,7 +27,7 @@ IPGO_NUM , GOODS_NUM , IPGO_QTY , IPGO_DATE , MADE_DATE , ipgo_PRICE , EMP_NUM
 		<idArg column="GOODS_NUM" javaType="string" />
 		<arg column="IPGO_QTY" javaType="integer"/>
 		<arg column="IPGO_DATE" javaType="java.util.Date"/>
-		<arg column="MADE_DATE" javaType="java.util.Date"/>
+		<arg column="MADE_DATE" javaType="java.sql.Timestamp"/>
 		<arg column="IPGO_PRICE" javaType="integer"/>
 		<arg column="EMP_NUM" javaType="string"/>
 	</constructor>

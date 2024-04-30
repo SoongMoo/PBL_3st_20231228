@@ -64,13 +64,13 @@ $(function(){
 	<li><a href="goodsIpgoList">상품 입고 현황</a></li>
 </ul>
 <form action="ipgoRegist" method="post" id="frm">
-입고번호 : <input type="text" name= "goodsIpgoNum" id="goodsIpgoNum"/>자동부여<br />
+입고번호 : <input type="text" name= "goodsIpgoNum" id="goodsIpgoNum" th:value="${goodsIpgoNum}"/>자동부여<br />
 상품번호 : <input type="text" name= "goodsNum" id="goodsNum" />
 		 <button type="button" id="btn" >상품 검색</button> <br />
 상품명 : <input type="text" name= "goodsName" id="goodsName" /><br />
 입고일 : <input type="date" name= "ipgoDate" id="ipgoDate" /><br />
 입고 수량 : <input type="number" name= "ipgoQty" id="ipgoQty" value="1" min="1" /><br />
-제조일 : <input type="date" name= "madeDate" id="madeDate" /><br />
+제조일 : <input type="datetime-local" name= "madeDate" id="madeDate" /><br />
 가격 : <input type="number" name= "ipgoPrice" id="ipgoPrice" value="0" min="0" max="100000" /><br />
 <!-- <input type="submit" value="입고 등록" /> -->
 <button type="button" id="regist">입고 등록</button>

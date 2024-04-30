@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import springBootMVCShopping.command.GoodsIpgoCommand;
 import springBootMVCShopping.domain.GoodsIpgoGoodsNameDTO;
+import springBootMVCShopping.mapper.AutoNumMapper;
 import springBootMVCShopping.service.goodsIpgo.GoodsIpgoAutoNumservice;
 import springBootMVCShopping.service.goodsIpgo.GoodsIpgoDeleteService;
 import springBootMVCShopping.service.goodsIpgo.GoodsIpgoDetailService;
@@ -110,8 +111,13 @@ public class GoodsIpgoController {
 		//return "thymeleaf/goods/goodsRedirect";
 		return "200";
 	}
+	
+	@Autowired
+	AutoNumMapper autoNumMapper;
 	@RequestMapping(value="goodsIpgo",method = RequestMethod.GET )
 	public String goodsIpgo(Model model) {
+		String goodsIpgoNum = autoNumMapper.autoNumSelectOne("goodsipgo","ipgo_num", "ip_");
+		model.addAttribute("goodsIpgoNum", goodsIpgoNum);
 		return "thymeleaf/goodsIpgo/goodsIpgo";
 	}
 	
