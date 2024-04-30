@@ -17,6 +17,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
+		<webapp.lib>${project.basedir}/libs</webapp.lib>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -151,7 +152,7 @@
 			<artifactId>INIpaySample</artifactId>
 			<version>1.3</version>
 			<scope>system</scope>
-			<systemPath>C:\dev\src6\PBL_3st_20231228\springBootMVCShopping\libs\INIpaySample_v1.3.jar</systemPath>
+			<systemPath>${project.basedir}/libs/INIpaySample_v1.3.jar</systemPath>
 		</dependency>
 	</dependencies>
 
