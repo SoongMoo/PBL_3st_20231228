@@ -1,0 +1,15 @@
+import random
+lotto = []
+start = 1
+while start <= 45:
+    lotto.append(start)
+    start += 1
+#print(lotto)
+size = len(lotto) # 45
+i = 1
+while i <= 6:
+    size -= 1
+    idx = random.randint(0, size)
+    result = lotto.pop(idx)
+    print(result , end = ", ")
+    i += 1
