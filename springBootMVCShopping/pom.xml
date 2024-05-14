@@ -157,7 +157,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>ROOT</finalName><!-- 배포시 /(root)로 베포 --->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -173,7 +172,7 @@
 
 </project>
 <!-- 
-또는
+배포 후 /(root)로 접속하기 
 1 . Tomcat의 설치 디렉토리에서 conf 폴더로 이동합니다.
 2, server.xml 파일을 엽니다.
 3. <Host> 요소 안에 다음과 같이 Context 요소를 추가합니다.
