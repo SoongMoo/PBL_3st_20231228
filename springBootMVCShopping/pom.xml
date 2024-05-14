@@ -157,6 +157,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>ROOT</finalName><!-- 배포시 /(root)로 베포 --->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
