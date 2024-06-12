@@ -1,0 +1,54 @@
+1. 먼저 자바설치 하기 
+$ sudo apt update
+$ sudo apt install openjdk-11-jdk
+2. 자바 버전 확인
+$ java -version
+openjdk version "11.0.23" 2024-04-16
+OpenJDK Runtime Environment (build 11.0.23+9-post-Ubuntu-1ubuntu1)
+OpenJDK 64-Bit Server VM (build 11.0.23+9-post-Ubuntu-1ubuntu1, mixed mode, sharing)
+
+$  sudo update-alternatives --config java
+
+1. wget 명령을 이용해서 톰캣을 다운 받는다.
+$ wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz
+
+2. 압축을 풀어 /usr/sbin에 옮기기
+$ sudo tar -xzvf apache-tomcat-9.0.89.tar.gz -C /usr/local/
+
+3.  링크파일을 만들어 준다.
+$ sudo ln -s /usr/local/apache-tomcat-9.0.89 /usr/sbin/tomcat
+
+4. 톰켓 실행 시키기
+$ sudo /usr/sbin/tomcat/bin/startup.sh
+Using CATALINA_BASE:   /usr/sbin/tomcat
+Using CATALINA_HOME:   /usr/sbin/tomcat
+Using CATALINA_TMPDIR: /usr/sbin/tomcat/temp
+Using JRE_HOME:        /usr
+Using CLASSPATH:       /usr/sbin/tomcat/bin/bootstrap.jar:/usr/sbin/tomcat/bin/tomcat-juli.jar
+Using CATALINA_OPTS:
+Tomcat started.
+
+5. 서비스 확인 
+$ netstat -atpn | grep 8080
+
+6. ftp로 접속할 사용자 만들기
+$ sudo useradd webadmin -s /bin/bash -d /usr/local/apache-tomcat-9.0.89
+
+7. 비밀번호 변경하기
+$ sudo passwd webadmin
+$ sudo chmod 757 /usr/local/apache-tomcat-9.0.89/webapps
+
+8.  전송한 프로젝트가 웹 주소에서 /(root)가 되도록 설정
+$ sudo su -
+# cd /usr/local/apache-tomcat-9.0.89/conf/
+# vim server.xml 
+<!-- Host를 찾아서 Context 태그를 추가 --->
+<Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+ <Context path="" docBase="springBootMVCShopping-0.0.1" debug="0" reloadable="true" />
+...생략
+</Host>
+
+# /usr/sbin/tomcat/bin/shutdown.sh
+# /usr/sbin/tomcat/bin/startup.sh
+

@@ -163,3 +163,11 @@
 	</build>
 
 </project>
+<!-- 
+배포 후 /(root)로 접속하기 
+1 . Tomcat의 설치 디렉토리에서 conf 폴더로 이동합니다.
+2, server.xml 파일을 엽니다.
+3. <Host> 요소 안에 다음과 같이 Context 요소를 추가합니다.
+4. <Context path="" docBase="배포파일명" debug="0" reloadable="true"/>
+   배포파일명 예 : springBootMVCShopping-0.0.1
+-->
