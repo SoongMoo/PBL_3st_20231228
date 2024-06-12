@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebSocket Chat</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script>
+	function connect() {
+		ws = new WebSocket("ws://localhost:8080/chat");
+		ws.onopen = onOpen;
+		ws.onmessage = onMessage;
+		ws.onclose = onClose;
+	}
+	function  disconnect(){
+		ws.close();
+	}
+	function onOpen(evt){
+		appendMessage("연결되었습니다.");
+	}
+	function onMessage(evt){
+		alert(evt);
+		var data = evt.data;
+		alert(data);
+		if(data.substring(0,4) == "msg:"){
+			appendMessage(data.substring(4));
+		}
+	}
+	function appendMessage(msg){
+		$("#chatMessageArea").append(msg + "<br />");
+		var chatAreaHeight = $("#chatArea").height();
+		var maxScroll = $("#chatMessageArea").height() - chatAreaHeight
+		$("#chatArea").scrollTop(maxScroll);
+	}
+	
+	function onClose(evt){
+		appendMessage("연결을 끊었습니다.");
+	}
+	function onMessage(evt){
+		var data = evt.data;
+		if(data.substring(0,4)=="msg:"){
+			appendMessage(data.substring(4));
+		}
+	}
+	function send(){
+		var nickname = $("#nickname").val();
+		var msg = $("#message").val();
+		ws.send("msg:" + nickname + ":" + msg);
+		$("#message").val("");
+	}
+	$(function(){
+		$("#sendBtn").click(function(){send();});
+		$("#enterBtn").click(function(){connect();});
+		$("#exitBtn").click(function(){disconnect();});
+	});
+	
+</script>
+</head>
+<body>
+	이름 :
+	<input type="text" id="nickname" />
+	<input type="button" id="enterBtn" value="입장" />
+	<input type="button" id="exitBtn" value="나가기" />
+	<h1>대화영역</h1>
+	<div id="chatArea">
+		<div id="chatMessageArea"></div>
+	</div>
+	<input type="text" id="message" placeholder="Enter your message..." />
+	<button id="sendBtn">전송</button>
+</body>
+</html>
